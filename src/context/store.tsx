@@ -16,6 +16,8 @@ import {
 
 const KEY = 'airsens.state.v1';
 const SESSION = 'airsens.session.v1';
+const SEED_VERSION = 'v4'; // bump this whenever seed data changes
+const SEED_VERSION_KEY = 'airsens.seed.version';
 
 interface State {
   aircraft: Aircraft[];
@@ -47,12 +49,17 @@ function freshState(): State {
 
 function load(): State {
   try {
+    // if seed was updated, clear old localStorage so users get fresh data
+    const savedVersion = localStorage.getItem(SEED_VERSION_KEY);
+    if (savedVersion !== SEED_VERSION) {
+      localStorage.removeItem(KEY);
+      localStorage.setItem(SEED_VERSION_KEY, SEED_VERSION);
+      return freshState();
+    }
     const raw = localStorage.getItem(KEY);
     if (raw) {
       const parsed = JSON.parse(raw);
       const fresh = freshState();
-      // merge: keep saved data but fill in any missing fields from fresh state
-      // this handles localStorage from older app versions missing new fields
       return { ...fresh, ...parsed, organizations: parsed.organizations ?? fresh.organizations };
     }
   } catch { /* ignore */ }
