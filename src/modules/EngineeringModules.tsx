@@ -134,7 +134,7 @@ export const AgeingModule: React.FC = () => {
         <KpiCard label="Over 15 yrs" value={aged.filter(a => a.age > 15).length} sub="Enhanced programs" accent="var(--red)" icon={<AlertTriangle size={18} />} delay={120} />
         <KpiCard label="Active Programs" value={programs.length} sub="Ageing compliance" accent="var(--green)" icon={<ShieldCheck size={18} />} delay={180} />
       </div>
-      <div className="grid" style={{ gridTemplateColumns: '1fr 1fr' }}>
+      <div className="grid" className="grid-2col">
         <div className="panel fade-up">
           <PanelHead title="Fleet by Age" icon={<History size={15} className="tamber" />} />
           <div style={{ padding: 18 }}>

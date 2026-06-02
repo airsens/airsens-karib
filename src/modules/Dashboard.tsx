@@ -65,7 +65,7 @@ export const Dashboard: React.FC = () => {
         <KpiCard label="AD/SB Open" value={KPI.adsbOpen} sub="Compliance pending" accent="var(--cyan)" icon={<TrendingUp size={18} />} delay={300} />
       </div>
 
-      <div className="grid" style={{ gridTemplateColumns: '2fr 1fr', marginBottom: 16 }}>
+      <div className="grid-chart" style={{ marginBottom: 16 }}>
         <div className="panel fade-up" style={{ animationDelay: '120ms' }}>
           <PanelHead title="Fleet Utilization — 30 days" icon={<Activity size={15} className="tcyan" />}
             right={<span className="badge muted">block hours / day</span>} />
@@ -111,7 +111,7 @@ export const Dashboard: React.FC = () => {
         </div>
       </div>
 
-      <div className="grid" style={{ gridTemplateColumns: '1.4fr 1fr', marginBottom: 16 }}>
+      <div className="grid-chart-alt" style={{ marginBottom: 16 }}>
         <div className="panel fade-up" style={{ animationDelay: '220ms' }}>
           <PanelHead title="Priority Aircraft" icon={<AlertTriangle size={15} className="tamber" />}
             right={<button className="btn ghost sm" onClick={() => nav('/aircraft')}>View all <ArrowUpRight size={14} /></button>} />

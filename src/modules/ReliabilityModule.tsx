@@ -114,7 +114,7 @@ export const ReliabilityModule: React.FC = () => {
         <KpiCard label="Tracked Components" value={components.length} sub="With life data" accent="var(--cyan)" icon={<Gauge size={18} />} delay={180} />
       </div>
 
-      <div className="grid" style={{ gridTemplateColumns: '1fr 1fr', marginBottom: 16 }}>
+      <div className="grid-2col" style={{ marginBottom: 16 }}>
         <div className="panel fade-up">
           <PanelHead title="Defects by ATA Chapter" icon={<Activity size={15} className="tamber" />} />
           <div style={{ padding: '16px 12px 8px' }}>

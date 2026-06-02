@@ -187,7 +187,7 @@ const UserDrawer: React.FC<{ user: User | null; onClose: () => void; onSave: (u:
         </div>
 
         <div style={{ padding: 22 }}>
-          <div className="grid" style={{ gridTemplateColumns: '1fr 1fr', gap: 14 }}>
+          <div className="grid" className="grid-2col" style={{ gap: 14 }}>
             <Input label="Full Name" value={name} onChange={setName} placeholder="e.g. John Adeyemi" />
             <Input label="Title" value={title} onChange={setTitle} placeholder="B1 Licensed Engineer" />
             <Input label="Email" value={email} onChange={setEmail} placeholder="john@karibaerospace.com" />

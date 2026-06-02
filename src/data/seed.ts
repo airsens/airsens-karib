@@ -386,7 +386,7 @@ const viewPerms = () => Object.fromEntries(allModules.map(m => [m, ['view', 'rea
 // server-side, hashed (bcrypt/argon2), and auth returns a token — never shipped to client.
 export const seedUsers: User[] = [
   {
-    id: 'U-SUPER', name: 'Rilwan Olowu', title: 'COO / Co-Founder',
+    id: 'U-SUPER', name: 'Rilwan Olowu', title: 'COO',
     email: 'rilwan.olowu@karib-aerospace.com', password: 'admin', role: 'superadmin',
     orgId: 'ORG1', active: true, createdAt: daysFrom(-200),
     permissions: { ...fullPerms(), admin: [...ALL] },

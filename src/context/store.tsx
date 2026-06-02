@@ -16,7 +16,7 @@ import {
 
 const KEY = 'airsens.state.v1';
 const SESSION = 'airsens.session.v1';
-const SEED_VERSION = 'v4'; // bump this whenever seed data changes
+const SEED_VERSION = 'v5'; // bump this whenever seed data changes
 const SEED_VERSION_KEY = 'airsens.seed.version';
 
 interface State {

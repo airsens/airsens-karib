@@ -102,7 +102,7 @@ const AircraftDrawer: React.FC<{ acId: string; onClose: () => void; canWrite: bo
             </button>
           </div>
 
-          <div className="grid" style={{ gridTemplateColumns: '1fr 1fr', gap: 12, marginBottom: 20 }}>
+          <div className="grid-2col" style={{ gap: 12, marginBottom: 20 }}>
             {[
               { l: 'Airframe Hours', v: ac.totalHours.toLocaleString(), i: <Clock size={15} /> },
               { l: 'Airframe Cycles', v: ac.totalCycles.toLocaleString(), i: <RotateCw size={15} /> },

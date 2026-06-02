@@ -156,7 +156,7 @@ const NewWorkOrderDrawer: React.FC<{ onClose: () => void }> = ({ onClose }) => {
             </select>
           </Field>
           <Field label="Title"><input className="input" placeholder="e.g. Replace No.2 hydraulic pump" value={title} onChange={e => setTitle(e.target.value)} /></Field>
-          <div className="grid" style={{ gridTemplateColumns: '1fr 1fr', gap: 12 }}>
+          <div className="grid-2col" style={{ gap: 12 }}>
             <Field label="Type">
               <select className="select" value={type} onChange={e => setType(e.target.value as WorkOrder['type'])}>
                 <option value="scheduled">Scheduled</option><option value="unscheduled">Unscheduled</option>

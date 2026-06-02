@@ -64,7 +64,7 @@ export const AmplificationModule: React.FC = () => {
 
         {/* Results */}
         <div className="col gap-16">
-          <div className="grid" style={{ gridTemplateColumns: '1fr 1fr 1fr' }}>
+          <div className="grid" className="grid-3col">
             <div className="panel panel-pad ticks fade-up" style={{ animationDelay: '80ms' }}>
               <div className="eyebrow row gap-8"><Gauge size={13} />Amplification</div>
               <div className="num" style={{ fontSize: 40, fontWeight: 800, color: BAND_COLOR[res.band], marginTop: 8, lineHeight: 1 }}>
@@ -90,7 +90,7 @@ export const AmplificationModule: React.FC = () => {
             </div>
           </div>
 
-          <div className="grid" style={{ gridTemplateColumns: '1fr 1fr' }}>
+          <div className="grid" className="grid-2col">
             <div className="panel fade-up" style={{ animationDelay: '160ms' }}>
               <PanelHead title="Fatigue Index" icon={<Cpu size={15} className="tcyan" />} />
               <div style={{ padding: 12, position: 'relative' }}>

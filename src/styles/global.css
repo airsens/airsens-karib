@@ -228,6 +228,21 @@ input, select, textarea { font-family: inherit; }
 .pulse { animation: pulse 1.8s ease-in-out infinite; }
 
 /* ============================================================
+   RESPONSIVE GRID UTILITIES — stack on mobile, side-by-side on desktop
+   ============================================================ */
+.grid-2col { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.grid-3col { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 14px; }
+.grid-chart { display: grid; grid-template-columns: 2fr 1fr; gap: 14px; }
+.grid-chart-alt { display: grid; grid-template-columns: 1.4fr 1fr; gap: 14px; }
+
+@media (max-width: 700px) {
+  .grid-2col,
+  .grid-3col,
+  .grid-chart,
+  .grid-chart-alt { grid-template-columns: 1fr !important; }
+}
+
+/* ============================================================
    MOBILE RESPONSIVE — breakpoints
    ============================================================ */
 

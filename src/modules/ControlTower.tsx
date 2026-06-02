@@ -102,7 +102,7 @@ export const ControlTower: React.FC = () => {
 
                 {expanded && (
                   <div style={{ borderTop: '1px solid var(--line)', padding: '18px 20px' }} className="fade-up">
-                    <div className="grid" style={{ gridTemplateColumns: '1fr 1fr', gap: 16, marginBottom: 16 }}>
+                    <div className="grid" className="grid-2col" style={{ gap: 16, marginBottom: 16 }} data-x="ct1">
                       <QuotaBar label="Admins" used={adminUsed} max={org.maxAdmins} color="var(--amber)" />
                       <QuotaBar label="Users" used={usersUsed} max={org.maxUsers} color="var(--cyan)" />
                     </div>
@@ -198,7 +198,7 @@ export const ControlTower: React.FC = () => {
       {/* ANALYTICS TAB */}
       {tab === 'analytics' && (
         <div className="col gap-14 fade-up">
-          <div className="grid" style={{ gridTemplateColumns: '1fr 1fr', gap: 14 }}>
+          <div className="grid" className="grid-2col" style={{ gap: 14 }}>
             <div className="panel panel-pad">
               <PanelHead title="Organisations by Plan" icon={<BarChart3 size={15} className="tcyan" />} />
               <div style={{ padding: 16 }}>
@@ -362,7 +362,7 @@ const OrgDrawer: React.FC<{ org: Organization | null; onClose: () => void; onSav
           <button className="btn ghost sm" onClick={onClose} style={{ padding: 8 }}><X size={16} /></button>
         </div>
         <div style={{ padding: 22 }}>
-          <div className="grid" style={{ gridTemplateColumns: '1fr 1fr', gap: 12 }}>
+          <div className="grid-2col" style={{ gap: 12 }}>
             <Field label="Organisation Name"><input className="input" value={name} onChange={e => setName(e.target.value)} placeholder="e.g. Caribbean Wings Ltd" /></Field>
             <Field label="ICAO Prefix"><input className="input" value={icao} onChange={e => setIcao(e.target.value)} placeholder="e.g. 9Y" /></Field>
             <Field label="Contact Email"><input className="input" type="email" value={email} onChange={e => setEmail(e.target.value)} placeholder="ops@example.com" /></Field>
@@ -379,7 +379,7 @@ const OrgDrawer: React.FC<{ org: Organization | null; onClose: () => void; onSav
 
           <div style={{ marginTop: 18, paddingTop: 18, borderTop: '1px solid var(--line)' }}>
             <div className="eyebrow" style={{ marginBottom: 12, color: 'var(--amber)' }}>User Quotas — set by you</div>
-            <div className="grid" style={{ gridTemplateColumns: '1fr 1fr 1fr', gap: 12 }}>
+            <div className="grid-3col" style={{ gap: 12 }}>
               <Field label="Max Admins"><input className="input num" type="number" min="1" max="10" value={maxAdmins} onChange={e => setMaxAdmins(e.target.value)} /></Field>
               <Field label="Max Users"><input className="input num" type="number" min="1" value={maxUsers} onChange={e => setMaxUsers(e.target.value)} /></Field>
               <Field label="Max Aircraft"><input className="input num" type="number" min="1" value={maxAircraft} onChange={e => setMaxAircraft(e.target.value)} /></Field>

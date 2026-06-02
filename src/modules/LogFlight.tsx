@@ -61,7 +61,7 @@ export const LogFlightDrawer: React.FC<{ aircraftId: string; onClose: () => void
               <ArrowRight size={16} className="muted" style={{ marginBottom: 11 }} />
               <Field label="To"><select className="select" value={to} onChange={e => setTo(e.target.value)}>{BASES.map(b => <option key={b}>{b}</option>)}</select></Field>
             </div>
-            <div className="grid" style={{ gridTemplateColumns: '1fr 1fr', gap: 12 }}>
+            <div className="grid-2col" style={{ gap: 12 }}>
               <Field label="Block Hours"><input className="input num" type="number" step="0.1" value={blockHours} onChange={e => setBlockHours(e.target.value)} /></Field>
               <Field label="Landings / Cycles"><input className="input num" type="number" value={cycles} onChange={e => setCycles(e.target.value)} /></Field>
               <Field label="Payload (kg)"><input className="input num" type="number" value={payloadKg} onChange={e => setPayloadKg(e.target.value)} /></Field>
