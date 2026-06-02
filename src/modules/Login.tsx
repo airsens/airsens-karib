@@ -106,8 +106,8 @@ export const Login: React.FC = () => {
             <div className="eyebrow" style={{ marginBottom: 10 }}>Demo accounts — tap to fill</div>
             <div className="col gap-8">
               {[
-                { label: 'Super Admin · Rilwan Olowu', email: 'rilwan.olowu@karib-aerospace.com', pw: 'admin' },
-                { label: 'Org Admin · Promise Benebo', email: 'promise.benebo@karib-aerospace.com', pw: 'admin' },
+                { label: 'Super Admin · Rilwan Olowu (COO)', email: 'rilwan.olowu@karib-aerospace.com', pw: 'admin' },
+                { label: 'Org Admin · Promise Benebo (Founder)', email: 'promise.benebo@karib-aerospace.com', pw: 'admin' },
                 { label: 'Engineer · M. Okafor', email: 'm.okafor@karib-aerospace.com', pw: 'engineer' },
                 { label: 'Viewer · L. Persaud', email: 'l.persaud@karib-aerospace.com', pw: 'viewer' },
               ].map(a => (
