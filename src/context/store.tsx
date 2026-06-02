@@ -48,7 +48,13 @@ function freshState(): State {
 function load(): State {
   try {
     const raw = localStorage.getItem(KEY);
-    if (raw) return JSON.parse(raw);
+    if (raw) {
+      const parsed = JSON.parse(raw);
+      const fresh = freshState();
+      // merge: keep saved data but fill in any missing fields from fresh state
+      // this handles localStorage from older app versions missing new fields
+      return { ...fresh, ...parsed, organizations: parsed.organizations ?? fresh.organizations };
+    }
   } catch { /* ignore */ }
   return freshState();
 }
