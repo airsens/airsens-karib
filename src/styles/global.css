@@ -223,5 +223,94 @@ input, select, textarea { font-family: inherit; }
 @keyframes fadeUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
 @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: .4; } }
 @keyframes sweep { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+@keyframes slideIn { from { transform: translateX(-100%); } to { transform: translateX(0); } }
 .fade-up { animation: fadeUp .45s cubic-bezier(.2,.7,.3,1) both; }
 .pulse { animation: pulse 1.8s ease-in-out infinite; }
+
+/* ============================================================
+   MOBILE RESPONSIVE — breakpoints
+   ============================================================ */
+
+/* Tablet: ≤ 900px */
+@media (max-width: 900px) {
+  :root { --sidebar-w: 0px; }
+
+  /* KPI grids: 2 columns on tablet */
+  .kpi-grid { grid-template-columns: repeat(2, 1fr); }
+
+  /* Tables: horizontal scroll */
+  .tbl-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+
+  /* Reduce page padding */
+  main { padding: 16px !important; }
+}
+
+/* Mobile: ≤ 600px */
+@media (max-width: 600px) {
+  :root {
+    --topbar-h: 56px;
+  }
+
+  body { overflow: hidden; }
+
+  /* KPI grids: 2 columns on mobile */
+  .kpi-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+
+  /* Page titles */
+  .page-title { font-size: 20px; }
+  .page-sub { font-size: 12px; }
+
+  /* Drawers: full screen on mobile */
+  .drawer-mobile {
+    width: 100vw !important;
+    top: 0 !important;
+    right: 0 !important;
+    border-radius: 0 !important;
+  }
+
+  /* Tables: scroll horizontally */
+  .tbl { font-size: 12px; }
+  .tbl thead th { padding: 8px 10px; font-size: 9px; }
+  .tbl tbody td { padding: 9px 10px; }
+
+  /* Buttons: smaller on mobile */
+  .btn { padding: 8px 12px; font-size: 12px; }
+  .btn.sm { padding: 5px 9px; font-size: 11px; }
+
+  /* Panels */
+  .panel-pad { padding: 14px; }
+
+  /* Wrap action rows */
+  .page-actions { flex-wrap: wrap; gap: 8px; }
+
+  /* Login: stack on mobile */
+  .login-split {
+    grid-template-columns: 1fr !important;
+  }
+  .login-brand { display: none !important; }
+
+  /* Work order kanban: horizontal scroll */
+  .kanban-board {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    display: flex !important;
+    gap: 12px;
+    padding-bottom: 12px;
+  }
+  .kanban-col {
+    min-width: 260px;
+    flex-shrink: 0;
+  }
+
+  /* Search: full width */
+  .search-box { width: 100% !important; }
+
+  /* Hide search text, show icon only */
+  .search-box input { font-size: 12px; }
+}
+
+/* Very small: ≤ 380px */
+@media (max-width: 380px) {
+  .kpi-grid { grid-template-columns: 1fr 1fr; gap: 8px; }
+  main { padding: 12px !important; }
+}

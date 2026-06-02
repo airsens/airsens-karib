@@ -16,10 +16,10 @@ export const Login: React.FC = () => {
   const quick = (e: string, p: string) => { setEmail(e); setPassword(p); setErr(''); };
 
   return (
-    <div style={{ height: '100vh', display: 'grid', gridTemplateColumns: '1.1fr 1fr', position: 'relative', zIndex: 1 }}>
+    <div style={{ height: '100vh', display: 'grid', gridTemplateColumns: '1.1fr 1fr', position: 'relative', zIndex: 1 }} className="login-split">
       {/* Left: brand panel */}
       <div style={{ position: 'relative', overflow: 'hidden', borderRight: '1px solid var(--line)',
-        background: 'linear-gradient(160deg, var(--bg-panel), var(--bg-void))', padding: 56, display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+        background: 'linear-gradient(160deg, var(--bg-panel), var(--bg-void))', padding: 56, display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }} className="login-brand">
         {/* radar sweep deco */}
         <div style={{ position: 'absolute', width: 620, height: 620, borderRadius: '50%', right: -240, top: '50%', transform: 'translateY(-50%)',
           border: '1px solid var(--line)', boxShadow: '0 0 0 80px rgba(47,230,224,.02), 0 0 0 160px rgba(47,230,224,.015)' }}>

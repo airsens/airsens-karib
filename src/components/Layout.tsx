@@ -5,7 +5,7 @@ import {
   LayoutDashboard, Plane, Boxes, CalendarRange, BookOpen, ClipboardList,
   FileWarning, ListChecks, Activity, GitBranch, Wrench, Package, FileText,
   Receipt, Gauge, ShieldCheck, History, Search, Bell, ChevronRight, Radar,
-  LogOut, Users, AlertTriangle, X, Clock, PackageX, CornerDownLeft,
+  LogOut, Users, AlertTriangle, X, Clock, PackageX, CornerDownLeft, Menu,
 } from 'lucide-react';
 import { useStore } from '../context/store';
 import type { ModuleKey } from '../data/types';
@@ -117,6 +117,7 @@ export const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) =>
   }, [aircraft, defects]);
 
   const [bellOpen, setBellOpen] = useState(false);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
   const bellBtnRef = useRef<HTMLButtonElement>(null);
   const [bellPos,  setBellPos]  = useState({ top: 0, right: 0 });
 
@@ -147,8 +148,29 @@ export const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) =>
   return (
     <div style={{ display: 'flex', height: '100vh', position: 'relative', zIndex: 1 }}>
 
+      {/* ── mobile overlay ── */}
+      {sidebarOpen && (
+        <div onClick={() => setSidebarOpen(false)}
+          style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,.6)', zIndex: 30, backdropFilter: 'blur(2px)' }} />
+      )}
+
       {/* ── sidebar ── */}
-      <aside style={{ width: 'var(--sidebar-w)', flexShrink: 0, background: 'var(--bg-deep)', borderRight: '1px solid var(--line)', display: 'flex', flexDirection: 'column', height: '100%' }}>
+      <aside style={{
+        width: 'var(--sidebar-w, 248px)',
+        flexShrink: 0,
+        background: 'var(--bg-deep)',
+        borderRight: '1px solid var(--line)',
+        display: 'flex',
+        flexDirection: 'column',
+        height: '100%',
+        // mobile: hidden by default, slides in as overlay
+        position: window.innerWidth <= 900 ? 'fixed' : 'relative',
+        top: 0, left: 0,
+        zIndex: window.innerWidth <= 900 ? 40 : 'auto',
+        transform: window.innerWidth <= 900 && !sidebarOpen ? 'translateX(-100%)' : 'translateX(0)',
+        transition: 'transform .25s cubic-bezier(.2,.8,.3,1)',
+        minWidth: 248,
+      }}>
         <div className="row gap-12" style={{ padding: '16px 18px', borderBottom: '1px solid var(--line)' }}>
           <div style={{ width: 36, height: 36, borderRadius: 9, display: 'grid', placeItems: 'center', background: 'linear-gradient(135deg, var(--cyan), var(--cyan-dim))', boxShadow: '0 0 18px var(--cyan-glow)', flexShrink: 0 }}>
             <Radar size={20} color="#04181a" />
@@ -168,7 +190,7 @@ export const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) =>
                 <div className="eyebrow" style={{ padding: '4px 10px 8px', fontSize: 9 }}>{g.group}</div>
                 {visible.map((it) => (
                   <NavLink key={it.to} to={it.to} end={it.to === '/'}
-                    style={({ isActive }) => ({
+                    onClick={() => setSidebarOpen(false)}                    style={({ isActive }) => ({
                       display: 'flex', alignItems: 'center', gap: 11, padding: '8.5px 11px', borderRadius: 8,
                       fontSize: 13, fontWeight: 500, marginBottom: 2,
                       color: isActive ? 'var(--text-hi)' : 'var(--text-dim)',
@@ -184,7 +206,7 @@ export const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) =>
           {isAdmin && (
             <div style={{ marginBottom: 16 }}>
               <div className="eyebrow" style={{ padding: '4px 10px 8px', fontSize: 9 }}>Administration</div>
-              <NavLink to="/admin" style={({ isActive }) => ({
+              <NavLink to="/admin" onClick={() => setSidebarOpen(false)} style={({ isActive }) => ({
                 display: 'flex', alignItems: 'center', gap: 11, padding: '8.5px 11px', borderRadius: 8,
                 fontSize: 13, fontWeight: 500, marginBottom: 2,
                 color: isActive ? 'var(--text-hi)' : 'var(--text-dim)',
@@ -215,9 +237,18 @@ export const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) =>
       {/* ── main area ── */}
       <div style={{ flex: 1, display: 'flex', flexDirection: 'column', minWidth: 0 }}>
         {/* topbar — no backdropFilter so popovers don't get trapped in its stacking context */}
-        <header style={{ height: 'var(--topbar-h)', borderBottom: '1px solid var(--line)', display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '0 24px', background: 'rgba(8,11,20,.95)', flexShrink: 0 }}>
-          <div className="row gap-8 muted" style={{ fontSize: 13 }}>
-            <span>AirSENS</span><ChevronRight size={14} /><span className="hi" style={{ fontWeight: 600 }}>{crumb}</span>
+        <header style={{ height: 'var(--topbar-h)', borderBottom: '1px solid var(--line)', display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '0 16px', background: 'rgba(8,11,20,.95)', flexShrink: 0 }}>
+          <div className="row gap-8">
+            {/* hamburger — visible on mobile only */}
+            <button className="btn ghost sm" onClick={() => setSidebarOpen(o => !o)}
+              style={{ padding: 8, display: window.innerWidth <= 900 ? 'flex' : 'none' }}>
+              <Menu size={18} />
+            </button>
+            <div className="row gap-8 muted" style={{ fontSize: 13 }}>
+              <span style={{ display: window.innerWidth <= 600 ? 'none' : 'inline' }}>AirSENS</span>
+              <ChevronRight size={14} style={{ display: window.innerWidth <= 600 ? 'none' : 'inline' }} />
+              <span className="hi" style={{ fontWeight: 600 }}>{crumb}</span>
+            </div>
           </div>
 
           <div className="row gap-12">
