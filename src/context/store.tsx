@@ -271,6 +271,8 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     audit('Removed organisation', id);
   };
 
+  const resetData = () => { setState(freshState()); audit('Reset demo data', 'full reset'); };
+
   // org-scoped user list: superadmins see all, org-admins see only their org
   const scopedUsers = (currentUser?.role === 'superadmin')
     ? state.users

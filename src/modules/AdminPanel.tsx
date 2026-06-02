@@ -4,7 +4,7 @@ import {
 } from 'lucide-react';
 import { PageHeader, PanelHead, KpiCard } from '../components/ui';
 import { useStore } from '../context/store';
-import { allModules, organizations } from '../data/seed';
+import { allModules } from '../data/seed';
 import type { User, Permission, Role } from '../data/types';
 
 const PERMS: Permission[] = ['view', 'read', 'write', 'edit'];

@@ -22,7 +22,7 @@ export const ControlTower: React.FC = () => {
   const totalUsers = users.length;
   const activeOrgs = organizations.filter(o => o.status === 'active').length;
   const pendingOrgs = organizations.filter(o => o.status === 'pending').length;
-  const allUsers = useStore().users; // unscoped via store — superadmin sees all
+  const allUsers = users; // superadmin sees all via scoped store
 
   // users grouped by org
   const orgUsers = (orgId: string) => allUsers.filter(u => u.orgId === orgId);
