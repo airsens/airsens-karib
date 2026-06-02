@@ -8,7 +8,7 @@ import type { Component } from '../data/types';
 export const ComponentsModule: React.FC = () => {
   const { components, aircraft } = useStore();
   const toast = useToast();
-  const [acId, setAcId] = useState(aircraft[0].id);
+  const [acId, setAcId] = useState(() => aircraft[0]?.id ?? '');
   const [open, setOpen] = useState<Record<string, boolean>>({});
   const list = components.filter(c => c.aircraftId === acId);
   const roots = list.filter(c => !c.parentId);

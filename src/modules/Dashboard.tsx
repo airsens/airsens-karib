@@ -32,7 +32,7 @@ export const Dashboard: React.FC = () => {
   // 30-day utilization series
   const byDate: Record<string, number> = {};
   flightLogs.forEach(f => { byDate[f.date] = (byDate[f.date] || 0) + f.blockHours; });
-  const util = Object.entries(byDate).slice(-30).map(([date, hrs]) => ({
+  const util = Object.entries(byDate).sort((a, b) => a[0].localeCompare(b[0])).slice(-30).map(([date, hrs]) => ({
     date: date.slice(5), hrs: +hrs.toFixed(1),
   }));
 

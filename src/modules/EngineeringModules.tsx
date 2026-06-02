@@ -7,8 +7,8 @@ import { useToast } from '../components/Toast';
 /* ---------------- CONFIGURATION MANAGEMENT ---------------- */
 export const ConfigurationModule: React.FC = () => {
   const { aircraft } = useStore();
-  const [acId, setAcId] = useState(aircraft[0].id);
-  const ac = aircraft.find(a => a.id === acId)!;
+  const [acId, setAcId] = useState(() => aircraft[0]?.id ?? '');
+  const ac = aircraft.find(a => a.id === acId) ?? aircraft[0];
   const timeline = [
     { phase: 'As-Designed', date: '2014-03-01', desc: 'OEM baseline configuration delivered', state: 'locked' },
     { phase: 'As-Built', date: '2014-06-18', desc: 'Final assembly + customer options (winglets, IFE)', state: 'locked' },

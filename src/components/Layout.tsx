@@ -39,6 +39,17 @@ const NAV: { group: string; items: { to: string; label: string; icon: React.Reac
   ]},
 ];
 
+// responsive hook — updates on resize, no window.innerWidth in render
+function useIsMobile(breakpoint = 900) {
+  const [is, setIs] = React.useState(() => window.innerWidth <= breakpoint);
+  useEffect(() => {
+    const handler = () => setIs(window.innerWidth <= breakpoint);
+    window.addEventListener('resize', handler);
+    return () => window.removeEventListener('resize', handler);
+  }, [breakpoint]);
+  return is;
+}
+
 const ROLE_LABEL: Record<string, string> = {
   superadmin: 'Super Admin', 'org-admin': 'Org Admin', engineer: 'Engineer', viewer: 'Viewer',
 };
@@ -118,13 +129,15 @@ export const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) =>
 
   const [bellOpen, setBellOpen] = useState(false);
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const isMobile = useIsMobile(900);
+  const isSmall = useIsMobile(600);
   const bellBtnRef = useRef<HTMLButtonElement>(null);
   const [bellPos,  setBellPos]  = useState({ top: 0, right: 0 });
 
   const openBell = () => {
     if (bellBtnRef.current) {
       const r = bellBtnRef.current.getBoundingClientRect();
-      setBellPos({ top: r.bottom + 8, right: window.innerWidth - r.right });
+      setBellPos({ top: r.bottom + 8, right: document.documentElement.clientWidth - r.right });
     }
     setBellOpen(o => !o);
   };
@@ -164,10 +177,10 @@ export const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) =>
         flexDirection: 'column',
         height: '100%',
         // mobile: hidden by default, slides in as overlay
-        position: window.innerWidth <= 900 ? 'fixed' : 'relative',
+        position: isMobile ? 'fixed' : 'relative',
         top: 0, left: 0,
-        zIndex: window.innerWidth <= 900 ? 40 : 'auto',
-        transform: window.innerWidth <= 900 && !sidebarOpen ? 'translateX(-100%)' : 'translateX(0)',
+        zIndex: isMobile ? 40 : 'auto',
+        transform: isMobile && !sidebarOpen ? 'translateX(-100%)' : 'translateX(0)',
         transition: 'transform .25s cubic-bezier(.2,.8,.3,1)',
         minWidth: 248,
       }}>
@@ -241,12 +254,12 @@ export const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) =>
           <div className="row gap-8">
             {/* hamburger — visible on mobile only */}
             <button className="btn ghost sm" onClick={() => setSidebarOpen(o => !o)}
-              style={{ padding: 8, display: window.innerWidth <= 900 ? 'flex' : 'none' }}>
+              style={{ padding: 8, display: isMobile ? 'flex' : 'none' }}>
               <Menu size={18} />
             </button>
             <div className="row gap-8 muted" style={{ fontSize: 13 }}>
-              <span style={{ display: window.innerWidth <= 600 ? 'none' : 'inline' }}>AirSENS</span>
-              <ChevronRight size={14} style={{ display: window.innerWidth <= 600 ? 'none' : 'inline' }} />
+              <span style={{ display: isSmall ? 'none' : 'inline' }}>AirSENS</span>
+              <ChevronRight size={14} style={{ display: isSmall ? 'none' : 'inline' }} />
               <span className="hi" style={{ fontWeight: 600 }}>{crumb}</span>
             </div>
           </div>

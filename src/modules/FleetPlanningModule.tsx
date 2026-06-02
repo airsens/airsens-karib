@@ -8,7 +8,7 @@ const HORIZONS = [30, 60, 90] as const;
 export const FleetPlanningModule: React.FC = () => {
   const { aircraft } = useStore();
   const [horizon, setHorizon] = useState<number>(90);
-  const today = new Date('2026-06-01').getTime();
+  const today = new Date().getTime();
 
   const rows = aircraft.map(a => {
     const due = new Date(a.nextCheck.dueDate).getTime();

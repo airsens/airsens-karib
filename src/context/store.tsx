@@ -91,13 +91,18 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
 
   useEffect(() => { try { localStorage.setItem(KEY, JSON.stringify(state)); } catch { /* quota */ } }, [state]);
 
+  // audit helper — uses ref so it's never stale without re-creating actions
+  const currentUserRef = React.useRef(currentUser);
+  useEffect(() => { currentUserRef.current = currentUser; }, [currentUser]);
+
   const audit = useCallback((action: string, detail: string) => {
+    const u = currentUserRef.current;
     setState(s => ({ ...s, audit: [{
       id: `AUD${Date.now()}`, ts: new Date().toISOString(),
-      userId: currentUser?.id ?? 'anon', userName: currentUser?.name ?? 'Anonymous',
+      userId: u?.id ?? 'anon', userName: u?.name ?? 'Anonymous',
       action, detail,
     }, ...s.audit].slice(0, 500) }));
-  }, [currentUser]);
+  }, []); // stable — uses ref internally
 
   const login: Store['login'] = (email, password) => {
     const u = state.users.find(x => x.email.toLowerCase() === email.toLowerCase().trim());
@@ -178,17 +183,32 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
       reportedBy: currentUser?.name ?? 'Unknown', closedDate: null,
     };
     setState(s => {
-      // safety-critical (Cat A) grounds the aircraft
-      const aircraft = d.safetyCritical
-        ? s.aircraft.map(a => a.id === d.aircraftId ? { ...a, status: 'aog' as const } : a)
-        : s.aircraft;
+      // safety-critical (Cat A) grounds the aircraft; always increment defectsOpen
+      const aircraft = s.aircraft.map(a => {
+        if (a.id !== d.aircraftId) return a;
+        return { ...a, defectsOpen: a.defectsOpen + 1, ...(d.safetyCritical ? { status: 'aog' as const } : {}) };
+      });
       return { ...s, defects: [defect, ...s.defects], aircraft };
     });
     audit('Raised defect', `${d.aircraftId} · ATA ${d.ata} · ${d.severity}${d.safetyCritical ? ' (MEL A — AOG)' : ` (MEL ${cat})`}`);
   };
 
   const closeDefect: Store['closeDefect'] = (id) => {
-    setState(s => ({ ...s, defects: s.defects.map(x => x.id === id ? { ...x, status: 'closed' as const, closedDate: new Date().toISOString().slice(0, 10) } : x) }));
+    setState(s => {
+      const defect = s.defects.find(x => x.id === id);
+      if (!defect) return s;
+      const defects = s.defects.map(x => x.id === id
+        ? { ...x, status: 'closed' as const, closedDate: new Date().toISOString().slice(0, 10) }
+        : x);
+      // recalculate aircraft defectsOpen and clear AOG if no remaining Cat-A open defects
+      const aircraft = s.aircraft.map(a => {
+        if (a.id !== defect.aircraftId) return a;
+        const openCount = defects.filter(d => d.aircraftId === a.id && d.status !== 'closed').length;
+        const hasAog = defects.some(d => d.aircraftId === a.id && d.status !== 'closed' && d.melCategory === 'A');
+        return { ...a, defectsOpen: openCount, ...(a.status === 'aog' && !hasAog ? { status: 'airworthy' as const } : {}) };
+      });
+      return { ...s, defects, aircraft };
+    });
     audit('Closed defect', id);
   };
 

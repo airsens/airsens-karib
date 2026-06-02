@@ -122,7 +122,7 @@ export const WorkOrdersModule: React.FC = () => {
 const NewWorkOrderDrawer: React.FC<{ onClose: () => void }> = ({ onClose }) => {
   const { aircraft, createWorkOrder } = useStore();
   const toast = useToast();
-  const [aircraftId, setAircraftId] = useState(aircraft[0].id);
+  const [aircraftId, setAircraftId] = useState(() => aircraft[0]?.id ?? '');
   const [title, setTitle] = useState('');
   const [type, setType] = useState<WorkOrder['type']>('scheduled');
   const [priority, setPriority] = useState<WorkOrder['priority']>('med');
