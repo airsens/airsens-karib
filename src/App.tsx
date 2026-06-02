@@ -17,6 +17,7 @@ import {
   AmpModule, ToolsModule, SalesModule,
 } from './modules/TableModules';
 import { ConfigurationModule, StructuralModule, AgeingModule } from './modules/EngineeringModules';
+import { ControlTower } from './modules/ControlTower';
 import type { ModuleKey } from './data/types';
 import { ShieldAlert } from 'lucide-react';
 
@@ -37,6 +38,11 @@ const AdminGuard: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const { currentUser } = useStore();
   const ok = currentUser?.role === 'superadmin' || currentUser?.role === 'org-admin';
   return ok ? <>{children}</> : <Denied />;
+};
+
+const SuperAdminGuard: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  const { currentUser } = useStore();
+  return currentUser?.role === 'superadmin' ? <>{children}</> : <Denied />;
 };
 
 const Shell: React.FC = () => (
@@ -60,6 +66,7 @@ const Shell: React.FC = () => (
       <Route path="/structural" element={<Guard mod="structural"><StructuralModule /></Guard>} />
       <Route path="/ageing" element={<Guard mod="ageing"><AgeingModule /></Guard>} />
       <Route path="/admin" element={<AdminGuard><AdminPanel /></AdminGuard>} />
+      <Route path="/control-tower" element={<SuperAdminGuard><ControlTower /></SuperAdminGuard>} />
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
     <AIAssistant />

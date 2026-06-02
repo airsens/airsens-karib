@@ -34,7 +34,20 @@ export interface Organization {
   id: string;
   name: string;
   icaoPrefix: string;
-  approvalRef: string;    // e.g. "EASA Part-CAMO / Part-145 ref"
+  approvalRef: string;
+  country: string;
+  contactEmail: string;
+  plan: 'starter' | 'professional' | 'enterprise';
+  status: 'active' | 'suspended' | 'pending';
+  createdAt: string;
+  // quotas set by platform owners (Rilwan & Promise)
+  maxAdmins: number;        // how many org-admins allowed
+  maxUsers: number;         // total users allowed in org
+  maxAircraft: number;      // fleet size limit
+  // onboarding (mailto invite for now, real email when backend ready)
+  inviteSentAt?: string;
+  activatedAt?: string;
+  notes?: string;           // internal notes from Control Tower
 }
 
 export interface Engine {

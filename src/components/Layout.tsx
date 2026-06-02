@@ -228,6 +228,17 @@ export const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) =>
               })}>
                 <Users size={17} /><span>Admin Panel</span>
               </NavLink>
+              {currentUser?.role === 'superadmin' && (
+                <NavLink to="/control-tower" onClick={() => setSidebarOpen(false)} style={({ isActive }) => ({
+                  display: 'flex', alignItems: 'center', gap: 11, padding: '8.5px 11px', borderRadius: 8,
+                  fontSize: 13, fontWeight: 500, marginBottom: 2,
+                  color: isActive ? 'var(--text-hi)' : 'var(--text-dim)',
+                  background: isActive ? 'var(--bg-elevated)' : 'transparent',
+                  boxShadow: isActive ? 'inset 2px 0 0 var(--cyan)' : 'none',
+                })}>
+                  <Radar size={17} /><span>Control Tower</span>
+                </NavLink>
+              )}
             </div>
           )}
         </nav>

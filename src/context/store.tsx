@@ -6,12 +6,12 @@
 import React, { createContext, useContext, useEffect, useState, useCallback } from 'react';
 import type {
   Aircraft, Engine, FlightLog, Defect, MELItem, User, WorkOrder,
-  Component, AuditEntry,
+  Component, AuditEntry, Organization,
 } from '../data/types';
 import {
   aircraft as seedAircraft, engines as seedEngines, flightLogs as seedFlights,
   defects as seedDefects, mel as seedMel, workOrders as seedWO,
-  components as seedComponents, seedUsers,
+  components as seedComponents, seedUsers, organizations as seedOrgs,
 } from '../data/seed';
 
 const KEY = 'airsens.state.v1';
@@ -26,6 +26,7 @@ interface State {
   workOrders: WorkOrder[];
   components: Component[];
   users: User[];
+  organizations: Organization[];
   audit: AuditEntry[];
 }
 
@@ -39,6 +40,7 @@ function freshState(): State {
     workOrders: structuredClone(seedWO),
     components: structuredClone(seedComponents),
     users: structuredClone(seedUsers),
+    organizations: structuredClone(seedOrgs),
     audit: [],
   };
 }
@@ -78,6 +80,9 @@ interface Store extends State {
   addUser: (u: Omit<User, 'id' | 'createdAt'>) => void;
   updateUser: (id: string, patch: Partial<User>) => void;
   removeUser: (id: string) => void;
+  addOrganization: (o: Omit<Organization, 'id' | 'createdAt'>) => void;
+  updateOrganization: (id: string, patch: Partial<Organization>) => void;
+  removeOrganization: (id: string) => void;
   resetData: () => void;
 }
 
@@ -252,11 +257,33 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     audit('Removed user', id);
   };
 
-  const resetData = () => { setState(freshState()); audit('Reset demo data', 'full reset'); };
+  const addOrganization: Store['addOrganization'] = (o) => {
+    const org: Organization = { ...o, id: `ORG${Date.now()}`, createdAt: new Date().toISOString().slice(0, 10) };
+    setState(s => ({ ...s, organizations: [...s.organizations, org] }));
+    audit('Created organisation', `${o.name} · ${o.plan}`);
+  };
+  const updateOrganization: Store['updateOrganization'] = (id, patch) => {
+    setState(s => ({ ...s, organizations: s.organizations.map(o => o.id === id ? { ...o, ...patch } : o) }));
+    audit('Updated organisation', id);
+  };
+  const removeOrganization: Store['removeOrganization'] = (id) => {
+    setState(s => ({ ...s, organizations: s.organizations.filter(o => o.id !== id) }));
+    audit('Removed organisation', id);
+  };
+
+  // org-scoped user list: superadmins see all, org-admins see only their org
+  const scopedUsers = (currentUser?.role === 'superadmin')
+    ? state.users
+    : state.users.filter(u => u.orgId === currentUser?.orgId);
 
   const value: Store = {
-    ...state, currentUser, login, logout, can,
-    logFlight, raiseDefect, closeDefect, createWorkOrder, moveWorkOrder, addUser, updateUser, removeUser, resetData,
+    ...state,
+    users: scopedUsers,   // org-scoped — superadmins see all, org-admins see own org only
+    currentUser, login, logout, can,
+    logFlight, raiseDefect, closeDefect, createWorkOrder, moveWorkOrder,
+    addUser, updateUser, removeUser,
+    addOrganization, updateOrganization, removeOrganization,
+    resetData,
   };
   return <Ctx.Provider value={value}>{children}</Ctx.Provider>;
 };

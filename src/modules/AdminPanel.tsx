@@ -17,7 +17,10 @@ const MODULE_LABELS: Record<string, string> = {
 };
 
 export const AdminPanel: React.FC = () => {
-  const { users, currentUser, addUser, updateUser, removeUser, audit, resetData } = useStore();
+  const { users, currentUser, addUser, updateUser, removeUser, audit, resetData, organizations } = useStore();
+  const myOrg = organizations.find(o => o.id === currentUser?.orgId);
+  const canAddUser = !myOrg || users.length < myOrg.maxUsers;
+  const canAddAdmin = !myOrg || users.filter(u => u.role === 'org-admin').length < myOrg.maxAdmins;
   const [tab, setTab] = useState<'users' | 'audit' | 'org'>('users');
   const [editing, setEditing] = useState<User | null>(null);
   const [creating, setCreating] = useState(false);
@@ -29,7 +32,14 @@ export const AdminPanel: React.FC = () => {
     <div>
       <PageHeader eyebrow="Administration" title="Admin Control Panel"
         sub="Manage engineers, roles and per-module access for your organization."
-        actions={<button className="btn primary" onClick={() => setCreating(true)}><UserPlus size={15} /> Add Engineer</button>} />
+        actions={<>
+          {myOrg && (
+            <span className="muted" style={{ fontSize: 12 }}>{users.length}/{myOrg.maxUsers} users · {users.filter(u=>u.role==='org-admin').length}/{myOrg.maxAdmins} admins</span>
+          )}
+          <button className="btn primary" disabled={!canAddUser} title={!canAddUser ? `User limit reached (${myOrg?.maxUsers}). Contact AirSENS to upgrade.` : ''} onClick={() => setCreating(true)}>
+            <UserPlus size={15} /> Add Engineer
+          </button>
+        </>} />
 
       <div className="grid kpi-grid" style={{ marginBottom: 18 }}>
         <KpiCard label="Total Users" value={users.length} sub={`${admins.length} admins`} icon={<Users size={18} />} />

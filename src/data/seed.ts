@@ -338,7 +338,37 @@ export const enginesFor = (aircraftId: string) => engines.filter(e => e.aircraft
 
 // ---------------- ORGANIZATIONS ----------------
 export const organizations: Organization[] = [
-  { id: 'ORG1', name: 'Karib Aerospace', icaoPrefix: 'J7', approvalRef: 'EASA Part-CAMO / Part-145 · KA-2026' },
+  {
+    id: 'ORG1',
+    name: 'Karib Aerospace',
+    icaoPrefix: 'J7',
+    approvalRef: 'EASA Part-CAMO / Part-145 · KA-2026',
+    country: 'United Kingdom',
+    contactEmail: 'karib.aerospace@outlook.com',
+    plan: 'enterprise',
+    status: 'active',
+    createdAt: daysFrom(-200),
+    maxAdmins: 3,
+    maxUsers: 20,
+    maxAircraft: 30,
+    activatedAt: daysFrom(-200),
+    notes: 'Founding client — Karib Aerospace Ltd',
+  },
+  {
+    id: 'ORG2',
+    name: 'Caribbean Wings Ltd',
+    icaoPrefix: '9Y',
+    approvalRef: 'TTCAA Part-CAMO · CW-2026',
+    country: 'Trinidad & Tobago',
+    contactEmail: 'ops@caribbeanwings.tt',
+    plan: 'professional',
+    status: 'pending',
+    createdAt: daysFrom(-5),
+    maxAdmins: 2,
+    maxUsers: 10,
+    maxAircraft: 10,
+    notes: 'Demo org — awaiting activation',
+  },
 ];
 
 // full permission set helper
