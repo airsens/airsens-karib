@@ -5,11 +5,12 @@
 // ============================================================
 
 export interface AFInputs {
-  payloadRatio: number;   // 0..1.2  actual payload / max structural payload
-  cyclesPerDay: number;   // landings per day
-  loadFactor: number;     // 0..1   avg seat/cargo load
-  envSeverity: number;    // 1=benign .. 5=harsh (coastal salt, heat, dust)
-  avgSectorHrs: number;   // hours per cycle (short sectors = more cycles/hr)
+  payloadRatio: number;
+  cyclesPerDay: number;
+  loadFactor: number;
+  envSeverity: number;
+  avgSectorHrs: number;
+  structuralFatigueModifier?: number; // from Structural Fatigue Index engine (default 1.0)
 }
 
 export interface AFResult {
@@ -46,8 +47,9 @@ export function computeAF(i: AFInputs): AFResult {
   const raw = payloadTerm * cycleTerm * loadTerm * envTerm;
   const baseline = Math.pow(0.75, 2.4) * (0.6 + 0.9) * (0.7 + 0.6 * 0.7) * 1;
   const ratio = raw / baseline;
-  // apply diminishing-returns compression so realistic ops stay ~1.0–2.6×
-  const af = +(1 + Math.log2(Math.max(ratio, 1)) * 0.62).toFixed(3);
+  // apply structural fatigue modifier from SFI engine (default 1.0 = no effect)
+  const structMod = i.structuralFatigueModifier ?? 1.0;
+  const af = +(((1 + Math.log2(Math.max(ratio, 1)) * 0.62)) * structMod).toFixed(3);
 
   // driver attribution (share of excess over 1.0)
   const excess = Math.max(af - 1, 0.0001);
