@@ -132,7 +132,12 @@ export const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) =>
     return list;
   }, [aircraft, defects]);
 
-  const [bellOpen, setBellOpen] = useState(false);
+  const [pendingNav, setPendingNav] = useState<string | null>(null);
+
+  // execute navigation outside the portal (portal is outside Router context)
+  useEffect(() => {
+    if (pendingNav) { navigate(pendingNav); setPendingNav(null); }
+  }, [pendingNav, navigate]);
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const isMobile = useIsMobile(900);
   const isSmall = useIsMobile(600);
@@ -406,7 +411,7 @@ export const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) =>
           {notifications.length === 0
             ? <div className="muted" style={{ padding: 24, textAlign: 'center', fontSize: 12.5 }}>All clear — no active alerts.</div>
             : notifications.map((n, i) => (
-              <button key={i} onClick={() => { setBellOpen(false); navigate(n.to); }}
+              <button key={i} onClick={() => { setBellOpen(false); setPendingNav(n.to); }}
                 className="row gap-10"
                 style={{ width: '100%', padding: '10px 14px', borderBottom: '1px solid var(--line)', textAlign: 'left' }}
                 onMouseEnter={e => (e.currentTarget.style.background = 'var(--bg-elevated)')}
