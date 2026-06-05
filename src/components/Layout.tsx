@@ -415,22 +415,24 @@ export const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) =>
           {notifications.length === 0
             ? <div className="muted" style={{ padding: 24, textAlign: 'center', fontSize: 12.5 }}>All clear — no active alerts.</div>
             : notifications.map((n, i) => (
-              <button key={i}
-                onClick={() => {
-                  setBellOpen(false);
-                  // use window.location for guaranteed navigation from portal
-                  window.location.href = n.to;
+              <div key={i}
+                onClick={() => { setBellOpen(false); window.location.assign(n.to); }}
+                style={{
+                  display: 'flex', alignItems: 'flex-start', gap: 10,
+                  width: '100%', padding: '12px 14px',
+                  borderBottom: '1px solid var(--line)',
+                  cursor: 'pointer',
+                  userSelect: 'none',
+                  transition: 'background .1s',
                 }}
-                className="row gap-10"
-                style={{ width: '100%', padding: '10px 14px', borderBottom: '1px solid var(--line)', textAlign: 'left' }}
                 onMouseEnter={e => (e.currentTarget.style.background = 'var(--bg-elevated)')}
                 onMouseLeave={e => (e.currentTarget.style.background = 'transparent')}>
-                <span style={{ color: n.tone, flexShrink: 0, marginTop: 1 }}>{n.icon}</span>
-                <div style={{ minWidth: 0 }}>
+                <span style={{ color: n.tone, flexShrink: 0, marginTop: 1, pointerEvents: 'none' }}>{n.icon}</span>
+                <div style={{ minWidth: 0, pointerEvents: 'none' }}>
                   <div className="hi" style={{ fontSize: 12, fontWeight: 600, lineHeight: 1.3 }}>{n.title}</div>
                   <div className="muted" style={{ fontSize: 11, marginTop: 2, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{n.sub}</div>
                 </div>
-              </button>
+              </div>
             ))}
         </div>,
         document.body
