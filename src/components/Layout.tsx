@@ -133,6 +133,7 @@ export const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) =>
   }, [aircraft, defects]);
 
   const [pendingNav, setPendingNav] = useState<string | null>(null);
+  const [bellOpen, setBellOpen] = useState(false);
 
   // execute navigation outside the portal (portal is outside Router context)
   useEffect(() => {
