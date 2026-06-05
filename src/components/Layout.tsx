@@ -146,7 +146,8 @@ export const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) =>
   const isMobile = useIsMobile(900);
   const isSmall = useIsMobile(600);
   const bellBtnRef = useRef<HTMLButtonElement>(null);
-  const [bellPos,  setBellPos]  = useState({ top: 0, right: 0 });
+  const bellPanelRef = useRef<HTMLDivElement>(null);
+  const [bellPos, setBellPos] = useState({ top: 0, right: 0 });
 
   const openBell = () => {
     if (bellBtnRef.current) {
@@ -162,7 +163,9 @@ export const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) =>
       const t = e.target as Node;
       if (searchRef.current && !searchRef.current.contains(t) &&
           searchBtnRef.current && !searchBtnRef.current.contains(t)) setSearchOpen(false);
-      if (bellBtnRef.current && !bellBtnRef.current.contains(t)) setBellOpen(false);
+      // only close bell if click is outside BOTH the button AND the panel
+      if (bellBtnRef.current && !bellBtnRef.current.contains(t) &&
+          bellPanelRef.current && !bellPanelRef.current.contains(t)) setBellOpen(false);
     };
     const onKey = (e: KeyboardEvent) => {
       if (e.key === 'Escape') { setSearchOpen(false); setBellOpen(false); }
@@ -391,7 +394,7 @@ export const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) =>
 
       {/* ── notifications dropdown — portal, always on top ── */}
       {bellOpen && createPortal(
-        <div className="fade-up" style={{
+        <div ref={bellPanelRef} className="fade-up" style={{
           position: 'fixed',
           top: bellPos.top,
           right: bellPos.right,
