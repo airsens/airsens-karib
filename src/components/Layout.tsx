@@ -78,29 +78,29 @@ export const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) =>
 
   const results = useMemo(() => {
     const q = query.trim().toLowerCase();
-    if (!q) return [] as { type: string; label: string; sub: string; to: string }[];
-    const out: { type: string; label: string; sub: string; to: string }[] = [];
+    if (q.length < 2) return [] as { type: string; label: string; sub: string; to: string; id?: string; badge?: string }[];
+    const out: { type: string; label: string; sub: string; to: string; id?: string; badge?: string }[] = [];
     aircraft.forEach(a => {
-      if (a.registration.toLowerCase().includes(q) || a.model.toLowerCase().includes(q) || a.msn.includes(q))
-        out.push({ type: 'Aircraft', label: a.registration, sub: `${a.model} ${a.variant} · ${a.status}`, to: '/aircraft' });
+      if (a.registration.toLowerCase().includes(q) || a.model.toLowerCase().includes(q) || a.msn.includes(q) || a.owner.toLowerCase().includes(q))
+        out.push({ type: 'Aircraft', label: a.registration, sub: `${a.model} ${a.variant} · ${a.base} · ${a.status}`, to: '/aircraft', id: a.id, badge: a.status === 'aog' ? '🔴 AOG' : a.status === 'overdue' ? '🟠 Overdue' : '' });
     });
     workOrders.forEach(w => {
-      if (w.wo.toLowerCase().includes(q) || w.title.toLowerCase().includes(q))
-        out.push({ type: 'Work Order', label: w.wo, sub: w.title, to: '/work-orders' });
+      if (w.wo.toLowerCase().includes(q) || w.title.toLowerCase().includes(q) || w.assignee.toLowerCase().includes(q))
+        out.push({ type: 'Work Order', label: w.wo, sub: `${w.title} · ${w.priority.toUpperCase()} · ${w.state}`, to: '/work-orders', id: w.id, badge: w.priority === 'aog' ? '🔴 AOG' : w.priority === 'high' ? '🟠 High' : '' });
     });
     components.forEach(c => {
       if (c.pn.toLowerCase().includes(q) || c.name.toLowerCase().includes(q) || c.sn.toLowerCase().includes(q))
-        out.push({ type: 'Component', label: c.name, sub: `P/N ${c.pn} · S/N ${c.sn}`, to: '/components' });
+        out.push({ type: 'Component', label: c.name, sub: `P/N ${c.pn} · S/N ${c.sn}`, to: '/components', id: c.id });
     });
     defects.forEach(d => {
-      if (d.description.toLowerCase().includes(q) || d.ata.includes(q) || (d.melRef ?? '').toLowerCase().includes(q))
-        out.push({ type: 'Defect', label: d.description, sub: `ATA ${d.ata}${d.melCategory ? ` · MEL ${d.melCategory}` : ''}`, to: '/mel' });
+      if (d.description.toLowerCase().includes(q) || d.ata.includes(q) || (d.melRef ?? '').toLowerCase().includes(q) || (d.reportedBy ?? '').toLowerCase().includes(q))
+        out.push({ type: 'Defect', label: d.description, sub: `ATA ${d.ata}${d.melCategory ? ` · MEL Cat ${d.melCategory}` : ''} · ${d.status}`, to: '/mel', id: d.id, badge: d.melCategory === 'A' ? '🔴 Cat A' : d.melCategory === 'B' ? '🟠 Cat B' : '' });
     });
     seedInventory.forEach(i => {
       if (i.pn.toLowerCase().includes(q) || i.description.toLowerCase().includes(q))
-        out.push({ type: 'Part', label: i.description, sub: `P/N ${i.pn} · qty ${i.qty}`, to: '/inventory' });
+        out.push({ type: 'Part', label: i.description, sub: `P/N ${i.pn} · Qty: ${i.qty} · ${i.location}`, to: '/inventory', badge: i.qty < i.minQty ? '🟠 Low Stock' : '' });
     });
-    return out.slice(0, 8);
+    return out.slice(0, 10);
   }, [query, aircraft, workOrders, components, defects]);
 
   const openSearch = () => {
@@ -111,7 +111,12 @@ export const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) =>
     setSearchOpen(true);
   };
 
-  const goTo = (to: string) => { setQuery(''); setSearchOpen(false); navigate(to); };
+  const [selectedIdx, setSelectedIdx] = useState(0);
+
+  const goTo = (to: string, id?: string) => {
+    setQuery(''); setSearchOpen(false); setSelectedIdx(0);
+    navigate(to, { state: { highlightId: id } });
+  };
 
   // ── notifications ──────────────────────────────────────────
   const notifications = useMemo(() => {
@@ -282,9 +287,14 @@ export const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) =>
                 <Search size={15} className="muted" />
                 <input
                   value={query}
-                  onChange={e => { setQuery(e.target.value); openSearch(); }}
+                  onChange={e => { setQuery(e.target.value); setSelectedIdx(0); openSearch(); }}
                   onFocus={openSearch}
-                  onKeyDown={e => { if (e.key === 'Enter' && results[0]) goTo(results[0].to); }}
+                  onKeyDown={e => {
+                    if (e.key === 'ArrowDown') { e.preventDefault(); setSelectedIdx(i => Math.min(i + 1, results.length - 1)); }
+                    if (e.key === 'ArrowUp') { e.preventDefault(); setSelectedIdx(i => Math.max(i - 1, 0)); }
+                    if (e.key === 'Enter' && results[selectedIdx]) goTo(results[selectedIdx].to, results[selectedIdx].id);
+                    if (e.key === 'Escape') { setQuery(''); setSearchOpen(false); }
+                  }}
                   placeholder="Search reg, P/N, WO, defect…"
                   style={{ background: 'none', border: 'none', outline: 'none', color: 'var(--text-hi)', fontSize: 13, width: '100%' }} />
                 {query && <button onClick={() => { setQuery(''); setSearchOpen(false); }} className="muted" style={{ display: 'flex' }}><X size={14} /></button>}
@@ -322,8 +332,8 @@ export const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) =>
           position: 'fixed',
           top: searchPos.top,
           left: searchPos.left,
-          width: 320,
-          maxHeight: 360,
+          width: 380,
+          maxHeight: 420,
           overflowY: 'auto',
           background: 'var(--bg-panel)',
           border: '1px solid var(--line-bright)',
@@ -332,24 +342,40 @@ export const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) =>
           zIndex: 9999,
           padding: 6,
         }}>
-          {results.length === 0
-            ? <div className="muted" style={{ padding: 16, textAlign: 'center', fontSize: 12.5 }}>No matches for "{query}".</div>
-            : results.map((r, i) => (
-              <button key={i} onClick={() => goTo(r.to)} className="row between" style={{ width: '100%', padding: '8px 10px', borderRadius: 8, textAlign: 'left' }}
-                onMouseEnter={e => (e.currentTarget.style.background = 'var(--bg-elevated)')}
-                onMouseLeave={e => (e.currentTarget.style.background = 'transparent')}>
-                <div style={{ minWidth: 0 }}>
-                  <div className="hi" style={{ fontSize: 12.5, fontWeight: 600, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{r.label}</div>
-                  <div className="muted" style={{ fontSize: 11, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{r.sub}</div>
+          {query.length < 2
+            ? <div className="muted" style={{ padding: 16, textAlign: 'center', fontSize: 12.5 }}>Keep typing to search…</div>
+            : results.length === 0
+            ? <div className="muted" style={{ padding: 16, textAlign: 'center', fontSize: 12.5 }}>No matches for "<strong>{query}</strong>"</div>
+            : <>
+                {results.map((r, i) => {
+                  const typeColor: Record<string, string> = { Aircraft: 'var(--cyan)', 'Work Order': 'var(--amber)', Defect: 'var(--red)', Component: 'var(--blue)', Part: 'var(--green)' };
+                  return (
+                    <button key={i} onClick={() => goTo(r.to, r.id)}
+                      className="row between"
+                      style={{ width: '100%', padding: '9px 10px', borderRadius: 8, textAlign: 'left', background: i === selectedIdx ? 'var(--bg-elevated)' : 'transparent', transition: 'background .1s' }}
+                      onMouseEnter={() => setSelectedIdx(i)}>
+                      <div className="row gap-10" style={{ minWidth: 0, flex: 1 }}>
+                        <div style={{ width: 28, height: 28, borderRadius: 7, background: `${typeColor[r.type] ?? 'var(--cyan)'}18`, display: 'grid', placeItems: 'center', flexShrink: 0 }}>
+                          <span style={{ fontSize: 10, fontWeight: 700, color: typeColor[r.type] ?? 'var(--cyan)' }}>{r.type.slice(0, 2).toUpperCase()}</span>
+                        </div>
+                        <div style={{ minWidth: 0 }}>
+                          <div className="hi" style={{ fontSize: 12.5, fontWeight: 600, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{r.label}</div>
+                          <div className="muted" style={{ fontSize: 10.5, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{r.sub}</div>
+                        </div>
+                      </div>
+                      <div className="row gap-6" style={{ flexShrink: 0, marginLeft: 8 }}>
+                        {r.badge && <span style={{ fontSize: 9, whiteSpace: 'nowrap' }}>{r.badge}</span>}
+                        <span className="badge muted" style={{ fontSize: 9, color: typeColor[r.type] ?? 'var(--cyan)', borderColor: typeColor[r.type] ?? 'var(--cyan)', background: 'transparent' }}>{r.type}</span>
+                      </div>
+                    </button>
+                  );
+                })}
+                <div className="row gap-12 muted" style={{ padding: '7px 10px 4px', fontSize: 10, borderTop: '1px solid var(--line)', marginTop: 4 }}>
+                  <span className="row gap-4"><CornerDownLeft size={11} /> Enter</span>
+                  <span className="row gap-4">↑↓ Navigate</span>
+                  <span className="row gap-4">Esc Close</span>
                 </div>
-                <span className="badge muted" style={{ fontSize: 9, flexShrink: 0, marginLeft: 8 }}>{r.type}</span>
-              </button>
-            ))}
-          {results.length > 0 && (
-            <div className="row gap-6 muted" style={{ padding: '6px 10px 4px', fontSize: 10, borderTop: '1px solid var(--line)', marginTop: 4 }}>
-              <CornerDownLeft size={11} /> Enter to jump to first result
-            </div>
-          )}
+              </>}
         </div>,
         document.body
       )}

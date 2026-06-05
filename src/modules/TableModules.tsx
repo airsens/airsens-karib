@@ -11,6 +11,7 @@ import { adsb, inventory } from '../data/seed';
 import { useStore } from '../context/store';
 import { useToast } from '../components/Toast';
 import { downloadCsv, printPdf } from '../lib/exports';
+import { useLocation } from 'react-router-dom';
 
 const tooltipStyle = {
   background: 'var(--bg-elevated)', border: '1px solid var(--line-bright)',
@@ -80,6 +81,8 @@ export const AdSbModule: React.FC = () => {
 export const MelModule: React.FC = () => {
   const { defects, aircraft, closeDefect, can } = useStore();
   const toast = useToast();
+  const location = useLocation();
+  const highlightId = (location.state as any)?.highlightId;
   const aircraftById = (id: string) => aircraft.find(a => a.id === id);
   const active = defects.filter(d => d.status !== 'closed' && d.melCategory);
   const catDays = { A: 'Immediate', B: '3 days', C: '10 days', D: '120 days' };
@@ -134,11 +137,12 @@ export const MelModule: React.FC = () => {
               <tbody>
                 {active.map(d => {
                   const overdue = d.dueDate && new Date(d.dueDate).getTime() < Date.now();
+                  const isHighlighted = d.id === highlightId;
                   return (
-                    <tr key={d.id}>
+                    <tr key={d.id} style={isHighlighted ? { background: 'rgba(47,230,224,.08)', outline: '1px solid var(--cyan-dim)' } : {}}>
                       <td className="num hi">{d.melRef ?? '—'}</td>
                       <td className="num muted">{d.ata}</td>
-                      <td>{d.description}</td>
+                      <td>{d.description}{isHighlighted && <span className="badge ok" style={{ marginLeft: 8, fontSize: 8 }}>← from search</span>}</td>
                       <td><span className={`badge ${d.melCategory === 'A' ? 'aog' : d.melCategory === 'B' ? 'crit' : d.melCategory === 'C' ? 'warn' : 'info'}`}>{d.melCategory}</span></td>
                       <td className="num">{aircraftById(d.aircraftId)?.registration}</td>
                       <td className="muted">{d.reportedBy}</td>

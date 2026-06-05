@@ -402,22 +402,87 @@ export const AgeingModule: React.FC = () => {
   const toast = useToast();
   const aged = aircraft.map(a => ({ ...a, age: new Date().getFullYear() - a.yearOfMfg })).sort((a, b) => b.age - a.age);
   const programs = [
-    { name: 'Corrosion Prevention & Control (CPCP)', ref: 'AMC 20-20', due: 8 },
-    { name: 'Structural Significant Items (SSI)', ref: 'ICAO Annex 8', due: 3 },
-    { name: 'Widespread Fatigue Damage (WFD)', ref: 'AMC 20-20', due: 5 },
-    { name: 'Repair Assessment Program (RAP)', ref: 'FAA AC 91-56', due: 2 },
+    {
+      name: 'Supplemental Structural Inspection Document (SSID)',
+      ref: 'JAR 25.571 / FAR 25.571',
+      due: aged.filter(a => a.age > 12).length,
+      desc: 'Inspection programme derived from fatigue & damage tolerance evaluation. Required for ageing aircraft to find and correct all forms of fatigue damage before they become critical.',
+      status: 'active',
+    },
+    {
+      name: 'Aircraft Structural Integrity Programme (ASIP)',
+      ref: 'EASA Part-26 / CS-26',
+      due: aged.filter(a => a.age > 10).length,
+      desc: 'Overarching programme managing the entire structural health of each airframe across its service life — integrating fatigue tracking, damage tolerance, repair assessment and inspection regimes.',
+      status: 'active',
+    },
+    {
+      name: 'Corrosion Prevention & Control Programme (CPCP)',
+      ref: 'AMC 20-20 / AMC4 CAMO.A.305(g)',
+      due: aged.filter(a => a.age > 8).length,
+      desc: 'Systematic approach to prevent and control corrosion in primary structure. Limits direct corrosion deterioration and prevents fatigue failures initiated by corrosion. Baseline CPCP established by type certificate holder.',
+      status: 'active',
+    },
+    {
+      name: 'FAR 26 / EASA Part-26 Compliance',
+      ref: 'Regulation (EU) 2015/640 / 14 CFR Part 26',
+      due: aircraft.length,
+      desc: 'Additional airworthiness specifications for operations. Mandates operators to revise their AMP to incorporate CPCP, WFD assessment, damage tolerance inspections and structural life limits. CAMO is directly responsible.',
+      status: 'mandatory',
+    },
+    {
+      name: 'Widespread Fatigue Damage (WFD) Assessment',
+      ref: 'AMC 20-20 / CS 26.370',
+      due: aged.filter(a => a.age > 15).length,
+      desc: 'Assessment for simultaneous presence of cracks at multiple structural locations. WFD risk increases with repairs on primary load paths (see Structural module). Must demonstrate structure meets fail-safe and residual strength requirements.',
+      status: aged.filter(a => a.age > 15).length > 0 ? 'attention' : 'active',
+    },
+    {
+      name: 'Repair Assessment Programme (RAP)',
+      ref: 'FAA AC 91-56 / EASA Part-26',
+      due: aged.filter(a => a.age > 10).length,
+      desc: 'Evaluation of all significant structural repairs for fatigue and damage tolerance compliance. Works in conjunction with the Structural module SFI engine to flag repairs requiring formal DTE/DTI.',
+      status: 'active',
+    },
   ];
+  const statusColor: Record<string, string> = { active: 'var(--green)', mandatory: 'var(--amber)', attention: 'var(--red)' };
+  const statusLabel: Record<string, string> = { active: 'Active', mandatory: 'Mandatory', attention: 'Attention Required' };
   return (
     <div>
-      <PageHeader eyebrow="Engineering · Compliance" title="Ageing Aircraft Audit"
-        sub="Age-related deterioration programs per AMC 20-20 & ICAO requirements."
+      <PageHeader eyebrow="Engineering · Compliance" title="Ageing Aircraft & Structural Integrity"
+        sub="SSID · ASIP · CPCP · FAR 26 / EASA Part-26 compliance per AMC 20-20 & ICAO requirements."
         actions={<button className="btn primary" onClick={() => toast.push('Ageing-inspection scheduling is coming soon. Create a Work Order to track it now.')}><Plus size={15} /> Schedule Inspection</button>} />
       <div className="grid kpi-grid" style={{ marginBottom: 16 }}>
         <KpiCard label="Oldest Airframe" value={`${aged[0]?.age ?? 0} yrs`} sub={aged[0]?.registration} accent="var(--amber)" icon={<History size={18} />} />
         <KpiCard label="Avg Fleet Age" value={`${aged.length ? (aged.reduce((s, a) => s + a.age, 0) / aged.length).toFixed(1) : 0} yrs`} sub="Across fleet" accent="var(--cyan)" icon={<History size={18} />} delay={60} />
-        <KpiCard label="Over 15 yrs" value={aged.filter(a => a.age > 15).length} sub="Enhanced programs" accent="var(--red)" icon={<AlertTriangle size={18} />} delay={120} />
-        <KpiCard label="Active Programs" value={programs.length} sub="Ageing compliance" accent="var(--green)" icon={<ShieldCheck size={18} />} delay={180} />
+        <KpiCard label="Over 15 yrs" value={aged.filter(a => a.age > 15).length} sub="Enhanced WFD programme" accent="var(--red)" icon={<AlertTriangle size={18} />} delay={120} />
+        <KpiCard label="Active Programmes" value={programs.length} sub="Structural compliance" accent="var(--green)" icon={<ShieldCheck size={18} />} delay={180} />
       </div>
+
+      {/* Compliance programmes — full detail */}
+      <div className="panel fade-up" style={{ marginBottom: 14 }}>
+        <PanelHead title="Structural Integrity & Ageing Programmes" icon={<ShieldCheck size={15} className="tgreen" />}
+          right={<span className="muted" style={{ fontSize: 11 }}>Per EASA Part-26, AMC 20-20, FAA FAR 26</span>} />
+        <div className="col" style={{ padding: '0 0 8px' }}>
+          {programs.map((p, i) => (
+            <div key={p.name} style={{ padding: '14px 20px', borderBottom: i < programs.length - 1 ? '1px solid var(--line)' : 'none' }}>
+              <div className="row between" style={{ marginBottom: 6 }}>
+                <div className="row gap-10">
+                  <div style={{ width: 8, height: 8, borderRadius: '50%', background: statusColor[p.status], flexShrink: 0, marginTop: 5, boxShadow: `0 0 6px ${statusColor[p.status]}` }} />
+                  <span className="hi" style={{ fontWeight: 600, fontSize: 13.5 }}>{p.name}</span>
+                </div>
+                <div className="row gap-10">
+                  <span className="badge muted" style={{ fontSize: 9 }}>{p.ref}</span>
+                  <span className="badge" style={{ fontSize: 9, color: statusColor[p.status], borderColor: statusColor[p.status], background: 'transparent' }}>{statusLabel[p.status]}</span>
+                  <span className="num" style={{ fontSize: 12, color: p.due > 0 ? statusColor[p.status] : 'var(--text-faint)' }}>{p.due} aircraft</span>
+                </div>
+              </div>
+              <div className="muted" style={{ fontSize: 12, lineHeight: 1.6, paddingLeft: 18 }}>{p.desc}</div>
+            </div>
+          ))}
+        </div>
+      </div>
+
       <div className="grid-2col">
         <div className="panel fade-up">
           <PanelHead title="Fleet by Age" icon={<History size={15} className="tamber" />} />
@@ -426,7 +491,11 @@ export const AgeingModule: React.FC = () => {
               <div key={a.id} style={{ marginBottom: 13 }}>
                 <div className="row between" style={{ fontSize: 12.5, marginBottom: 6 }}>
                   <span className="num hi">{a.registration} <span className="muted">{a.model}</span></span>
-                  <span className="num">{a.age} yrs</span>
+                  <div className="row gap-8">
+                    {a.age > 15 && <span className="badge aog" style={{ fontSize: 8 }}>WFD review</span>}
+                    {a.age > 12 && a.age <= 15 && <span className="badge warn" style={{ fontSize: 8 }}>SSID required</span>}
+                    <span className="num">{a.age} yrs</span>
+                  </div>
                 </div>
                 <Bar value={a.age} max={25} color={a.age > 18 ? 'var(--red)' : a.age > 12 ? 'var(--amber)' : 'var(--cyan)'} />
               </div>
@@ -434,19 +503,31 @@ export const AgeingModule: React.FC = () => {
           </div>
         </div>
         <div className="panel fade-up" style={{ animationDelay: '80ms' }}>
-          <PanelHead title="Ageing Programs" icon={<ShieldCheck size={15} className="tgreen" />} />
-          <table className="tbl">
-            <thead><tr><th>Program</th><th>Reference</th><th>Due (aircraft)</th></tr></thead>
-            <tbody>
-              {programs.map(p => (
-                <tr key={p.name}>
-                  <td className="hi">{p.name}</td>
-                  <td><span className="badge muted">{p.ref}</span></td>
-                  <td><span className={`badge ${p.due > 5 ? 'warn' : 'info'}`}>{p.due}</span></td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+          <PanelHead title="Programme Requirements by Age" icon={<ShieldCheck size={15} className="tgreen" />} />
+          <div style={{ padding: 18 }}>
+            {[
+              { label: '8+ years', prog: 'CPCP baseline required', color: 'var(--cyan)' },
+              { label: '10+ years', prog: 'ASIP + RAP initiated', color: 'var(--blue)' },
+              { label: '12+ years', prog: 'SSID full compliance', color: 'var(--amber)' },
+              { label: '15+ years', prog: 'WFD assessment mandatory', color: 'var(--red)' },
+              { label: '20+ years', prog: 'Enhanced structural audit', color: 'var(--red)' },
+            ].map(r => (
+              <div key={r.label} className="row between" style={{ padding: '9px 0', borderBottom: '1px solid var(--line)', fontSize: 12.5 }}>
+                <span className="num" style={{ color: r.color, fontWeight: 600, minWidth: 80 }}>{r.label}</span>
+                <span className="muted">{r.prog}</span>
+                <span className="num" style={{ color: r.color }}>
+                  {aged.filter(a => {
+                    const age = a.age;
+                    if (r.label === '8+ years') return age >= 8;
+                    if (r.label === '10+ years') return age >= 10;
+                    if (r.label === '12+ years') return age >= 12;
+                    if (r.label === '15+ years') return age >= 15;
+                    return age >= 20;
+                  }).length} AC
+                </span>
+              </div>
+            ))}
+          </div>
         </div>
       </div>
     </div>

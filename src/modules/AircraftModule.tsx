@@ -1,15 +1,27 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Plane, X, Gauge, Clock, RotateCw, Wrench, AlertTriangle, BookOpen, Activity } from 'lucide-react';
 import { PageHeader, StatusBadge, Bar } from '../components/ui';
 import { useStore } from '../context/store';
+import { useLocation } from 'react-router-dom';
 import { LogFlightDrawer } from './LogFlight';
 import { RaiseDefectDrawer } from './RaiseDefect';
 import type { Aircraft } from '../data/types';
 
 export const AircraftModule: React.FC = () => {
   const { aircraft, can } = useStore();
+  const location = useLocation();
   const [sel, setSel] = useState<Aircraft | null>(null);
   const [filter, setFilter] = useState<string>('all');
+
+  // auto-open drawer if navigated here from search
+  useEffect(() => {
+    const id = (location.state as any)?.highlightId;
+    if (id) {
+      const ac = aircraft.find(a => a.id === id);
+      if (ac) setSel(ac);
+    }
+  }, [location.state]);
+
   const list = aircraft.filter(a => filter === 'all' || a.status === filter);
 
   return (
