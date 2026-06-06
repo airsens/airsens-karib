@@ -58,23 +58,43 @@ export const AdminPanel: React.FC = () => {
         <div className="panel fade-up">
           <PanelHead title="Users" icon={<Users size={15} className="tcyan" />} right={<span className="badge muted">{users.length}</span>} />
           <table className="tbl">
-            <thead><tr><th>Name</th><th>Title</th><th>Email</th><th>Role</th><th>License</th><th>Status</th><th></th></tr></thead>
+            <thead><tr><th>Name</th><th>Title</th><th>Email</th><th>Role</th><th>Licence</th><th>Licence Expiry</th><th>Medical Expiry</th><th>Status</th><th></th></tr></thead>
             <tbody>
-              {users.map(u => (
-                <tr key={u.id} onClick={() => setEditing(u)}>
-                  <td className="hi" style={{ fontWeight: 600 }}>{u.name}</td>
-                  <td className="muted">{u.title}</td>
-                  <td className="num muted" style={{ fontSize: 12 }}>{u.email}</td>
-                  <td><RoleBadge role={u.role} /></td>
-                  <td className="num muted">{u.licenseNo ?? '—'}</td>
-                  <td>{u.active ? <span className="badge ok"><span className="dot" />Active</span> : <span className="badge muted">Disabled</span>}</td>
-                  <td onClick={e => e.stopPropagation()}>
-                    {u.id !== currentUser?.id && (u.role === 'engineer' || u.role === 'viewer') && (
-                      <button className="btn ghost sm" style={{ padding: 6 }} onClick={() => { if (confirm(`Remove ${u.name}?`)) removeUser(u.id); }}><Trash2 size={14} /></button>
-                    )}
-                  </td>
-                </tr>
-              ))}
+              {users.map(u => {
+                const licDays = u.licenceExpiry ? (new Date(u.licenceExpiry).getTime() - Date.now()) / 864e5 : null;
+                const medDays = u.medicalExpiry ? (new Date(u.medicalExpiry).getTime() - Date.now()) / 864e5 : null;
+                return (
+                  <tr key={u.id} onClick={() => setEditing(u)}>
+                    <td className="hi" style={{ fontWeight: 600 }}>{u.name}</td>
+                    <td className="muted">{u.title}</td>
+                    <td className="num muted" style={{ fontSize: 12 }}>{u.email}</td>
+                    <td><RoleBadge role={u.role} /></td>
+                    <td className="num muted">{u.licenceType ? <span className="badge info" style={{ fontSize: 9 }}>{u.licenceType}</span> : '—'} {u.licenseNo ? <span style={{ fontSize: 11 }}>{u.licenseNo}</span> : ''}</td>
+                    <td className="num" style={{ fontSize: 12 }}>
+                      {u.licenceExpiry
+                        ? <span style={{ color: licDays !== null && licDays < 0 ? 'var(--red)' : licDays !== null && licDays < 30 ? 'var(--amber)' : 'var(--text-dim)' }}>
+                            {u.licenceExpiry} {licDays !== null && licDays < 30 && licDays >= 0 && `(${Math.round(licDays)}d)`}
+                            {licDays !== null && licDays < 0 && ' ⚠ EXPIRED'}
+                          </span>
+                        : '—'}
+                    </td>
+                    <td className="num" style={{ fontSize: 12 }}>
+                      {u.medicalExpiry
+                        ? <span style={{ color: medDays !== null && medDays < 0 ? 'var(--red)' : medDays !== null && medDays < 14 ? 'var(--amber)' : 'var(--text-dim)' }}>
+                            {u.medicalExpiry} {medDays !== null && medDays < 14 && medDays >= 0 && `(${Math.round(medDays)}d)`}
+                            {medDays !== null && medDays < 0 && ' ⚠ EXPIRED'}
+                          </span>
+                        : '—'}
+                    </td>
+                    <td>{u.active ? <span className="badge ok"><span className="dot" />Active</span> : <span className="badge muted">Disabled</span>}</td>
+                    <td onClick={e => e.stopPropagation()}>
+                      {u.id !== currentUser?.id && (u.role === 'engineer' || u.role === 'viewer') && (
+                        <button className="btn ghost sm" style={{ padding: 6 }} onClick={() => { if (confirm(`Remove ${u.name}?`)) removeUser(u.id); }}><Trash2 size={14} /></button>
+                      )}
+                    </td>
+                  </tr>
+                );
+              })}
             </tbody>
           </table>
         </div>
@@ -154,6 +174,10 @@ const UserDrawer: React.FC<{ user: User | null; onClose: () => void; onSave: (u:
   const [password, setPassword] = useState(user?.password ?? 'engineer');
   const [role, setRole] = useState<Role>(user?.role ?? 'engineer');
   const [licenseNo, setLicenseNo] = useState(user?.licenseNo ?? '');
+  const [licenceType, setLicenceType] = useState(user?.licenceType ?? '');
+  const [typeRatings, setTypeRatings] = useState((user?.typeRatings ?? []).join(', '));
+  const [licenceExpiry, setLicenceExpiry] = useState(user?.licenceExpiry ?? '');
+  const [medicalExpiry, setMedicalExpiry] = useState(user?.medicalExpiry ?? '');
   const [active, setActive] = useState(user?.active ?? true);
   const [perms, setPerms] = useState<Record<string, Permission[]>>(
     user?.permissions ?? Object.fromEntries(allModules.map(m => [m, ['view', 'read'] as Permission[]]))
@@ -171,7 +195,7 @@ const UserDrawer: React.FC<{ user: User | null; onClose: () => void; onSave: (u:
 
   const save = () => {
     if (!name || !email) { alert('Name and email are required.'); return; }
-    onSave({ name, title, email, password, role, licenseNo: licenseNo || undefined, active, permissions: perms });
+    onSave({ name, title, email, password, role, licenseNo: licenseNo || undefined, licenceType: licenceType as any || undefined, typeRatings: typeRatings ? typeRatings.split(',').map(s => s.trim()).filter(Boolean) : undefined, licenceExpiry: licenceExpiry || undefined, medicalExpiry: medicalExpiry || undefined, active, permissions: perms });
   };
 
   return (
@@ -193,6 +217,35 @@ const UserDrawer: React.FC<{ user: User | null; onClose: () => void; onSave: (u:
             <Input label="Email" value={email} onChange={setEmail} placeholder="john@karibaerospace.com" />
             <Input label="Password" value={password} onChange={setPassword} />
             <Input label="License No. (optional)" value={licenseNo} onChange={setLicenseNo} placeholder="EASA-66-B1-…" />
+            <div>
+              <div className="eyebrow" style={{ marginBottom: 8 }}>Licence Type</div>
+              <select className="select" value={licenceType} onChange={e => setLicenceType(e.target.value)}>
+                <option value="">— Not applicable —</option>
+                <option value="B1">B1 — Mechanical</option>
+                <option value="B2">B2 — Avionics</option>
+                <option value="B1+B2">B1+B2 — Combined</option>
+                <option value="C">C — Base Maintenance</option>
+                <option value="D">D — Non-destructive Testing</option>
+                <option value="ATPL">ATPL — Airline Pilot</option>
+                <option value="CPL">CPL — Commercial Pilot</option>
+                <option value="PPL">PPL — Private Pilot</option>
+              </select>
+            </div>
+            <Input label="Type Ratings (comma-separated)" value={typeRatings} onChange={setTypeRatings} placeholder="A320, B737, ATR72" />
+            <div>
+              <div className="eyebrow" style={{ marginBottom: 8 }}>Licence Expiry</div>
+              <input className="input" type="date" value={licenceExpiry} onChange={e => setLicenceExpiry(e.target.value)} />
+              {licenceExpiry && new Date(licenceExpiry).getTime() - Date.now() < 30 * 864e5 && (
+                <div className="tred" style={{ fontSize: 11, marginTop: 4 }}>⚠ Expiring within 30 days</div>
+              )}
+            </div>
+            <div>
+              <div className="eyebrow" style={{ marginBottom: 8 }}>Medical Expiry</div>
+              <input className="input" type="date" value={medicalExpiry} onChange={e => setMedicalExpiry(e.target.value)} />
+              {medicalExpiry && new Date(medicalExpiry).getTime() - Date.now() < 14 * 864e5 && (
+                <div className="tred" style={{ fontSize: 11, marginTop: 4 }}>⚠ Medical expiring within 14 days</div>
+              )}
+            </div>
             <div>
               <div className="eyebrow" style={{ marginBottom: 8 }}>Role</div>
               <select className="select" value={role} onChange={e => setRole(e.target.value as Role)}>

@@ -16,7 +16,7 @@ import {
 
 const KEY = 'airsens.state.v1';
 const SESSION = 'airsens.session.v1';
-const SEED_VERSION = 'v5'; // bump this whenever seed data changes
+const SEED_VERSION = 'v6'; // bump this whenever seed data changes
 const SEED_VERSION_KEY = 'airsens.seed.version';
 
 interface State {
@@ -179,12 +179,57 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
         ? { ...en, hours: +(en.hours + e.blockHours).toFixed(1), cycles: en.cycles + e.cycles, sinceOverhaul: +(en.sinceOverhaul + e.blockHours).toFixed(1) }
         : en);
 
-      // roll hours into installed components' time-in-service
       const components = s.components.map(c => c.aircraftId === e.aircraftId
         ? { ...c, sinceOverhaul: +(c.sinceOverhaul + e.blockHours).toFixed(1), sinceNew: +(c.sinceNew + e.blockHours).toFixed(1), installedHours: +(c.installedHours + e.blockHours).toFixed(1) }
         : c);
 
-      return { ...s, flightLogs, aircraft, engines, components };
+      // ── Phase 1: Auto-WO generation from maintenance thresholds ──────────
+      // After rolling hours, scan this aircraft's maintProgram tasks.
+      // If any task drops below 15% remaining AND no open WO exists for it → auto-create.
+      const updatedAc = aircraft.find(a => a.id === e.aircraftId);
+      const autoWOs: WorkOrder[] = [];
+      if (updatedAc?.maintProgram) {
+        updatedAc.maintProgram.forEach(t => {
+          let remaining = Infinity, span = 1;
+          if (t.intervalType === 'hours') { remaining = (t.lastDoneHours + t.interval) - updatedAc.totalHours; span = t.interval; }
+          else if (t.intervalType === 'cycles') { remaining = (t.lastDoneCycles + t.interval) - updatedAc.totalCycles; span = t.interval; }
+          else {
+            const next = new Date(t.lastDoneDate); next.setDate(next.getDate() + t.interval);
+            remaining = (next.getTime() - Date.now()) / 864e5; span = t.interval;
+          }
+          const pct = (remaining / span) * 100;
+          // only auto-create if below 15% AND no matching open WO already exists
+          const alreadyOpen = s.workOrders.some(w =>
+            w.aircraftId === e.aircraftId &&
+            w.state !== 'closed' &&
+            w.title.includes(t.code)
+          );
+          if (pct < 15 && !alreadyOpen) {
+            const dueDate = new Date();
+            if (t.intervalType === 'hours') dueDate.setDate(dueDate.getDate() + Math.max(1, Math.round(remaining / (updatedAc.utilizationDaily || 3))));
+            else dueDate.setDate(dueDate.getDate() + Math.max(1, Math.round(remaining)));
+            autoWOs.push({
+              id: `WO-AUTO-${t.id}-${Date.now()}`,
+              wo: `WO-${new Date().getFullYear().toString().slice(-2)}-${1000 + s.workOrders.length + autoWOs.length + 1}`,
+              title: `[AUTO] ${t.label} — ${updatedAc.registration}`,
+              aircraftId: e.aircraftId,
+              type: 'scheduled',
+              priority: pct < 0 ? 'high' : 'med',
+              state: 'backlog',
+              manHoursEst: 4,
+              manHoursActual: 0,
+              assignee: '',
+              zone: 'All zones',
+              openedDate: new Date().toISOString().slice(0, 10),
+              dueDate: dueDate.toISOString().slice(0, 10),
+              tasks: 1, tasksDone: 0,
+            });
+          }
+        });
+      }
+
+      const workOrders = autoWOs.length > 0 ? [...autoWOs, ...s.workOrders] : s.workOrders;
+      return { ...s, flightLogs, aircraft, engines, components, workOrders };
     });
     audit('Logged flight', `${e.aircraftId} · ${e.from}→${e.to} · ${e.blockHours}h / ${e.cycles}c`);
   };

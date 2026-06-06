@@ -5,7 +5,7 @@ import {
   LayoutDashboard, Plane, Boxes, CalendarRange, BookOpen, ClipboardList,
   FileWarning, ListChecks, Activity, GitBranch, Wrench, Package, FileText,
   Receipt, Gauge, ShieldCheck, History, Search, Bell, ChevronRight, Radar,
-  LogOut, Users, AlertTriangle, X, Clock, PackageX, CornerDownLeft, Menu,
+  LogOut, Users, AlertTriangle, X, Clock, PackageX, CornerDownLeft, Menu, ShieldAlert,
 } from 'lucide-react';
 import { useStore } from '../context/store';
 import type { ModuleKey } from '../data/types';
@@ -57,7 +57,7 @@ const ROLE_LABEL: Record<string, string> = {
 export const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const loc      = useLocation();
   const navigate = useNavigate();
-  const { currentUser, logout, can, aircraft, workOrders, components, defects } = useStore();
+  const { currentUser, logout, can, aircraft, workOrders, components, defects, users } = useStore();
   const isAdmin  = currentUser?.role === 'superadmin' || currentUser?.role === 'org-admin';
 
   const allItems = [...NAV.flatMap(g => g.items), { to: '/admin', label: 'Admin Panel', mod: 'admin' as ModuleKey }];
@@ -120,17 +120,44 @@ export const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) =>
 
   // ── notifications ──────────────────────────────────────────
   const notifications = useMemo(() => {
-    const list: { icon: React.ReactNode; title: string; sub: string; to: string; tone: string }[] = [];
+    const list: { icon: React.ReactNode; title: string; sub: string; to: string; tone: string; id?: string }[] = [];
+    const today = Date.now();
+    const days = (iso: string) => (new Date(iso).getTime() - today) / 864e5;
+
+    // AOG aircraft — link directly to aircraft with highlightId
     aircraft.filter(a => a.status === 'aog').forEach(a =>
-      list.push({ icon: <AlertTriangle size={14} />, title: `${a.registration} is AOG`, sub: 'Review blocking defects', to: '/aircraft', tone: 'var(--red)' }));
-    defects.filter(d => d.status !== 'closed' && d.dueDate && new Date(d.dueDate).getTime() < Date.now()).forEach(d =>
-      list.push({ icon: <ListChecks size={14} />, title: `MEL ${d.melCategory ?? ''} overdue`, sub: `${d.description} · ATA ${d.ata}`, to: '/mel', tone: 'var(--red)' }));
+      list.push({ icon: <AlertTriangle size={14} />, title: `${a.registration} is AOG`, sub: 'Review blocking defects', to: `/aircraft`, id: a.id, tone: 'var(--red)' }));
+
+    // Overdue MEL items
+    defects.filter(d => d.status !== 'closed' && d.dueDate && new Date(d.dueDate).getTime() < today).forEach(d =>
+      list.push({ icon: <ListChecks size={14} />, title: `MEL ${d.melCategory ?? ''} overdue`, sub: `${d.description} · ATA ${d.ata}`, to: '/mel', id: d.id, tone: 'var(--red)' }));
+
+    // MEL items due within 24 hours
+    defects.filter(d => d.status !== 'closed' && d.dueDate && days(d.dueDate) >= 0 && days(d.dueDate) <= 1).forEach(d =>
+      list.push({ icon: <ListChecks size={14} />, title: `MEL ${d.melCategory ?? ''} due in < 24hrs`, sub: `${d.description} · ATA ${d.ata}`, to: '/mel', id: d.id, tone: 'var(--amber)' }));
+
+    // Due-soon checks
     aircraft.filter(a => a.status === 'due-soon').forEach(a =>
       list.push({ icon: <Clock size={14} />, title: `${a.registration} check due soon`, sub: `${a.nextCheck.type} · ${a.nextCheck.dueDate}`, to: '/fleet-planning', tone: 'var(--amber)' }));
+
+    // Low stock parts
     seedInventory.filter(i => i.qty < i.minQty).forEach(i =>
       list.push({ icon: <PackageX size={14} />, title: `Low stock: ${i.description}`, sub: `${i.qty} on hand · min ${i.minQty}`, to: '/inventory', tone: 'var(--amber)' }));
+
+    // Licence expiry alerts — within 30 days
+    users.filter(u => u.licenceExpiry && days(u.licenceExpiry) >= 0 && days(u.licenceExpiry) <= 30).forEach(u =>
+      list.push({ icon: <ShieldAlert size={14} />, title: `Licence expiring: ${u.name}`, sub: `${u.licenceType ?? 'Licence'} expires ${u.licenceExpiry} — ${Math.round(days(u.licenceExpiry))} days`, to: '/admin', tone: 'var(--amber)' }));
+
+    // Medical expiry alerts — within 14 days
+    users.filter(u => u.medicalExpiry && days(u.medicalExpiry) >= 0 && days(u.medicalExpiry) <= 14).forEach(u =>
+      list.push({ icon: <ShieldAlert size={14} />, title: `Medical expiring: ${u.name}`, sub: `Medical certificate expires ${u.medicalExpiry} — ${Math.round(days(u.medicalExpiry))} days`, to: '/admin', tone: 'var(--red)' }));
+
+    // Expired licences (already lapsed)
+    users.filter(u => u.licenceExpiry && days(u.licenceExpiry) < 0 && u.active).forEach(u =>
+      list.push({ icon: <ShieldAlert size={14} />, title: `EXPIRED licence: ${u.name}`, sub: `${u.licenceType ?? 'Licence'} expired — engineer cannot sign off tasks`, to: '/admin', tone: 'var(--red)' }));
+
     return list;
-  }, [aircraft, defects]);
+  }, [aircraft, defects, users]);
 
   const [pendingNav, setPendingNav] = useState<string | null>(null);
   const [bellOpen, setBellOpen] = useState(false);
@@ -419,7 +446,11 @@ export const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) =>
             ? <div className="muted" style={{ padding: 24, textAlign: 'center', fontSize: 12.5 }}>All clear — no active alerts.</div>
             : notifications.map((n, i) => (
               <div key={i}
-                onClick={() => { setBellOpen(false); window.location.assign(n.to); }}
+                onClick={() => {
+                  setBellOpen(false);
+                  if (n.id) window.location.assign(`${n.to}?highlight=${n.id}`);
+                  else window.location.assign(n.to);
+                }}
                 style={{
                   display: 'flex', alignItems: 'flex-start', gap: 10,
                   width: '100%', padding: '12px 14px',

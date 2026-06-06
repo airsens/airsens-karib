@@ -5,7 +5,7 @@
 export type Status = 'airworthy' | 'due-soon' | 'overdue' | 'aog';
 
 // ---- Access control ----
-export type Role = 'superadmin' | 'org-admin' | 'engineer' | 'viewer';
+export type Role = 'superadmin' | 'org-admin' | 'engineer' | 'pilot' | 'viewer';
 export type Permission = 'view' | 'read' | 'write' | 'edit';
 
 // modules that can be permission-gated
@@ -18,15 +18,19 @@ export type ModuleKey =
 export interface User {
   id: string;
   name: string;
-  title: string;          // e.g. "B1 Licensed Engineer"
+  title: string;
   email: string;
-  password: string;       // demo only — hashed/served by backend in production
+  password: string;       // demo only — hashed server-side in production
   role: Role;
   orgId: string;
   licenseNo?: string;
+  // Phase 1 — licence & rating tracking
+  licenceType?: 'B1' | 'B2' | 'B1+B2' | 'C' | 'D' | 'ATPL' | 'CPL' | 'PPL';
+  typeRatings?: string[];       // e.g. ['A320', 'B737', 'ATR72']
+  licenceExpiry?: string;       // ISO date string
+  medicalExpiry?: string;       // ISO date string
   active: boolean;
   createdAt: string;
-  // per-module permission grants (org-admin manages these for engineers)
   permissions: Record<string, Permission[]>;
 }
 
@@ -187,12 +191,18 @@ export interface FlightLog {
   from: string;
   to: string;
   blockHours: number;
-  cycles: number;        // landings this entry
-  engineHours?: number;  // hrs added to engines (usually = blockHours)
-  engineCycles?: number; // cycles added to engines
+  cycles: number;
+  engineHours?: number;
+  engineCycles?: number;
   payloadKg: number;
-  loadFactor: number; // 0-1
-  loggedBy?: string;     // user name
+  loadFactor: number;
+  loggedBy?: string;
+  // Phase 1 — Electronic Tech Log (ETL)
+  captainSignature?: string;    // base64 or PIN hash
+  engineerSignature?: string;   // base64 or PIN hash
+  captainName?: string;
+  engineerName?: string;
+  isLocked?: boolean;           // true after both signatures — immutable
 }
 
 export interface Defect {

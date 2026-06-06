@@ -13,14 +13,16 @@ export const AircraftModule: React.FC = () => {
   const [sel, setSel] = useState<Aircraft | null>(null);
   const [filter, setFilter] = useState<string>('all');
 
-  // auto-open drawer if navigated here from search
+  // auto-open drawer from search (state) or notification (query param)
   useEffect(() => {
-    const id = (location.state as any)?.highlightId;
+    const fromState = (location.state as any)?.highlightId;
+    const fromQuery = new URLSearchParams(location.search).get('highlight');
+    const id = fromState ?? fromQuery;
     if (id) {
       const ac = aircraft.find(a => a.id === id);
       if (ac) setSel(ac);
     }
-  }, [location.state]);
+  }, [location.state, location.search]);
 
   const list = aircraft.filter(a => filter === 'all' || a.status === filter);
 

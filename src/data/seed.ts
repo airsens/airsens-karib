@@ -389,41 +389,43 @@ export const seedUsers: User[] = [
     id: 'U-SUPER', name: 'Rilwan Olowu', title: 'COO',
     email: 'rilwan.olowu@karib-aerospace.com', password: 'admin', role: 'superadmin',
     orgId: 'ORG1', active: true, createdAt: daysFrom(-200),
+    licenceType: 'C', licenseNo: 'EASA-66-C-00124',
+    typeRatings: ['A320', 'B737', 'ATR72'],
+    licenceExpiry: daysFrom(420), medicalExpiry: daysFrom(310),
     permissions: { ...fullPerms(), admin: [...ALL] },
   },
   {
     id: 'U-ADMIN2', name: 'Promise Benebo', title: 'Founder / CEO',
     email: 'promise.benebo@karib-aerospace.com', password: 'admin', role: 'org-admin',
     orgId: 'ORG1', active: true, createdAt: daysFrom(-200),
+    licenceType: 'C', licenseNo: 'EASA-66-C-00891',
+    typeRatings: ['A320', 'B737', 'ATR72', 'B757'],
+    licenceExpiry: daysFrom(380), medicalExpiry: daysFrom(180),
     permissions: { ...fullPerms(), admin: [...ALL] },
   },
   {
     id: 'U-ENG1', name: 'M. Okafor', title: 'B1 Licensed Engineer',
     email: 'm.okafor@karib-aerospace.com', password: 'engineer', role: 'engineer',
-    orgId: 'ORG1', licenseNo: 'EASA-66-B1-44821', active: true, createdAt: daysFrom(-90),
-    permissions: {
-      ...viewPerms(),
-      aircraft: ['view', 'read', 'write', 'edit'], logbook: ['view', 'read', 'write', 'edit'],
-      'work-orders': ['view', 'read', 'write', 'edit'], mel: ['view', 'read', 'write'],
-      components: ['view', 'read', 'write'],
-    },
+    orgId: 'ORG1', active: true, createdAt: daysFrom(-180),
+    licenceType: 'B1', licenseNo: 'EASA-66-B1-44821',
+    typeRatings: ['ATR72', 'B737'],
+    licenceExpiry: daysFrom(25), medicalExpiry: daysFrom(60), // expiring soon — triggers alert
+    permissions: { aircraft: ['view','read','write'], logbook: ['view','read','write'], 'work-orders': ['view','read','write'], mel: ['view','read','write'], components: ['view','read'], reliability: ['view','read'], 'fleet-planning': ['view','read'], adsb: ['view','read'], amp: ['view','read'], inventory: ['view','read'], 'tools-manuals': ['view','read'], configuration: ['view','read'], structural: ['view','read'], ageing: ['view','read'], amplification: ['view','read'], sales: [], dashboard: ['view','read'], admin: [] },
   },
   {
     id: 'U-ENG2', name: 'S. Rampersad', title: 'B2 Avionics Engineer',
     email: 's.rampersad@karib-aerospace.com', password: 'engineer', role: 'engineer',
-    orgId: 'ORG1', licenseNo: 'EASA-66-B2-30192', active: true, createdAt: daysFrom(-60),
-    permissions: {
-      ...viewPerms(),
-      logbook: ['view', 'read', 'write'], 'work-orders': ['view', 'read', 'write', 'edit'],
-      mel: ['view', 'read', 'write'],
-    },
+    orgId: 'ORG1', active: true, createdAt: daysFrom(-150),
+    licenceType: 'B2', licenseNo: 'EASA-66-B2-30192',
+    typeRatings: ['ATR72', 'A320'],
+    licenceExpiry: daysFrom(290), medicalExpiry: daysFrom(14), // medical expiring soon
+    permissions: { aircraft: ['view','read'], logbook: ['view','read','write'], 'work-orders': ['view','read','write'], mel: ['view','read','write'], components: ['view','read'], reliability: ['view','read'], 'fleet-planning': ['view','read'], adsb: ['view','read'], amp: ['view','read'], inventory: ['view','read'], 'tools-manuals': ['view','read'], configuration: ['view'], structural: ['view','read'], ageing: ['view'], amplification: ['view'], sales: [], dashboard: ['view','read'], admin: [] },
   },
   {
     id: 'U-VIEW1', name: 'L. Persaud', title: 'Quality Auditor',
     email: 'l.persaud@karib-aerospace.com', password: 'viewer', role: 'viewer',
-    orgId: 'ORG1', active: true, createdAt: daysFrom(-30),
-    permissions: viewPerms(),
-  },
+    orgId: 'ORG1', active: true, createdAt: daysFrom(-120),
+    permissions: { aircraft: ['view','read'], logbook: ['view','read'], 'work-orders': ['view','read'], mel: ['view','read'], components: ['view','read'], reliability: ['view','read'], 'fleet-planning': ['view','read'], adsb: ['view','read'], amp: ['view','read'], inventory: ['view','read'], 'tools-manuals': ['view','read'], configuration: ['view','read'], structural: ['view','read'], ageing: ['view','read'], amplification: ['view','read'], sales: ['view','read'], dashboard: ['view','read'], admin: [] },
 ];
 
 export { allModules };
