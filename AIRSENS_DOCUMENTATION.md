@@ -1,851 +1,909 @@
-# AirSENS — Complete Product & Technical Documentation
+# AirSENS — Complete Master Documentation
 
-**Version:** 1.0 (June 2026)  
-**Product:** AirSENS — Aviation Maintenance & Sustainment Platform  
-**Company:** Karib Aerospace Ltd, 4 Preston Road, Brighton, England BN1 4QF  
-**Contact:** karib.aerospace@outlook.com | UK: +44 7512 549 068 | US: +1 217 848 2193  
+**Version:** 3.0 (June 2026) — Full Merge: Technical + Strategic + Roadmap
+**Product:** AirSENS — Aviation Maintenance & Sustainment Platform
+**Company:** Karib Aerospace Ltd, 4 Preston Road, Brighton, England BN1 4QF
+**Contact:** karib.aerospace@outlook.com | UK: +44 7512 549 068 | US: +1 217 848 2193
 **Company House No.:** 14231476
+**Live URL:** https://airsens-karib-l8n2.vercel.app
+**Repository:** https://github.com/airsens/airsens-karib (public)
+**Codebase:** ~5,200 lines of production TypeScript/React
 
 ---
 
 ## Table of Contents
 
 1. [What is AirSENS?](#1-what-is-airsens)
-2. [Who It's For](#2-who-its-for)
-3. [Technology Stack](#3-technology-stack)
-4. [Project Structure](#4-project-structure)
-5. [Data Architecture](#5-data-architecture)
-6. [Authentication & Access Control](#6-authentication--access-control)
-7. [Navigation Modules — Full Detail](#7-navigation-modules--full-detail)
-   - [Command Deck (Dashboard)](#71-command-deck-dashboard)
-   - [Aircraft](#72-aircraft)
-   - [Components](#73-components)
-   - [Fleet Planning](#74-fleet-planning)
-   - [Logbook & Ops](#75-logbook--ops)
-   - [Maintenance Program](#76-maintenance-program)
-   - [AD / SB Tracking](#77-ad--sb-tracking)
-   - [MEL](#78-mel-minimum-equipment-list)
-   - [Reliability](#79-reliability)
-   - [Configuration](#710-configuration)
-   - [Work Orders](#711-work-orders)
-   - [Inventory](#712-inventory)
-   - [Tools & Manuals](#713-tools--manuals)
-   - [Sales & Invoice](#714-sales--invoice)
-   - [Amplification Factor](#715-amplification-factor)
-   - [Structural (DTE/DTI)](#716-structural-dtedti)
-   - [Ageing Aircraft](#717-ageing-aircraft)
-8. [Administration Layer](#8-administration-layer)
-   - [Admin Panel](#81-admin-panel)
-   - [Control Tower](#82-control-tower)
-9. [SENS AI Assistant](#9-sens-ai-assistant)
-10. [Core Libraries & Engines](#10-core-libraries--engines)
-    - [Amplification Factor Engine](#101-amplification-factor-engine)
-    - [Structural Fatigue Index Engine](#102-structural-fatigue-index-engine)
-    - [Export Utilities](#103-export-utilities)
-11. [State Management & Store](#11-state-management--store)
-12. [UI Component System](#12-ui-component-system)
-13. [Deployment & Infrastructure](#13-deployment--infrastructure)
-14. [Demo Accounts](#14-demo-accounts)
-15. [Competitive Positioning](#15-competitive-positioning)
-16. [Roadmap — Backend & Production](#16-roadmap--backend--production)
+2. [Vision & Market Position](#2-vision--market-position)
+3. [Who It's For](#3-whos-for)
+4. [Technology Stack — Current](#4-technology-stack--current)
+5. [Project Structure](#5-project-structure)
+6. [Data Architecture](#6-data-architecture)
+7. [Authentication & Access Control](#7-authentication--access-control)
+8. [Navigation Modules — Full Technical Detail](#8-navigation-modules--full-technical-detail)
+9. [Administration Layer](#9-administration-layer)
+10. [SENS AI Assistant](#10-sens-ai-assistant)
+11. [Core Engineering Engines](#11-core-engineering-engines)
+12. [State Management & Store](#12-state-management--store)
+13. [UI Component System](#13-ui-component-system)
+14. [Deployment & Infrastructure](#14-deployment--infrastructure)
+15. [Demo Accounts](#15-demo-accounts)
+16. [Competitive Analysis](#16-competitive-analysis)
+17. [Master Roadmap — All 5 Phases](#17-master-roadmap--all-5-phases)
+18. [Scale Architecture — 1,000–3,000 Customers](#18-scale-architecture--10003000-customers)
+19. [Business Model & Pricing](#19-business-model--pricing)
 
 ---
 
 ## 1. What is AirSENS?
 
-AirSENS is a **web-based Aviation Maintenance & Sustainment platform** built by Karib Aerospace Ltd. It unifies Continuing Airworthiness Management Organisation (CAMO) functions, MRO (Maintenance, Repair & Overhaul) execution, and advanced engineering analytics into a single system accessible from any device.
+AirSENS is a **web-based Aviation Maintenance & Sustainment platform** built by Karib Aerospace Ltd.
+It unifies Continuing Airworthiness Management Organisation (CAMO) functions, MRO (Maintenance,
+Repair & Overhaul) execution, and advanced engineering analytics into a single system accessible
+from any device, anywhere in the world.
 
-The core purpose is to give aviation operators — from regional carriers to charter operators — a single source of truth for their entire airworthiness picture: who did what, when, what's due, what's defective, what it costs, and whether the structural and operational envelope is being respected.
+The core purpose: give aviation operators a **single source of truth** for their entire
+airworthiness picture — who did what, when, what is due, what is defective, what it costs,
+and whether the structural and operational envelope is being respected.
 
-**What makes AirSENS different from every competitor in the market today:**
-
-| Competitor weakness | AirSENS advantage |
-|---|---|
-| Windows-era desktop UIs (SAM, Blue Eye, OASES) | Modern, real-time cockpit-style web interface |
-| Months to implement | Onboards in minutes |
-| No real mobile support | Fully responsive, mobile-first |
-| No AI integration | SENS AI assistant built in from day one |
-| No structural fatigue modelling | Proprietary Structural Fatigue Index (SFI) engine |
-| No Amplification Factor concept | Unique AF engine links operations to maintenance cost |
-| Ignores Caribbean, African, Middle East operators | Built for exactly this market |
-| Opaque pricing, "call for quote" | Transparent SaaS plan model |
+**AirSENS is being built for public launch targeting 1,000 to 3,000 operator customers worldwide.**
 
 ---
 
-## 2. Who It's For
+## 2. Vision & Market Position
 
-**Platform Owners (Tier 1):**
+### The Problem with Today's Market
+
+Every competitor — SAM (ASA), Blue Eye (MRX), OASES, Aerotrac, Traxxall, Ramco —
+shares the same fundamental weaknesses:
+
+| Market weakness | AirSENS solution |
+|---|---|
+| Windows-era desktop UIs (look like 2008) | Modern real-time cockpit-style web interface |
+| Months to implement, huge onboarding cost | Self-onboard in under one hour |
+| No real mobile support | Fully responsive, mobile-first from day one |
+| No AI (OASES launched basic doc search 2024) | SENS reads live fleet data, answers operational questions |
+| No structural fatigue modelling at operator level | Proprietary SFI engine (Promise Benebo's model) |
+| No Amplification Factor concept anywhere | Unique AF engine links operations to maintenance cost |
+| Ignores Caribbean, African, Middle East operators | Built specifically for this underserved market |
+| Opaque "call for quote" pricing | Transparent self-service SaaS plans |
+| £500–2,000/month per aircraft | Flat-rate operator pricing |
+
+### What AirSENS Owns That Nobody Else Has
+
+1. **Amplification Factor Engine** — Models how operational loading choices amplify
+   structural fatigue and maintenance cost. Nobody in the market has this concept at all.
+
+2. **Structural Fatigue Index (SFI)** — Promise Benebo's engineering model: load-path
+   classification (Primary 3× / Secondary 1.5× / Tertiary 0.5×), WFD threshold monitoring
+   at 6, 12 and 200 primary repairs, derived inspection intervals per repair. No competitor
+   offers this depth for small operators.
+
+3. **SENS AI that reads live fleet data** — OASES has keyword document search. SENS actually
+   knows your fleet, reads real numbers, answers operational questions in plain English.
+
+4. **Caribbean / African / Middle East market focus** — Every competitor ignores this market.
+   AirSENS is the only platform purpose-built for these operators.
+
+5. **Instant self-onboarding** — Competitors take weeks to implement. AirSENS gets an
+   operator running in under one hour.
+
+6. **Two-tier platform architecture** — Rilwan and Promise manage all client organisations
+   via the Control Tower. No competitor offers this multi-tenant SaaS model.
+
+7. **Dispatch Risk Score (Phase 4)** — A single 0-100 number per aircraft per day combining
+   maintenance status, open defects, SFI, AF value, crew currency and weather severity.
+   Nobody has this for small operators anywhere in the world.
+
+8. **SSID / ASIP / CPCP / FAR 26 compliance tracking** — Full regulatory programme
+   management built in, not bolted on.
+
+---
+
+## 3. Who It's For
+
+**Platform Owners — Tier 1 (Karib Aerospace)**
+- Rilwan Olowu — COO / Co-Founder
 - Promise Benebo — Founder / CEO
-- Rilwan Olowu — COO
-- Full platform visibility across all client organisations
+- Full Control Tower: all organisations, all users, all analytics, all audit trails
 
-**Org Admins (Tier 2 — per client company):**
-- 1–3 trusted senior staff per client organisation
-- Manages engineers and their module permissions
-- Can only see their own organisation's data
+**Org Admins — Tier 2 (per client company, 1–3 people)**
+- Trusted senior staff at each operator
+- Manages their engineers and module permissions
+- Sees only their own organisation's data
+- Cannot exceed user/aircraft quotas set by Karib Aerospace
 
-**Engineers (Tier 3):**
+**Engineers — Tier 3**
 - Licensed engineers (B1, B2, C category etc.)
 - Access limited to modules assigned by their org admin
-- Can log flights, raise defects, manage work orders
+- Log flights, raise defects, manage work orders
 
-**Viewers (Tier 4):**
-- Quality auditors, accountants, management
-- Read-only access to assigned modules
+**Pilots — Tier 4 (Phase 1 addition)**
+- Simplified mobile view: only their aircraft, current MEL, defect raise, sector sign-off
+- No engineering modules
+
+**Viewers — Tier 5**
+- Quality auditors, accountants, management — read-only
 
 ---
 
-## 3. Technology Stack
+## 4. Technology Stack — Current
 
 | Layer | Technology | Version | Purpose |
 |---|---|---|---|
-| Frontend framework | React | 18.3.1 | Component-based UI |
+| Frontend | React | 18.3.1 | Component-based UI |
 | Language | TypeScript | 5.5.4 | Type safety across entire codebase |
 | Build tool | Vite | 5.4.6 | Fast dev server and production builds |
 | Routing | React Router DOM | 6.26.2 | Client-side navigation with guards |
 | Charts | Recharts | 2.12.7 | All data visualisations |
 | Icons | Lucide React | 0.445.0 | Consistent icon system |
-| Animation | Framer Motion | 11.5.4 | Page transitions |
+| Animation | Framer Motion | 11.5.4 | Page transitions and animations |
 | Date utilities | date-fns | 3.6.0 | Date formatting and calculations |
 | CSS utilities | clsx | 2.1.1 | Conditional class composition |
-| Hosting | Vercel | — | Auto-deploy from GitHub |
-| Repository | GitHub | — | Source control (airsens/airsens-karib) |
+| Hosting | Vercel (Hobby) | — | Auto-deploy from GitHub push |
+| Repository | GitHub | — | airsens/airsens-karib (public) |
 
-**Current persistence:** Browser `localStorage` (key: `airsens.state.v1`). Production backend swap point is `src/context/store.tsx` — the `load()` and `persist()` functions are the only things that need to change to move to a real API.
+**Current persistence:** Browser `localStorage` (key: `airsens.state.v1`).
+**Backend swap point:** `src/context/store.tsx` — the `load()` and `persist()` functions only.
 
 ---
 
-## 4. Project Structure
+## 5. Project Structure
 
 ```
 airsens_karib_pkg/
 ├── public/
 │   └── favicon.svg
 ├── src/
-│   ├── App.tsx                    # Root — login gate, route definitions, guards
-│   ├── main.tsx                   # Entry point — mounts StoreProvider + ToastProvider
+│   ├── App.tsx                     # Root — login gate, route definitions, all guards
+│   ├── main.tsx                    # Entry — mounts StoreProvider + ToastProvider
 │   │
 │   ├── components/
-│   │   ├── Layout.tsx             # Sidebar, topbar, search, notifications, user widget
-│   │   ├── Toast.tsx              # Global toast notification system
-│   │   └── ui.tsx                 # Shared UI: PageHeader, KpiCard, StatusBadge, Bar, PanelHead
+│   │   ├── Layout.tsx              # Sidebar, topbar, global search (keyboard nav),
+│   │   │                           # notification bell (portal-based, bellPanelRef fix),
+│   │   │                           # user widget wired to currentUser
+│   │   ├── Toast.tsx               # Global toast system — useToast() hook
+│   │   └── ui.tsx                  # PageHeader, KpiCard, StatusBadge, Bar, PanelHead
 │   │
 │   ├── context/
-│   │   └── store.tsx              # Central state store — ALL mutable data lives here
+│   │   └── store.tsx               # Central store — ALL mutable state, ALL actions,
+│   │                               # SEED_VERSION auto-clear, org-scoped users,
+│   │                               # localStorage persistence, backend swap point
 │   │
 │   ├── data/
-│   │   ├── types.ts               # TypeScript interfaces for every domain entity
-│   │   └── seed.ts                # Deterministic demo data generator (PRNG seeded)
+│   │   ├── types.ts                # TypeScript interfaces for every domain entity
+│   │   └── seed.ts                 # Deterministic demo data (PRNG seed 20260601)
+│   │                               # SEED_VERSION = v5
 │   │
 │   ├── lib/
-│   │   ├── amplification.ts       # Amplification Factor (AF) engine
-│   │   ├── structural.ts          # Structural Fatigue Index (SFI) engine
-│   │   └── exports.ts             # CSV download + print-PDF utilities
+│   │   ├── amplification.ts        # Amplification Factor (AF) engine
+│   │   ├── structural.ts           # Structural Fatigue Index (SFI) engine
+│   │   │                           # Promise Benebo's engineering model
+│   │   └── exports.ts              # downloadCsv() + printPdf() utilities
 │   │
 │   ├── modules/
-│   │   ├── Login.tsx              # Login page
-│   │   ├── Dashboard.tsx          # Command Deck
-│   │   ├── AircraftModule.tsx     # Aircraft register + profile drawer
-│   │   ├── LogFlight.tsx          # Log Flight / Hours drawer
-│   │   ├── RaiseDefect.tsx        # Raise Defect drawer with MEL classification
-│   │   ├── ComponentsModule.tsx   # Component tree and life tracking
-│   │   ├── FleetPlanningModule.tsx # Gantt-style maintenance forecast
-│   │   ├── ReliabilityModule.tsx  # Reliability analytics
-│   │   ├── WorkOrdersModule.tsx   # Kanban work order board
-│   │   ├── AmplificationModule.tsx # AF engine interactive UI
-│   │   ├── EngineeringModules.tsx # Configuration, Structural SFI, Ageing
-│   │   ├── TableModules.tsx       # AD/SB, MEL, Inventory, Logbook, AMP, Tools, Sales
-│   │   ├── AIAssistant.tsx        # SENS AI floating assistant
-│   │   ├── AdminPanel.tsx         # Org-level user and permission management
-│   │   └── ControlTower.tsx       # Platform-owner panel (Rilwan & Promise only)
+│   │   ├── Login.tsx               # Login — split screen, demo fills, company footer
+│   │   ├── Dashboard.tsx           # Command Deck — KPIs, charts, priority tables
+│   │   ├── AircraftModule.tsx      # Fleet register — auto-opens drawer from search
+│   │   ├── LogFlight.tsx           # Log Flight drawer — rolls hours everywhere
+│   │   ├── RaiseDefect.tsx         # Raise Defect — auto MEL classification
+│   │   ├── ComponentsModule.tsx    # Component tree and life tracking
+│   │   ├── FleetPlanningModule.tsx # Gantt maintenance forecast (new Date() not hardcoded)
+│   │   ├── ReliabilityModule.tsx   # Reliability analytics + CSV/PDF export
+│   │   ├── WorkOrdersModule.tsx    # Kanban + store-persisted drag + New WO + exports
+│   │   ├── AmplificationModule.tsx # AF engine interactive UI with 10-yr cost chart
+│   │   ├── EngineeringModules.tsx  # Configuration (wired selector) + Structural SFI
+│   │   │                           # + Ageing (SSID/ASIP/CPCP/FAR26 full compliance)
+│   │   ├── TableModules.tsx        # AD/SB + MEL (live defects, search highlight)
+│   │   │                           # + Inventory + Logbook + AMP + Tools + Sales
+│   │   │                           # All with CSV and PDF exports
+│   │   ├── AIAssistant.tsx         # SENS AI — live fleet data + mailto escalation
+│   │   ├── AdminPanel.tsx          # Org users + permission matrix + quota enforcement
+│   │   └── ControlTower.tsx        # Platform owner panel — Rilwan & Promise only
 │   │
 │   └── styles/
-│       └── global.css             # Design system: variables, layout utilities, responsive
+│       └── global.css              # Design tokens, layout utilities, responsive grids
+│                                   # .grid-2col/.grid-3col/.grid-chart stack at ≤700px
 │
-├── vercel.json                    # SPA routing — all URLs serve index.html
-├── vite.config.ts                 # Vite config — port 5173, allowedHosts for tunnels
-├── package.json                   # Dependencies and build scripts
-├── tsconfig.json                  # TypeScript configuration
-└── SESSION_STATE.md               # Development session notes
+├── vercel.json                     # SPA routing — all paths serve index.html
+├── vite.config.ts                  # port 5173, allowedHosts: all + .trycloudflare.com
+├── package.json                    # build: "vite build" (tsc removed for Vercel compat)
+├── AIRSENS_DOCUMENTATION.md        # This document
+└── SESSION_STATE.md                # Dev session continuity notes
 ```
 
 ---
 
-## 5. Data Architecture
+## 6. Data Architecture
 
 ### Domain Entities (`src/data/types.ts`)
 
-Every piece of data in AirSENS is typed. Here are all the entities:
+**`Aircraft`**
+Registration, model, variant, MSN, owner, base (ICAO), status (airworthy/due-soon/overdue/aog),
+totalHours, totalCycles, lastFlight, nextCheck (type/dueDate/dueHours), utilizationDaily,
+yearOfMfg, engines count, defectsOpen, melActive, maintProgram (MaintTask[]).
 
-**`Aircraft`** — The core airframe record. Holds registration, model, MSN, owner, base, status (airworthy/due-soon/overdue/AOG), total hours, total cycles, last flight date, next check details, daily utilisation, year of manufacture, engine count, open defect count, MEL active count, and the full maintenance program task list.
+**`Engine`**
+id, aircraftId, position (1/2...), model, sn, hours, cycles, tbo, sinceOverhaul.
+Multiple per aircraft. Hours/cycles roll up automatically when flight is logged.
 
-**`Engine`** — Per-engine record linked to an aircraft. Tracks hours, cycles, TBO (time between overhaul), and hours/cycles since last overhaul. Multiple engines per aircraft.
+**`Component`**
+id, aircraftId, parentId (hierarchical tree), name, pn, sn, category (rotable/fixed/consumable),
+lifeLimit, tbo, sinceOverhaul, sinceNew, installedHours, status.
+Auto-advances on every flight log via store action.
 
-**`Component`** — Individual parts installed on an aircraft. Tracks part number, serial number, category (rotable/fixed/consumable), parent component (hierarchical tree), life limit, time since overhaul, and installed hours. Hours roll up automatically when a flight is logged.
+**`WorkOrder`**
+id, wo (e.g. WO-26-1004), title, aircraftId, type (scheduled/unscheduled/ad-sb/mod),
+priority (low/med/high/aog), state (backlog/planned/in-progress/qa/closed),
+manHoursEst, manHoursActual, assignee, zone, openedDate, dueDate, tasks, tasksDone.
 
-**`WorkOrder`** — A job card. Holds WO number, title, aircraft, type (scheduled/unscheduled/AD-SB/mod), priority (low/med/high/AOG), state (backlog/planned/in-progress/QA/closed), estimated and actual man-hours, assignee, zone, and task completion.
+**`FlightLog`**
+id, date, aircraftId, from, to, blockHours, cycles, engineHours, engineCycles,
+payloadKg, loadFactor, loggedBy. Immutable after creation.
 
-**`FlightLog`** — A single flight entry. Date, from/to ICAO, block hours, cycles (landings), engine hours, engine cycles, payload, load factor, and who logged it.
+**`Defect`**
+id, aircraftId, ata, description, severity (minor/major/critical), safetyCritical (bool),
+melCategory (A/B/C/D/null), raisedDate, dueDate, status (open/deferred/closed),
+melRef, reportedBy, closedDate.
 
-**`Defect`** — A logged defect. ATA chapter, description, severity (minor/major/critical), safety-critical flag, MEL category (A/B/C/D), raised and due dates, status (open/deferred/closed), MEL reference, and who reported it.
+**`MELItem`** — MEL master list (regulatory reference lookup, separate from live defects).
 
-**`MELItem`** — The MEL master list (regulatory reference). Separate from live defects — this is the lookup table.
+**`ADSB`** — ref, kind (AD/SB), subject, authority, classification, effectiveDate,
+status, compliance (% fleet complied).
 
-**`ADSB`** — An Airworthiness Directive or Service Bulletin. Authority (EASA/FAA/OEM), classification (mandatory/recommended/optional), compliance percentage across the fleet.
+**`InventoryItem`** — pn, description, category, qty, minQty, location, unitCost, shelfLifeDate.
 
-**`InventoryItem`** — A parts stock record. P/N, description, quantity, minimum quantity, location, unit cost, shelf life.
+**`User`**
+id, name, title, email, password (demo only — hashed server-side in production),
+role (superadmin/org-admin/engineer/viewer), orgId, licenseNo, active, createdAt,
+permissions: Record<ModuleKey, Permission[]>.
 
-**`User`** — A platform user. Name, title, email, role (superadmin/org-admin/engineer/viewer), organisation, license number, active status, and per-module permissions map.
+**`Organization`**
+id, name, icaoPrefix, approvalRef, country, contactEmail,
+plan (starter/professional/enterprise), status (active/suspended/pending), createdAt,
+maxAdmins, maxUsers, maxAircraft (quotas set by Karib Aerospace), inviteSentAt,
+activatedAt, notes (internal, not visible to org).
 
-**`Organization`** — A client company. Name, ICAO prefix, approval reference, country, contact email, plan (starter/professional/enterprise), status (active/suspended/pending), and quotas (max admins, max users, max aircraft) set by the platform owners.
+**`AuditEntry`** — id, ts, userId, userName, action, detail. Every action logged.
 
-**`AuditEntry`** — Every action logged: timestamp, user, action type, detail string.
+**`MaintTask`** — id, code (DAILY/WEEKLY/100HR/500HR/1000HR/5000HR/2000FC), label,
+intervalType (hours/cycles/days), interval, lastDoneHours, lastDoneCycles, lastDoneDate.
 
-**`MaintTask`** — A maintenance program threshold. Code (DAILY/100HR/1000HR etc.), interval type (hours/cycles/days), interval value, last done date/hours/cycles.
+**`StructuralRepair`** — id, location, ataZone, repairType, loadPath (primary/secondary/tertiary),
+dtiCategory (A/B/C), cyclesAtRepair, corrosionInvolved, hardLandingRelated, dateLogged.
 
 ### Seed Data (`src/data/seed.ts`)
 
-The seed file generates a complete realistic demo dataset using a deterministic pseudo-random number generator (PRNG) seeded with `20260601`. This means the data looks real and varied but is reproducible. It generates:
-
-- 14 aircraft across multiple models (ATR-72, B737, A320, etc.)
-- Engines for each aircraft (1–2 per airframe)
-- A full maintenance program (DAILY/WEEKLY/100HR/500HR/1000HR/5000HR/2000FC) per aircraft
+Deterministic PRNG (seed 20260601) — reproducible, realistic demo dataset:
+- 14 aircraft, multiple models (ATR-72, B737, A320 etc.)
+- 1–2 engines per aircraft with realistic hours/cycles
+- Full maintenance program (7 tasks) per aircraft
 - ~500 flight log entries (90 days of operations)
-- 26 seeded defects with MEL classification
-- Components in a hierarchical tree per aircraft
-- 5 seed users (Rilwan, Promise, two engineers, one viewer)
-- 2 organisations (Karib Aerospace, Caribbean Wings Ltd demo)
-- AD/SB directives, MEL master list, inventory items, work orders
+- 26 defects with auto MEL classification
+- Component trees per aircraft
+- AD/SBs, MEL master list, inventory items, work orders
+- 5 seed users, 2 organisations
 
-A `SEED_VERSION` constant (`v5`) controls auto-clearing of stale localStorage — bump this whenever seed data changes and all users automatically get fresh data on next load.
+**`SEED_VERSION = 'v5'`** — Bump this whenever seed data changes.
+On version mismatch localStorage auto-clears and fresh data loads. Zero manual resets needed.
 
 ---
 
-## 6. Authentication & Access Control
+## 7. Authentication & Access Control
 
-### How Login Works
-
-The login system (`src/modules/Login.tsx` + `src/context/store.tsx`) uses email/password authentication stored in the browser session. On production, this will be replaced by a real backend with hashed passwords and JWT tokens — the swap point is the `login()` action in the store.
-
-**Session persistence:** The logged-in user is stored in `sessionStorage` (`airsens.session.v1`). This means the session survives page refresh but is cleared when the browser tab is closed.
+### Current Implementation (localStorage/sessionStorage)
+Email and password validated against seed users in store `login()` action.
+Logged-in user stored in `sessionStorage` (`airsens.session.v1`) — survives page refresh,
+cleared on browser tab close. Backend swap: replace `login()` action with API call
+returning JWT, store token in sessionStorage.
 
 ### Role Hierarchy
-
 ```
-superadmin (Rilwan & Promise)
-    └── Full access to everything including Control Tower
-        └── org-admin (1–3 per client company)
-                └── Full access to their org, no other orgs
-                    └── engineer (licensed staff)
-                            └── Access only to modules their admin grants
-                                └── viewer (auditors, management)
-                                        └── Read-only to assigned modules
+superadmin  (Rilwan & Promise)
+    └── Full access + Control Tower (invisible to all others)
+        └── org-admin  (1–3 per client organisation)
+               └── Full access to own org only, no other orgs
+                   └── engineer
+                          └── Only modules admin grants
+                              └── viewer
+                                     └── Read-only assigned modules
 ```
 
-### Permission System
+### Permission Levels (per module)
+`view` → see module in sidebar and open it
+`read` → see data inside module
+`write` → create new records
+`edit` → modify and delete existing records
+Write/edit automatically include read and view.
 
-Every module supports four permission levels: `view`, `read`, `write`, `edit`.
-
-- **view** — can see the module in the sidebar and open it
-- **read** — can see data inside the module
-- **write** — can create new records (log flight, raise defect, create WO)
-- **edit** — can modify and delete existing records
-
-Write/edit permissions automatically include read and view. The permission matrix in the Admin Panel lets org-admins set these per module per engineer with a visual toggle grid.
-
-### Route Guards
-
-Every route in `src/App.tsx` is wrapped in a guard:
-
-- `<Guard mod="aircraft">` — checks `can('aircraft', 'view')` before rendering
-- `<AdminGuard>` — only org-admins and superadmins
-- `<SuperAdminGuard>` — only superadmins (Rilwan & Promise)
-
-If a user doesn't have access, they see a clean "Access Restricted" message instead of the module.
+### Permission Matrix
+Admin Panel → Add/Edit User drawer has full 18-module × 4-permission toggle grid.
+Write/edit granting auto-enables read+view. Admin users bypass matrix entirely.
 
 ### Org Isolation
+`store.tsx` exposes `scopedUsers` — superadmins see all users, everyone else sees only
+their own `orgId`. This is enforced at the JavaScript layer (Phase 2 moves it to
+database row-level security, making it unbreakable).
 
-Org-admins and engineers see only their own organisation's users and data. The store's `scopedUsers` computed value filters the user list by `orgId` before exposing it — an org-admin literally cannot see another organisation's users even if they knew the URL.
+### Route Guards
+```tsx
+<Guard mod="aircraft">        // checks can('aircraft', 'view')
+<AdminGuard>                  // org-admin and superadmin
+<SuperAdminGuard>             // superadmin only (Control Tower)
+```
+Failed guard shows clean "Access Restricted" message, not an error.
 
----
-
-## 7. Navigation Modules — Full Detail
-
-### 7.1 Command Deck (Dashboard)
-
-**File:** `src/modules/Dashboard.tsx`  
-**Route:** `/`  
-**Access:** All roles with `dashboard` view permission
-
-The Command Deck is the first screen after login. It gives an at-a-glance picture of the entire fleet and operation.
-
-**KPI cards (top row):**
-- Fleet Size — total aircraft in the register
-- Open Work Orders — all WOs not in "closed" state
-- Open Defects — all defects not closed, with critical count
-- MTBUR — Mean Time Between Unscheduled Removals (hrs)
-
-**Fleet Utilisation chart** — a 30-day area chart of daily block hours across the fleet. Sorted by date so the trend is accurate left-to-right.
-
-**Fleet Status panel** — a live bar chart showing aircraft by airworthiness status (Airworthy, Due Soon, Overdue, AOG).
-
-**Priority Aircraft table** — lists aircraft ordered by urgency (AOG first, then overdue, then due-soon). Shows registration, model, next check type and date, hours to next check, and airworthiness status. Clicking a row navigates to the Aircraft module.
-
-**Work Order Pipeline** — a compact view of open WOs by state (Backlog/Planned/In-Progress/QA), colour coded by priority.
-
-**Data source:** Live from the store. Every flight logged, defect raised, or WO created is reflected here immediately.
+### Quota Enforcement
+Org quotas (maxAdmins, maxUsers) set by Rilwan/Promise in Control Tower.
+Admin Panel "Add Engineer" button disables at quota with tooltip:
+"User limit reached (N). Contact AirSENS to upgrade."
 
 ---
 
-### 7.2 Aircraft
+## 8. Navigation Modules — Full Technical Detail
 
-**File:** `src/modules/AircraftModule.tsx`  
-**Route:** `/aircraft`  
-**Access:** `aircraft` view permission
+### 8.1 Command Deck (Dashboard) — `/`
+**File:** `src/modules/Dashboard.tsx` | **Access:** `dashboard` view
 
-The Aircraft module is the core fleet register — a table of every airframe with key stats.
+KPI cards: Fleet Size, Open Work Orders (not closed), Open Defects (with critical count), MTBUR.
 
-**Main table columns:** Registration, Model, Owner, Base (ICAO), Total Hours, Cycles, Next Check, Status.
+**Fleet Utilisation chart** — 30-day area chart of daily block hours. Data sorted by date
+(`Object.entries(byDate).sort((a,b) => a[0].localeCompare(b[0])).slice(-30)`) so trend
+is always chronologically accurate.
 
-**Status filter chips** at the top let you filter by: All, Airworthy, Due Soon, Overdue, AOG.
+**Fleet Status panel** — bar chart: Airworthy / Due Soon / Overdue / AOG counts.
 
-**Aircraft Profile Drawer** (click any row) opens a full detail panel on the right side:
+**Priority Aircraft table** — ordered by urgency (AOG first, overdue, due-soon).
+Columns: Registration, Model, Next Check type + date, Hours remaining, Status badge.
+Clicking a row navigates to `/aircraft`.
+
+**Work Order Pipeline** — compact Kanban count by state, colour coded by priority.
+
+All data live from store. Every action (flight logged, defect raised, WO created)
+reflects immediately with no page refresh.
+
+---
+
+### 8.2 Aircraft — `/aircraft`
+**File:** `src/modules/AircraftModule.tsx` | **Access:** `aircraft` view
+
+Fleet register table. Columns: Registration, Model, Owner, Base (ICAO), Total Hrs,
+Cycles, Next Check, Status.
+
+**Status filter chips:** All / Airworthy / Due Soon / Overdue / AOG.
+
+**Search integration:** Clicking an aircraft result in the global search auto-opens
+its profile drawer via `useLocation()` reading `location.state.highlightId`.
+
+**Aircraft Profile Drawer** (click any row):
 - Status badge, owner, base, year of manufacture
-- Action buttons: **Log Flight / Hours** (requires `logbook` write) and **Raise Defect** (requires `mel` or `aircraft` write)
-- **Airframe stats** — total hours, total cycles, daily utilisation, last flight date
-- **Engines** — each engine with model, serial number, hours, cycles
-- **Maintenance Program countdown** — every scheduled task (DAILY/WEEKLY/100HR/500HR/1000HR/5000HR/2000FC) shown as a colour-coded progress bar with remaining hours/cycles/days. Green = plenty of time, amber = due soon, red = overdue
+- **Action buttons:**
+  - "Log Flight / Hours" — requires `logbook` write permission
+  - "Raise Defect" — requires `mel` write or `aircraft` write permission
+  - Buttons disabled with tooltip if user lacks permission
+- **Airframe stats:** total hours, cycles, daily utilisation, last flight
+- **Engines:** each engine — model, S/N, hours, cycles
+- **Maintenance Program countdowns:** all 7 tasks (DAILY/WEEKLY/100HR/500HR/1000HR/5000HR/2000FC)
+  as colour-coded progress bars with remaining hours/cycles/days. Green > 25%, amber 10-25%, red < 10%
 - **Open Work Orders** for this aircraft
 - **Open Defects** with MEL category badges
 - **Installed Components** (first 6 shown)
 
 ---
 
-### 7.3 Log Flight / Hours
+### 8.3 Log Flight / Hours — Drawer from Aircraft
+**File:** `src/modules/LogFlight.tsx` | **Access:** `logbook` write
 
-**File:** `src/modules/LogFlight.tsx`  
-**Route:** Drawer opened from Aircraft module  
-**Access:** `logbook` write permission
+**Input fields:** Date, From (ICAO), To (ICAO), Block Hours, Landings/Cycles,
+Payload (kg), Load Factor (%).
 
-This is the operational logging workflow. After every flight, an engineer opens the aircraft profile and clicks "Log Flight / Hours".
+**Live rollup preview** — updates as you type block hours:
+- Airframe: before → after (hours and cycles)
+- Each engine: hours before → after
 
-**Input fields:** Date, From (ICAO), To (ICAO), Block Hours, Landings/Cycles, Payload (kg), Load Factor (%).
-
-**Live rollup preview** — as you type block hours, a live panel shows exactly what will change:
-- Airframe hours: before → after
-- Each engine hours: before → after
-
-**On save, the following all update simultaneously:**
-1. Aircraft total hours and cycles
-2. Aircraft last flight date
+**On save, ALL of the following update in one atomic transaction:**
+1. `aircraft.totalHours` += blockHours, `aircraft.totalCycles` += cycles
+2. `aircraft.lastFlight` = date
 3. Aircraft status recomputed from maintenance program margins
-4. All installed engines: hours and cycles incremented
-5. All installed components: `sinceOverhaul`, `sinceNew`, and `installedHours` incremented
-6. New FlightLog entry created with logged-by user name
+4. All engines: `hours` += blockHours, `cycles` += cycles, `sinceOverhaul` += blockHours
+5. All installed components: `sinceOverhaul` += blockHours, `sinceNew` += blockHours,
+   `installedHours` += blockHours
+6. New FlightLog entry created with `loggedBy: currentUser.name`
 7. Audit entry created
 
-This is the single most important operational action in AirSENS — every maintenance threshold, component life, and reliability metric depends on accurate flight logging.
+**This is the most important operational action in AirSENS.** Every maintenance threshold,
+component life, and reliability metric depends on accurate flight logging. After Phase 1,
+this will also auto-trigger Work Order creation when tasks drop below threshold.
 
 ---
 
-### 7.4 Raise Defect
+### 8.4 Raise Defect — Drawer from Aircraft
+**File:** `src/modules/RaiseDefect.tsx` | **Access:** `mel` write or `aircraft` write
 
-**File:** `src/modules/RaiseDefect.tsx`  
-**Route:** Drawer opened from Aircraft module  
-**Access:** `mel` write or `aircraft` write permission
+**Input fields:** ATA Chapter dropdown (all standard chapters), Description (free text),
+Severity (Minor / Major / Critical), Safety-Critical checkbox.
 
-Defect logging with automatic MEL classification per Promise's model.
-
-**Input fields:** ATA Chapter (dropdown of all standard chapters), Description (free text), Severity (Minor/Major/Critical), Safety-Critical checkbox.
-
-**Live MEL auto-classification** — as you select severity and the safety-critical flag, a live card shows the auto-derived MEL category:
-- Safety-critical = **Category A** (Immediate — aircraft grounded)
-- Critical (not safety-critical) = **Category B** (3 days)
-- Major = **Category C** (10 days)
-- Minor = **Category D** (120 days)
+**Live MEL auto-classification** updates as you fill in the form:
+- Safety-critical ticked → **Category A** (Immediate — aircraft grounded)
+- Critical severity (not safety-critical) → **Category B** (3 days)
+- Major severity → **Category C** (10 days)
+- Minor severity → **Category D** (120 days)
 
 **On save:**
-1. Defect record created with MEL category, due date (raised + interval), and reporter name
-2. If safety-critical: aircraft status immediately set to AOG
-3. Aircraft `defectsOpen` count incremented
-4. MEL reference auto-generated (e.g. `MEL-27-45`)
-5. Defect appears in the MEL module live table
-6. Notification bell updated
+1. Defect created with melCategory, dueDate (raised + interval), melRef, reportedBy
+2. `aircraft.defectsOpen` incremented
+3. If safetyCritical: `aircraft.status = 'aog'`
+4. Defect appears live in MEL module
+5. Notification bell count updates
 
-**Closing a defect (via MEL module Rectify button):**
-1. Defect status set to "closed" with closed date
-2. Aircraft `defectsOpen` count decremented
-3. If no remaining Category A open defects: AOG status automatically cleared
-
----
-
-### 7.5 Components
-
-**File:** `src/modules/ComponentsModule.tsx`  
-**Route:** `/components`  
-**Access:** `components` view permission
-
-Tracks every installed component across the fleet in a hierarchical tree.
-
-**Aircraft selector** — choose an aircraft to view its component tree.
-
-**Component tree** — shows components with their parent-child relationships (e.g. Engine 1 → Fan Module → Fan Blade Set). Each component shows:
-- Part Number (P/N), Serial Number (S/N)
-- Category (Rotable, Fixed, Consumable)
-- Time Since Overhaul bar (hours used / TBO)
-- Life Limit remaining
-- Status badge
-
-**Important:** Component hours automatically advance whenever a flight is logged on the parent aircraft. No manual entry needed — the store's `logFlight()` action increments `sinceOverhaul`, `sinceNew`, and `installedHours` on every installed component in one transaction.
+**Closing a defect (MEL Rectify button):**
+1. `defect.status = 'closed'`, `closedDate` set
+2. `aircraft.defectsOpen` decremented
+3. If no remaining Cat-A open defects: `aircraft.status = 'airworthy'` (AOG cleared)
 
 ---
 
-### 7.6 Fleet Planning
+### 8.5 Components — `/components`
+**File:** `src/modules/ComponentsModule.tsx` | **Access:** `components` view
 
-**File:** `src/modules/FleetPlanningModule.tsx`  
-**Route:** `/fleet-planning`  
-**Access:** `fleet-planning` view permission
-
-A Gantt-style maintenance forecast showing the entire fleet's upcoming check schedule.
-
-**Horizon selector** — view 30, 60, or 90-day window.
-
-**Gantt chart** — each aircraft is a row. The coloured bar shows when the next check is due within the selected horizon. Colour coding: green (plenty of time), amber (due within 15% of horizon), red (overdue or due this week).
-
-**Today marker** — a vertical line shows today's position, computed from `new Date()` (not hardcoded — fixed bug from earlier session).
-
-Useful for maintenance planning — lets you see immediately which aircraft need to come in and roughly when to schedule hangar time.
+Aircraft selector → component tree with parent-child hierarchy.
+Each component: P/N, S/N, category, time-since-overhaul bar (hours / TBO), status.
+Hours auto-advance on every flight log — zero manual maintenance required.
 
 ---
 
-### 7.7 Logbook & Ops
+### 8.6 Fleet Planning — `/fleet-planning`
+**File:** `src/modules/FleetPlanningModule.tsx` | **Access:** `fleet-planning` view
 
-**File:** `src/modules/TableModules.tsx` — `LogbookModule` export  
-**Route:** `/logbook`  
-**Access:** `logbook` view permission
-
-The digital flight logbook. Shows all flight records logged across the fleet.
-
-**30-day trend chart** — block hours per day, area chart sorted chronologically.
-
-**Flight records table** — Date, Aircraft (registration), Route (From → To), Block Hours, Cycles, Payload (kg), Load Factor %, Logged By.
-
-**Important note to users:** Flights are not entered here directly. The module explains: "To add a flight, open Aircraft → select an aircraft → Log Flight / Hours." This is intentional — logging lives on the aircraft, not the logbook.
-
-**Exports:** CSV (full history, all columns) and PDF (summary KPIs + last 40 entries formatted for print).
+Gantt-style 30/60/90-day maintenance forecast. Horizon toggle at top.
+Today marker from `new Date()` (not hardcoded — bug fixed).
+Each aircraft row shows check due date as coloured bar within selected horizon.
+Green = plenty of time, amber = due within 15% of horizon, red = overdue or this week.
 
 ---
 
-### 7.8 Maintenance Program
+### 8.7 Logbook & Ops — `/logbook`
+**File:** `src/modules/TableModules.tsx (LogbookModule)` | **Access:** `logbook` view
 
-**File:** `src/modules/TableModules.tsx` — `AmpModule` export  
-**Route:** `/amp`  
-**Access:** `amp` view permission
+All flight records across the fleet. 30-day block hours trend chart (sorted chronologically).
+Table: Date, Aircraft, Route, Block Hours, Cycles, Payload, Load Factor %, Logged By.
 
-The Approved Maintenance Programme reference. Shows the scheduled task hierarchy (daily, weekly, 100hr, A-Check, C-Check, etc.) with compliance status.
+Flight entry note: directs users to Aircraft → Log Flight / Hours (not entered here directly).
 
-Currently displays the programme structure from the seed data. The "Assign Task" button (coming soon) will link programme tasks directly to work orders.
-
----
-
-### 7.9 AD / SB Tracking
-
-**File:** `src/modules/TableModules.tsx` — `AdSbModule` export  
-**Route:** `/adsb`  
-**Access:** `adsb` view permission
-
-Tracks Airworthiness Directives (ADs) and Service Bulletins (SBs) across the fleet.
-
-**Kind filter** — toggle between All, AD only, SB only.
-
-**Table columns:** Reference, Authority (EASA/FAA/OEM), Subject, Classification (Mandatory/Recommended/Optional), Effective Date, Status, Fleet Compliance %.
-
-**Mandatory ADs** are highlighted. The compliance % bar shows how much of the applicable fleet has complied.
-
-**Exports:** CSV (all directives with compliance) and PDF (formatted compliance report).
+**Exports:** CSV (full history, all columns with UTF-8 BOM for Excel) and PDF
+(Karib letterhead, summary KPIs + last 40 entries formatted for print).
 
 ---
 
-### 7.10 MEL (Minimum Equipment List)
+### 8.8 Maintenance Program — `/amp`
+**File:** `src/modules/TableModules.tsx (AmpModule)` | **Access:** `amp` view
 
-**File:** `src/modules/TableModules.tsx` — `MelModule` export  
-**Route:** `/mel`  
-**Access:** `mel` view permission
-
-The active MEL dispatch board — shows all open defects that carry a MEL category.
-
-**Category KPI cards** — count of Category A (immediate), B (3 days), C (10 days), D (120 days) active items.
-
-**Active MEL table:** MEL Ref, ATA, Description, Category badge, Aircraft, Reported By, Rectify By date (red if overdue).
-
-**Rectify button** (requires `mel` edit permission) — closes the defect, updates aircraft defectsOpen count, and clears AOG if it was the last Category A item.
-
-This module is the primary dispatch reference — before releasing an aircraft for flight, the dispatcher checks here to ensure no Category A items are open.
-
-**Exports:** CSV and PDF with all active MEL items, due dates, and aircraft.
+Approved Maintenance Programme reference — scheduled task hierarchy with compliance status.
+"Assign Task" button (coming Phase 1) will link programme tasks to work orders.
 
 ---
 
-### 7.11 Reliability
+### 8.9 AD / SB Tracking — `/adsb`
+**File:** `src/modules/TableModules.tsx (AdSbModule)` | **Access:** `adsb` view
 
-**File:** `src/modules/ReliabilityModule.tsx`  
-**Route:** `/reliability`  
-**Access:** `reliability` view permission
+Kind filter (All / AD / SB). Table: Ref, Authority (EASA/FAA/OEM), Subject,
+Classification (Mandatory/Recommended/Optional), Effective Date, Status, Fleet Compliance %.
+Mandatory ADs highlighted.
 
-Reliability analysis computed from actual logged flight and defect data.
-
-**KPI cards:** Dispatch Reliability %, Total Defects, Critical Defects, Tracked Components.
-
-**Defects by ATA Chapter** — bar chart showing which systems generate the most defects. Drives the maintenance programme review.
-
-**Defect trend** — weekly defect rate over the last 12 weeks. Rising trend triggers a programme review recommendation.
-
-**MTBUR by component family** — Mean Time Between Unscheduled Removals per component category, computed from the flight log and defect records.
-
-**Important:** The more flights and defects are logged in AirSENS, the sharper and more accurate the reliability data becomes. It is a living database, not a static report.
-
-**Exports:** CSV (full dataset — ATA breakdown, MTBUR, trend) and PDF (formatted reliability report with Karib Aerospace letterhead, suitable for authority submission).
+**Exports:** CSV and PDF compliance report.
 
 ---
 
-### 7.12 Configuration
+### 8.10 MEL (Minimum Equipment List) — `/mel`
+**File:** `src/modules/TableModules.tsx (MelModule)` | **Access:** `mel` view
 
-**File:** `src/modules/EngineeringModules.tsx` — `ConfigurationModule` export  
-**Route:** `/configuration`  
-**Access:** `configuration` view permission
+Live MEL items = open defects with melCategory (not a static list — driven by real defects).
 
-Tracks the configuration lifecycle of an individual aircraft from As-Designed to As-Maintained.
+**Category KPI cards:** Count of A (immediate), B (3 days), C (10 days), D (120 days).
 
-**Aircraft selector** — choose which aircraft's configuration history to view.
+**Table:** MEL Ref, ATA, Description, Category badge, Aircraft, Reported By,
+Rectify By date (red if overdue).
 
-**Configuration timeline** — a visual step-by-step timeline showing:
-- As-Designed (OEM baseline, locked)
-- As-Built (customer options applied, locked)
-- Modifications applied (SBs, STCs, mods — each with date and description)
-- As-Maintained (current effective configuration, live)
+**Search integration:** Clicking a defect in global search navigates here with
+`location.state.highlightId` — matching row gets cyan background + "← from search" badge.
 
-This is the configuration audit trail. In a real production deployment this will pull from engineering orders and approved modification records.
+**Rectify button** (requires `mel` edit): closes defect, decrements defectsOpen,
+clears AOG if last Cat-A item.
 
----
-
-### 7.13 Work Orders
-
-**File:** `src/modules/WorkOrdersModule.tsx`  
-**Route:** `/work-orders`  
-**Access:** `work-orders` view permission
-
-A Kanban board for managing maintenance execution.
-
-**Five columns:** Backlog → Planned → In Progress → QA / Sign-Off → Closed
-
-**Kanban cards** show: WO number (e.g. WO-26-1004), title, aircraft registration and model, priority badge (Low/Med/High/AOG), assignee, zone, estimated vs actual man-hours, task completion progress bar.
-
-**Drag and drop** — drag any card between columns to update its state. The move is persisted to the store immediately (not just local state). Drag is disabled for users without write permission.
-
-**New Work Order button** — opens a form drawer: Aircraft, Title, Type (Scheduled/Unscheduled/AD-SB/Modification), Priority, Estimated Man-Hours, Due Date, Assignee, Zone. New WOs go straight to Backlog.
-
-**Exports:** CSV (all open WOs with full detail) and PDF (formatted work order list).
+**Exports:** CSV and PDF — both suitable for authority dispatch records.
 
 ---
 
-### 7.14 Inventory
+### 8.11 Reliability — `/reliability`
+**File:** `src/modules/ReliabilityModule.tsx` | **Access:** `reliability` view
 
-**File:** `src/modules/TableModules.tsx` — `InventoryModule` export  
-**Route:** `/inventory`  
-**Access:** `inventory` view permission
+Computed from actual logged data — the more you log, the sharper it gets.
 
-Parts and materials stock management.
+KPI cards: Dispatch Reliability %, Total Defects, Critical Defects, Tracked Components.
 
-**KPI cards:** Total Parts, Low Stock Items, Total Stock Value (USD).
+**Defects by ATA Chapter** — bar chart showing which systems generate the most defects.
 
-**Low stock highlighted** — any part below its minimum quantity is flagged in the table.
+**Defect trend** — weekly defect rate, last 12 weeks. Rising trend triggers programme
+review recommendation.
 
-**Table columns:** P/N, Description, Category, Quantity, Min Qty, Location, Unit Cost, Shelf Life, Reorder status.
+**MTBUR by component family** — Mean Time Between Unscheduled Removals.
 
-**Exports:** CSV (full inventory with reorder flags) and PDF (stock report with value calculation and low-stock summary).
-
----
-
-### 7.15 Tools & Manuals
-
-**File:** `src/modules/TableModules.tsx` — `ToolsModule` export  
-**Route:** `/tools-manuals`  
-**Access:** `tools-manuals` view permission
-
-Reference library for tooling and technical documentation. Currently shows the seeded reference catalog. Full document upload and management is planned for the backend phase.
+**Exports:**
+- "Excel (CSV)" — real CSV download with UTF-8 BOM, opens directly in Excel
+- "PDF Report" — opens styled print window with Karib letterhead, suitable for
+  authority submission. Browser saves as PDF natively (no library needed).
 
 ---
 
-### 7.16 Sales & Invoice
+### 8.12 Configuration — `/configuration`
+**File:** `src/modules/EngineeringModules.tsx (ConfigurationModule)` | **Access:** `configuration` view
 
-**File:** `src/modules/TableModules.tsx` — `SalesModule` export  
-**Route:** `/sales`  
-**Access:** `sales` view permission
-
-Sales and quotation management for MRO services. Currently shows seeded quotation data. Full quotation builder and invoice generation is planned for the backend phase.
+Aircraft selector (wired to `useState`, `ac` variable used throughout — no crash on empty fleet).
+Timeline: As-Designed → As-Built → Modifications applied → As-Maintained.
+Each step: date, description, state (locked/applied/current) with dot-and-line visual.
 
 ---
 
-### 7.17 Amplification Factor
+### 8.13 Work Orders — `/work-orders`
+**File:** `src/modules/WorkOrdersModule.tsx` | **Access:** `work-orders` view
 
-**File:** `src/modules/AmplificationModule.tsx`  
-**Route:** `/amplification`  
-**Access:** `amplification` view permission
+Five-column Kanban: Backlog → Planned → In Progress → QA/Sign-Off → Closed.
 
-The **Amplification Factor (AF) engine** is one of AirSENS's most unique and proprietary features. No competitor has anything equivalent.
+**Cards show:** WO number, title, aircraft, priority badge, assignee, zone,
+hours (actual/estimated), task completion bar.
 
-**What it does:** Models how operational loading choices amplify structural fatigue, inspection frequency, and total maintenance cost over the aircraft's life. It translates five operational parameters into a single multiplier that drives maintenance interval and cost predictions.
+**Drag and drop** — persisted through store via `moveWorkOrder()` action (not local state —
+fixes the bug where moves were lost on page refresh). Drag disabled without write permission.
 
-**Input sliders:**
-1. **Payload Ratio** (0–120% of max structural payload) — higher payload = cubic stress increase
-2. **Cycles per Day** (landings/day) — more cycles = more pressurisation and landing fatigue
-3. **Load Factor** (% capacity utilisation) — commercial pressure to fill seats
-4. **Environment Severity** (1–5: benign inland to harsh coastal/arctic) — drives corrosion
-5. **Avg Sector Length** (hours) — short sectors = more cycles per flight hour
+**New Work Order drawer:** Aircraft (selector), Title, Type (Scheduled/Unscheduled/AD-SB/Mod),
+Priority (Low/Med/High/AOG), Est. Man-Hours, Due Date, Assignee, Zone. Opens in Backlog.
+
+**Exports:** CSV (open WOs, all columns) and PDF (formatted job list).
+
+---
+
+### 8.14 Inventory — `/inventory`
+**File:** `src/modules/TableModules.tsx (InventoryModule)` | **Access:** `inventory` view
+
+KPI: Total Parts, Low Stock count, Total Stock Value (USD).
+Low-stock items highlighted. Reorder status flags.
+**Exports:** CSV (full inventory with reorder flags) and PDF (stock report with value calc).
+
+---
+
+### 8.15 Tools & Manuals — `/tools-manuals`
+**File:** `src/modules/TableModules.tsx (ToolsModule)` | **Access:** `tools-manuals` view
+Reference library. Full document management added Phase 2.
+
+---
+
+### 8.16 Sales & Invoice — `/sales`
+**File:** `src/modules/TableModules.tsx (SalesModule)` | **Access:** `sales` view
+Quotation management. Full invoice builder added Phase 3.
+
+---
+
+### 8.17 Amplification Factor — `/amplification`
+**File:** `src/modules/AmplificationModule.tsx` | **Access:** `amplification` view
+
+**AirSENS's most unique proprietary feature. No competitor has this concept.**
+
+Models how operational loading choices amplify structural fatigue, inspection frequency,
+and total maintenance cost over the aircraft's life.
+
+**Five input sliders:**
+1. Payload Ratio (0–120% of max structural payload) — cubic stress relationship
+2. Cycles per Day (landings/day)
+3. Load Factor (0–100% capacity utilisation)
+4. Environment Severity (1=benign inland, 5=harsh coastal/arctic)
+5. Avg Sector Length (hours) — short sectors = more cycles per flight hour
 
 **Output panel:**
-- **AF Value** — the amplification multiplier (1.0 = baseline, 2.6 = severe)
-- **Fatigue Index** — composite 0–100 score
-- **Interval Tightening** — how much to reduce inspection intervals (%)
-- **Cost Multiplier** — lifecycle maintenance cost vs baseline
-- **Driver bar chart** — which factor contributes the most to amplification
-- **Recommendation** — plain-English action summary (Optimal / Elevated / High / Severe)
+- AF Value — the amplification multiplier (1.0 = baseline, up to ~3.0 = severe)
+- Fatigue Index — composite 0–100 score
+- Interval Tightening — how much to reduce inspection intervals (%)
+- Cost Multiplier — lifecycle maintenance cost vs baseline
+- Driver bar chart — which factor contributes most
+- Band: Optimal / Elevated / High / Severe with recommendation text
 
-**10-year cost projection chart** — shows cumulative maintenance cost: baseline (flat 4% escalation) vs projected (with AF amplification compounding year over year). The gap between the lines is the cost of the operating choices.
+**10-year cost projection chart** — baseline (4% annual escalation flat) vs projected
+(AF compounding year over year). The gap between lines is the cost of operating choices.
 
-**Structural modifier integration** — if a structural fatigue index has been computed in the Structural module, its `structuralAFModifier` (1.0–2.0×) is applied to the AF result, linking structural condition directly to maintenance cost.
-
-**Mathematical basis:**
-```
-payloadTerm  = payloadRatio ^ 2.4      (super-linear, stress concentration proxy)
-cycleTerm    = 0.6 + 0.9 × (cycleDensity / ref)
-loadTerm     = 0.7 + 0.6 × loadFactor
-envTerm      = 1 + (severity - 1) × 0.14
-raw          = payloadTerm × cycleTerm × loadTerm × envTerm
-AF           = (1 + log₂(raw/baseline) × 0.62) × structuralModifier
-```
+**Structural modifier integration** — the SFI engine's `structuralAFModifier`
+(1.0–2.0×) is applied to the AF result, linking structural condition to maintenance cost.
 
 ---
 
-### 7.18 Structural (DTE/DTI)
+### 8.18 Structural (DTE/DTI) — `/structural`
+**File:** `src/modules/EngineeringModules.tsx (StructuralModule)` | **Access:** `structural` view
 
-**File:** `src/modules/EngineeringModules.tsx` — `StructuralModule` export  
-**Route:** `/structural`  
-**Access:** `structural` view permission
-
-The **Structural Fatigue Index (SFI) engine** — Promise Benebo's proprietary engineering model, implemented as a live interactive system.
-
-This is the most technically sophisticated module in AirSENS and a major differentiator from every competitor.
-
-**What it does:** Computes a live structural fatigue index (0–100) for any aircraft based on real engineering inputs. The index drives inspection interval derivation and feeds into the Amplification Factor engine.
+**Promise Benebo's Structural Fatigue Index engine. Live and interactive.**
+**The most technically sophisticated module in AirSENS and a major market differentiator.**
 
 **Input controls:**
 - Aircraft selector
-- Environment Severity slider (1–5)
+- Environment Severity slider (1–5): Benign → Moderate → Significant → Harsh → Severe
 - Hard Landing Events counter
 
-**Load Path Classification** — every structural repair must be classified as:
-- **Primary Load Path** (weight: 3.0×) — main structural load bearing, most critical. Per Promise: "Primary load paths are critical." Each repair acts as a potential stress raiser.
-- **Secondary Load Path** (weight: 1.5×) — supporting structure, significant
-- **Tertiary Load Path** (weight: 0.5×) — minor/fairing structure, lowest criticality
+**Load Path Classification — the engineering core:**
+Every structural repair must be classified:
+- **Primary** (3.0× weight) — main structural load bearing. Per Promise: "Primary load paths are
+  critical. Once the primary one is affected, the fatigue index starts going up."
+- **Secondary** (1.5× weight) — supporting structure, significant contribution
+- **Tertiary** (0.5× weight) — minor/fairing structure, lowest criticality
 
-**Fatigue Index Drivers** (per Promise's model):
-1. **Takeoff/Landing Cycles** — normalised to 20,000 cycle reference life
-2. **Pressurisation Cycles** — approximately equal to landing cycles for pressurised aircraft
-3. **Environment / Corrosion** — coastal salt, tropical heat, dust — all accelerate fatigue
-4. **Hard Landings** — each hard landing event adds directly to the index
-5. **Repair Accumulation** — weighted by load path and DTI category. This is the most important driver. Per Promise: "The more repairs you have, they start to now act as stress raisers... they start to increase stress, local increase in stress. And then these repairs in various places can link up and break the entire thing up."
+**Fatigue Index Drivers (per Promise's model):**
+1. Takeoffs and landings — normalised to 20,000 cycle reference life
+2. Pressurisation cycles — approximately equal to landing cycles
+3. Environment and corrosion — coastal salt, tropical heat, dust all accelerate fatigue
+4. Hard landings — each event adds directly to the index
+5. Repair accumulation — weighted by load path and DTI category. Per Promise:
+   "The more repairs you have, they start to act as stress raisers — local increase in
+   stress — and these repairs in various places can link up and break the entire thing up."
 
-**WFD (Widespread Fatigue Damage) Monitoring:**
-- 4+ primary repairs: monitoring begins
-- 6+ primary repairs: WFD threshold crossed — warning banner appears
-- 9+ primary repairs: elevated risk — enhanced NDT mandatory
-- 12+ primary repairs: critical — immediate DTE review required
-- 200+ primary repairs: catastrophic threshold (per Promise: "if you have more than 200 repairs in your primary load path, the fatigue index starts to increase significantly")
+**WFD Threshold Monitoring:**
+- 4+ primary repairs → monitoring begins
+- 6+ primary repairs → WFD threshold crossed, warning banner appears
+- 9+ primary repairs → elevated risk, enhanced NDT mandatory
+- 12+ primary repairs → critical, immediate DTE review required
+- 200+ primary repairs → catastrophic (per Promise: "the fatigue index starts to increase
+  significantly"), full programme review mandatory
 
-**Log Repair drawer** — each repair logged with: Location, ATA Zone, Repair Type (Doubler/Crack stop/Bushing replace/Splice/Patch/Modification/Corrosion blend), Load Path (visual selector with descriptions), DTI Category (A/B/C), Corrosion flag, Hard Landing flag.
+**Log Repair Drawer:**
+Location, ATA Zone, Repair Type (Doubler/Crack stop/Bushing replace/Splice/Patch/
+Modification/Corrosion blend), Load Path (visual selector with descriptions),
+DTI Category (A/B/C), Corrosion flag, Hard Landing flag.
+Index updates immediately on save.
 
 **Four tabs:**
-1. **Overview** — load path bar charts, engineering summary KPIs
-2. **Repairs** — full repair log table with delete
-3. **Inspection Intervals** — derived intervals per repair: base interval reduced proportional to load path weight × DTI severity × current SFI. Red = critical interval (< 4,000 FH), amber = tightened, green = standard
-4. **Fatigue Drivers** — bar chart breakdown of what's causing the fatigue index
+1. **Overview** — load path bar charts, engineering summary (total repairs, corrosion,
+   hard landing, Cat-A count, structural AF modifier)
+2. **Repairs** — full log table with delete capability
+3. **Inspection Intervals** — derived per repair. Base interval reduced proportional to
+   load path weight × DTI severity × current SFI. Red < 4,000FH, amber < 7,000FH, green ≥ 7,000FH
+4. **Fatigue Drivers** — bar chart breakdown with model basis note
 
-**Structural AF Modifier output** — the SFI score generates a multiplier (1.0–2.0×) that is applied directly to the Amplification Factor engine, linking structural condition to maintenance cost modelling.
-
-**Mathematical basis:**
-```
-cycleTerm       = (totalCycles / 20,000) × 25        capped at 25
-pressTerm       = (pressureCycles / 20,000) × 10      capped at 10
-envTerm         = (severity-1 × 3) + (corrosionRepairs × 0.8)
-hardLandingTerm = hardLandings × 1.5                  capped at 10
-repairTerm      = Σ (loadPathWeight × dtiSeverity × 0.8) per repair
-wfdAmplifier    = 1 + log₂(primaryExcess + 1) × 0.6  if primary ≥ 6
-SFI             = min(100, round((cycleTerm + pressTerm + envTerm + hardLandingTerm + repairTerm) × wfdAmplifier))
-```
+**Structural AF Modifier output:** `1 + (SFI/100)` → feeds Amplification Factor engine.
+SFI 0 → modifier 1.0×. SFI 50 → 1.5×. SFI 100 → 2.0×.
 
 ---
 
-### 7.19 Ageing Aircraft
+### 8.19 Ageing Aircraft — `/ageing`
+**File:** `src/modules/EngineeringModules.tsx (AgeingModule)` | **Access:** `ageing` view
 
-**File:** `src/modules/EngineeringModules.tsx` — `AgeingModule` export  
-**Route:** `/ageing`  
-**Access:** `ageing` view permission
+**Full SSID / ASIP / CPCP / FAR 26 / EASA Part-26 compliance tracking.**
 
-Age-related deterioration compliance per AMC 20-20 and ICAO requirements.
+KPI cards: Oldest Airframe, Average Fleet Age, Aircraft over 15 years, Active Programmes.
 
-**KPI cards:** Oldest Airframe (years), Average Fleet Age, Aircraft over 15 years (requiring enhanced programmes), Active Programmes count.
+**Structural Integrity Programmes (full detail):**
 
-**Fleet by Age chart** — each aircraft as a horizontal bar. Green under 12 years, amber 12–18, red over 18. Age is computed from the current year dynamically.
+| Programme | Reference | Trigger age |
+|---|---|---|
+| SSID — Supplemental Structural Inspection Document | JAR 25.571 / FAR 25.571 | 12+ years |
+| ASIP — Aircraft Structural Integrity Programme | EASA Part-26 / CS-26 | 10+ years |
+| CPCP — Corrosion Prevention & Control Programme | AMC 20-20 / AMC4 CAMO.A.305(g) | 8+ years |
+| FAR 26 / EASA Part-26 Compliance | Reg (EU) 2015/640 / 14 CFR Part 26 | All aircraft |
+| WFD — Widespread Fatigue Damage Assessment | AMC 20-20 / CS 26.370 | 15+ years |
+| RAP — Repair Assessment Programme | FAA AC 91-56 / EASA Part-26 | 10+ years |
 
-**Ageing Programmes table:** Lists the four core ageing programmes every operator must maintain:
-- Corrosion Prevention & Control (CPCP) — AMC 20-20
-- Structural Significant Items (SSI) — ICAO Annex 8
-- Widespread Fatigue Damage (WFD) — AMC 20-20
-- Repair Assessment Program (RAP) — FAA AC 91-56
+Each programme card: name, regulatory reference, status indicator, live aircraft count,
+full plain-English description of what it requires and why.
 
-Shows how many aircraft in the fleet currently require each programme.
+**Fleet by Age chart:** horizontal bar per aircraft, colour-coded green/amber/red.
+Age computed dynamically from `new Date().getFullYear() - a.yearOfMfg`.
+Aircraft over 12 years: "SSID required" badge. Over 15 years: "WFD review" badge.
+
+**Programme Requirements by Age table:** what gets triggered at 8/10/12/15/20 years
+with live count of how many fleet aircraft currently require each level.
 
 ---
 
-## 8. Administration Layer
+## 9. Administration Layer
 
-### 8.1 Admin Panel
+### 9.1 Admin Panel — `/admin`
+**File:** `src/modules/AdminPanel.tsx` | **Access:** org-admin + superadmin
 
-**File:** `src/modules/AdminPanel.tsx`  
-**Route:** `/admin`  
-**Access:** Org-Admin and Super Admin only
+Org-admins see only their own users. Superadmins see all (via store scopedUsers).
 
-The org-level administration panel. Visible to both org-admins and superadmins, but org-admins can only see their own organisation's users.
+**Live quota indicator** (top-right of page header):
+`5/20 users · 1/3 admins` — updates in real time.
 
 **Three tabs:**
 
-**Users & Access:** Full user table with name, title, email, role badge, license number, active status. Click any user to open the edit drawer. Delete button available for engineers and viewers (not for admins — safety guard). The "Add Engineer" button is disabled and shows a quota tooltip if the org has reached its user limit set by the platform owners.
+**Users & Access:**
+Full user table — name, title, email, role badge, license, active status.
+Click row → Edit User drawer.
+Delete button only for engineers/viewers (cannot delete admins — safety guard).
+Add Engineer button disabled at quota limit.
 
-**User quota indicator** (top right of header): shows `X/Y users · X/Y admins` — live count vs the quota set by Rilwan/Promise in the Control Tower.
+**Add/Edit User Drawer:**
+Name, title, email, password, role, license number, active toggle.
+For engineers/viewers: permission matrix — 18 modules × 4 permission levels.
+Toggle logic: write/edit auto-enables read+view; read auto-enables view.
+Admin roles bypass matrix entirely.
 
-**Add/Edit User Drawer:** Name, title, email, password, role, license number, active toggle. For engineers and viewers: a full **permission matrix** — a grid of every module (18 modules) × every permission level (view/read/write/edit). Toggle buttons: when write or edit is granted, read and view are automatically enabled. When read is granted, view is automatically enabled. Admins bypass the matrix (they have full access by definition).
+**Audit Log:**
+Every action logged: timestamp, user, action type, detail string.
+"Reset Demo Data" button (superadmin only) — wipes localStorage, reloads seed,
+bumps session to force re-login.
 
-**Audit Log:** Every action taken in the system is logged here: timestamp, user name, action type, detail. Includes a "Reset Demo Data" button (superadmins only) that wipes localStorage and reloads the seed.
-
-**Organization tab:** Displays the organisation's name, ICAO prefix, approval reference, user count.
-
----
-
-### 8.2 Control Tower
-
-**File:** `src/modules/ControlTower.tsx`  
-**Route:** `/control-tower`  
-**Access:** Super Admin only (Rilwan & Promise)
-
-The platform-owner command centre. **Completely invisible to all other users** — it doesn't appear in the sidebar for anyone except superadmins.
-
-**Platform KPI cards:** Total Organisations, Total Users (all orgs), Active Orgs, Audit Events.
-
-**Four tabs:**
-
-**Organisations:** Each client organisation as an expandable card. Collapsed view shows name, plan badge (Starter/Professional/Enterprise), status badge (Active/Pending/Suspended), and live user/admin quota usage numbers. Expanded view shows:
-- Quota bars (Admins used/max, Users used/max) with red indicator if at limit
-- Full member list with role badges
-- Action buttons: Edit Quotas, Activate/Suspend toggle, Send Invite (opens email client pre-filled with onboarding email to karib.aerospace@outlook.com), Remove (with confirmation)
-- Internal notes (not visible to the org)
-
-**Add/Edit Organisation Drawer:** Organisation name, ICAO prefix, contact email, country, approval reference, plan selection, **user quotas** (max admins, max users, max aircraft — set by you, enforced automatically on their Admin Panel).
-
-**All Users:** Every single user across every organisation on the platform in one table. Name, title, organisation, role, email, status.
-
-**Analytics:** Plan distribution bars (Starter/Professional/Enterprise), user breakdown by role (Superadmin/Org-Admin/Engineer/Viewer), org capacity table showing quota utilisation per organisation.
-
-**Audit Trail:** Full platform-wide audit log — every action by every user in every organisation.
+**Organization tab:**
+Org name, ICAO prefix, approval reference, user count.
 
 ---
 
-## 9. SENS AI Assistant
+### 9.2 Control Tower — `/control-tower`
+**File:** `src/modules/ControlTower.tsx` | **Access:** SUPERADMIN ONLY
 
-**File:** `src/modules/AIAssistant.tsx`  
-**Mounted:** Always visible (bottom-right floating button) when logged in
+**Completely invisible to all other users — does not appear in sidebar for anyone else.**
 
-A floating AI assistant named SENS. The cyan chat button is always available in the bottom-right corner.
+**Platform KPIs:** Total Organisations, Total Users (all orgs), Active Orgs, Audit Events.
 
-**What SENS knows:**
-- Live fleet data (AOG count, fleet size, open defects, work orders, due-soon checks)
-- How every module works and how to use it
-- MEL categories and the rectification window rules
+**Organisations tab:**
+Each org as expandable card. Collapsed: name, plan badge, status badge, live user/admin counts.
+
+Expanded shows:
+- **Quota bars** — Admins used/max, Users used/max with red at-limit indicator
+- **Member list** — every user in org with role badge, title, email
+- **Action buttons:**
+  - Edit Quotas → org drawer (name, ICAO, email, country, approval ref, plan,
+    maxAdmins, maxUsers, maxAircraft, internal notes)
+  - Activate / Suspend toggle (colour changes status badge across platform)
+  - Send Invite → opens email client pre-filled with onboarding email to org contact
+  - Remove → confirmation required (ORG1 — Karib Aerospace — is protected)
+
+**All Users tab:**
+Every single user across every organisation in one table.
+Name, title, org (badge), role, email, status. Org-admins cannot see this view.
+
+**Analytics tab:**
+Plan distribution bars (Starter/Professional/Enterprise).
+User role breakdown bars (Superadmin/Org-Admin/Engineer/Viewer).
+Org capacity table — quota utilisation per organisation.
+
+**Audit Trail tab:**
+Full platform-wide audit log — every action by every user in every organisation.
+
+---
+
+## 10. SENS AI Assistant
+
+**File:** `src/modules/AIAssistant.tsx`
+**Mounted:** Always visible (bottom-right floating cyan button) when logged in.
+
+**Current implementation:** Rule-based engine reading live store data.
+No API call needed. Works offline. Works on any device.
+
+**What SENS knows and answers:**
+- Live fleet: AOG count, fleet size, open defects, open WOs, due-soon checks
+- How every module works and step-by-step instructions
+- MEL categories (A/B/C/D) with rectification windows
 - The Amplification Factor engine and how to interpret results
 - How flight logging works and what it affects
 - Permission and role management
 - Component life tracking
 - AD/SB compliance
-- Reliability analysis
+- Reliability analysis interpretation
 - How to reset demo data
+- WFD and structural fatigue concepts
 
-**Example questions SENS can answer:**
-- "How many aircraft are AOG?" → reads live store, gives exact answer
-- "What are the MEL categories?" → explains A/B/C/D with intervals
-- "How do I log a flight?" → step-by-step instructions
-- "Explain the Amplification Factor" → technical explanation
-- "What's due soon?" → reads fleet and lists aircraft
+**Escalation path:**
+When SENS cannot answer → offers "Email support" button →
+opens email client to `karib.aerospace@outlook.com` with question pre-filled in body.
 
-**Escalation:** When SENS cannot answer, it offers a one-tap "Email support" button that opens your email client pre-addressed to `karib.aerospace@outlook.com` with the question pre-filled in the email body.
+**Suggestion chips** appear on first open for common questions.
 
-**Current implementation:** Rule-based (no API call needed, works offline). The Claude API hook is documented in the code for when a backend proxy is ready — API keys must never be exposed in a frontend application.
+**Phase 4 upgrade (full Claude API):**
+Server-side Node.js proxy → Anthropic API key never in frontend code.
+SENS reads entire org dataset. Answers complex analytical questions.
+Generates draft MEL submissions, defect narratives, maintenance reports.
+Multi-language support (critical for Caribbean/African market).
+Voice input on mobile.
+Proactive alerts: "J7-EMG MTBUR trending down 18% — recommend early hydraulic inspection."
 
 ---
 
-## 10. Core Libraries & Engines
+## 11. Core Engineering Engines
 
-### 10.1 Amplification Factor Engine
-
-**File:** `src/lib/amplification.ts`
+### 11.1 Amplification Factor Engine (`src/lib/amplification.ts`)
 
 ```typescript
 computeAF(inputs: AFInputs): AFResult
-projectCostCurve(af: number, years: number, baseAnnual: number)
+projectCostCurve(af: number, years: number, baseAnnual: number): CostPoint[]
 ```
 
-Takes five operational parameters and returns: AF value, fatigue index (0-100), interval adjustment %, cost multiplier, driver attribution, recommendation text, and band (optimal/elevated/high/severe).
+**Mathematical model:**
+```
+payloadTerm  = payloadRatio ^ 2.4          (super-linear — stress concentration proxy)
+cycleTerm    = 0.6 + 0.9 × (cyclesPerDay / refCycles)
+loadTerm     = 0.7 + 0.6 × loadFactor
+envTerm      = 1 + (envSeverity - 1) × 0.14
+raw          = payloadTerm × cycleTerm × loadTerm × envTerm
+ratio        = raw / baseline
+AF           = (1 + log₂(max(ratio,1)) × 0.62) × structuralFatigueModifier
+```
 
-The `projectCostCurve` function generates a 10-year array of cumulative cost: baseline (standard escalation) vs projected (with AF compounding). Used to render the cost chart in the Amplification module.
+`structuralFatigueModifier` (optional input, default 1.0) — receives SFI engine output,
+linking structural condition directly to maintenance cost modelling.
 
-The `structuralFatigueModifier` optional input accepts the SFI engine's output modifier, linking structural condition directly to the AF result.
+`projectCostCurve` — generates 10-year annual and cumulative cost arrays:
+baseline (standard 4% escalation) vs projected (AF compounding). Used for cost chart.
 
-### 10.2 Structural Fatigue Index Engine
+**Outputs:** AF value, fatigue index (0-100), interval adjustment %, cost multiplier,
+driver attribution (% contribution per factor), recommendation text, band
+(optimal/elevated/high/severe).
 
-**File:** `src/lib/structural.ts`
+### 11.2 Structural Fatigue Index Engine (`src/lib/structural.ts`)
+
+Promise Benebo's proprietary model:
 
 ```typescript
 computeSFI(inputs: SFIInputs): SFIResult
-demoRepairs: StructuralRepair[]   // seed data for demo
+demoRepairs: StructuralRepair[]     // 6 realistic demo repairs
 ```
 
-Takes aircraft cycles, flight hours, repair list, environment severity, hard landing count, and pressure cycles. Returns: fatigue index (0–100), band, WFD risk level, per-repair inspection intervals, driver attribution, recommendation, and the structural AF modifier.
+**Mathematical model:**
+```
+cycleTerm       = min((totalCycles / 20000) × 25, 25)
+pressTerm       = min((pressureCycles / 20000) × 10, 10)
+envTerm         = (envSeverity - 1) × 3 + corrosionRepairs × 0.8
+hardLandingTerm = min(hardLandingCount × 1.5, 10)
+repairTerm      = Σ(loadPathWeight[r] × dtiSeverity[r] × 0.8) for each repair
+wfdAmplifier    = 1 + log₂(max(primaryRepairs - 6 + 1, 1)) × 0.6  if primary ≥ 6
+SFI             = min(100, round((cycleTerm + pressTerm + envTerm
+                                  + hardLandingTerm + repairTerm) × wfdAmplifier))
+```
 
-Key types exported: `LoadPath`, `DTICategory`, `RepairType`, `StructuralRepair`, `SFIInputs`, `SFIResult`.
+Load path weights: Primary 3.0×, Secondary 1.5×, Tertiary 0.5×
+DTI severity: Cat A 2.5×, Cat B 1.5×, Cat C 1.0×
+WFD thresholds: 6 (monitoring), 9 (elevated), 12 (critical), 200 (catastrophic)
+200+ rule per Promise: "if you have more than 200 repairs in your primary load path,
+the fatigue index starts to increase significantly"
 
-### 10.3 Export Utilities
+**Derived inspection interval formula per repair:**
+```
+reduction = loadPathWeight × dtiSeverity × (0.15 + (SFI/100) × 0.25)
+intervalFH = round(12000 × (1 - min(reduction, 0.7)))
+intervalFC = round(8000 × (1 - min(reduction, 0.7)))
+```
 
-**File:** `src/lib/exports.ts`
+**Structural AF modifier output:** `1 + (SFI / 100)` → fed into AF engine.
+
+**Exported types:** `LoadPath`, `DTICategory`, `RepairType`, `StructuralRepair`,
+`SFIInputs`, `SFIResult`.
+
+### 11.3 Export Utilities (`src/lib/exports.ts`)
 
 ```typescript
 downloadCsv(rows: (string|number|null|undefined)[][], filename: string): void
 printPdf(title: string, sections: { heading: string; html: string }[]): void
 ```
 
-`downloadCsv` creates a CSV blob with UTF-8 BOM (for Excel compatibility) and triggers a browser download.
+`downloadCsv` — creates Blob with UTF-8 BOM (`\uFEFF` prefix for Excel compatibility),
+triggers browser download with dated filename.
 
-`printPdf` opens a styled print window with Karib Aerospace branding — proper letterhead, coloured DTI badges, KPI grids, formatted tables, "Confidential — Internal Use Only" footer, and a "Print / Save as PDF" button. The browser handles the actual PDF generation natively, so no external library is needed.
+`printPdf` — opens new window with full branded print layout:
+- Karib Aerospace letterhead with logo area, document title, date
+- "Confidential — Internal Use Only" footer
+- Colour-coded badges (red/amber/green/blue per status)
+- KPI grid layout for summary metrics
+- Formatted tables with alternating row shading
+- "Print / Save as PDF" button — browser handles PDF generation natively
+- `@media print` rules for clean A4 output
 
 Used in: Reliability, Work Orders, MEL, Logbook, Inventory, AD/SB.
 
 ---
 
-## 11. State Management & Store
+## 12. State Management & Store
 
 **File:** `src/context/store.tsx`
 
-The store is the single most important file in AirSENS. It holds all mutable state, persists it to localStorage, and exposes all actions. It is the **sole swap point** for moving to a real backend — replace `load()` and the `useEffect` that calls `localStorage.setItem` with API calls, and the rest of the application is unchanged.
+**The single most important file in AirSENS.**
+Holds all mutable state. Persists to localStorage. Exposes all actions.
+The SOLE swap point for moving to a real backend.
 
-**State shape:**
+### State Shape
 ```typescript
 {
   aircraft: Aircraft[]
@@ -861,216 +919,666 @@ The store is the single most important file in AirSENS. It holds all mutable sta
 }
 ```
 
-**Actions exposed:**
+### All Actions
+
 | Action | What it does |
 |---|---|
-| `login(email, password)` | Validates credentials, sets currentUser in sessionStorage |
+| `login(email, password)` | Validates, sets currentUser in sessionStorage |
 | `logout()` | Clears currentUser and session |
-| `can(module, permission)` | Returns true/false — used by every guard and button |
-| `logFlight(entry)` | Rolls hours into aircraft + engines + components, recomputes status |
-| `raiseDefect(defect)` | Creates defect, sets MEL category, optionally AOGs aircraft |
-| `closeDefect(id)` | Closes defect, decrements count, clears AOG if last Cat-A |
-| `createWorkOrder(wo)` | Creates WO in Backlog with sequential WO number |
-| `moveWorkOrder(id, state)` | Moves WO between Kanban columns, persisted |
-| `addUser(user)` | Creates user with generated ID |
-| `updateUser(id, patch)` | Partial update to any user field |
-| `removeUser(id)` | Removes user (guard prevents removing yourself) |
-| `addOrganization(org)` | Creates new client org |
-| `updateOrganization(id, patch)` | Updates org (quotas, status, etc.) |
-| `removeOrganization(id)` | Removes org (ORG1 is protected) |
-| `resetData()` | Wipes localStorage, reloads from seed |
+| `can(module, permission)` | Returns true/false — every guard and button uses this |
+| `logFlight(entry)` | Rolls hours into aircraft + engines + all components, recomputes status from maintProgram margins |
+| `raiseDefect(defect)` | Creates defect, auto-MEL category, optionally AOGs aircraft, increments defectsOpen |
+| `closeDefect(id)` | Closes defect, decrements defectsOpen, clears AOG if last Cat-A |
+| `createWorkOrder(wo)` | Creates WO in Backlog with sequential WO-26-NNNN number |
+| `moveWorkOrder(id, state)` | Moves WO between Kanban columns, persisted to store |
+| `addUser(user)` | Creates user with generated ID, logs audit |
+| `updateUser(id, patch)` | Partial update, logs audit |
+| `removeUser(id)` | Removes user (cannot remove yourself), logs audit |
+| `addOrganization(org)` | Creates org with generated ID, logs audit |
+| `updateOrganization(id, patch)` | Partial update (quotas, status etc.), logs audit |
+| `removeOrganization(id)` | Removes org (ORG1 protected), logs audit |
+| `resetData()` | Wipes localStorage, reloads from seed, logs audit |
 
-**Seed version system:** `SEED_VERSION` constant (currently `v5`). If the saved version in localStorage doesn't match, the state is cleared and fresh seed data loads. This means you never need to manually clear browsers when seed data changes — just bump the version constant.
+### SEED_VERSION System
+```typescript
+const SEED_VERSION = 'v5';
+const SEED_VERSION_KEY = 'airsens.seed.version';
+// In load(): if saved version !== SEED_VERSION, clear localStorage and return freshState()
+```
+Bump `SEED_VERSION` whenever seed data changes. Every user's browser auto-clears and
+loads fresh data on next visit. Zero manual resets ever needed.
 
-**Org scoping:** The store exposes `scopedUsers` — superadmins get all users, org-admins get only their org's users. This is applied before the value is exposed via context, making it impossible for org-admins to access cross-org data even programmatically.
+### Audit System
+```typescript
+const currentUserRef = useRef(currentUser);
+useEffect(() => { currentUserRef.current = currentUser; }, [currentUser]);
+const audit = useCallback((action: string, detail: string) => { ... }, []);
+// Uses ref pattern — always current user, always stable function reference
+```
+
+### Backend Swap (Phase 2)
+Replace these two things in `store.tsx`:
+```typescript
+// CURRENT
+function load(): State { return JSON.parse(localStorage.getItem(KEY)) ?? freshState() }
+useEffect(() => { localStorage.setItem(KEY, JSON.stringify(state)) }, [state])
+
+// REPLACE WITH
+async function load(): State { return await api.get('/state') }
+// + dispatch API calls in each action (login, logFlight, raiseDefect etc.)
+```
+**Everything else in the application stays identical.**
 
 ---
 
-## 12. UI Component System
+## 13. UI Component System
 
-**File:** `src/components/ui.tsx`  
-**Design system:** `src/styles/global.css`
-
-### Shared Components
-
-**`PageHeader`** — consistent page title area with eyebrow text (e.g. "CAMO · Fleet"), main title, subtitle, and optional action buttons slot.
-
-**`KpiCard`** — metric card with label, large value, subtitle, accent colour, icon, and staggered fade-up animation via `delay` prop.
-
-**`StatusBadge`** — coloured badge for aircraft/component status (Airworthy = green dot, Due Soon = amber, Overdue = red, AOG = pulsing red). Optional custom label.
-
-**`Bar`** — horizontal progress bar. Colour, value, max props. Used for maintenance countdown bars, quota bars, component life bars, fatigue index breakdown.
-
-**`PanelHead`** — consistent panel title row with icon, title, and optional right-side content (badges, buttons).
-
-### Design System Variables (`global.css`)
-
-The entire visual language is defined as CSS custom properties:
+### Design Tokens (`src/styles/global.css`)
 
 ```css
---bg-void       #03050b    /* deepest background */
---bg-deep       #05070d    /* sidebar, page background */
---bg-panel      #080b14    /* cards and panels */
---bg-elevated   #0d1220    /* raised elements */
---cyan          #2fe6e0    /* primary accent — AirSENS brand colour */
---amber         #ffb02e    /* warnings */
---red           #ff4d5e    /* alerts, AOG */
---green         #3ad27a    /* airworthy, success */
---blue          #4d8fff    /* info */
---violet        #8b5cf6    /* user avatars */
---font-sans     'Sora', sans-serif
---font-mono     'JetBrains Mono', monospace
+--bg-void        #03050b    deepest background
+--bg-deep        #05070d    sidebar, page background
+--bg-panel       #080b14    cards and panels
+--bg-panel-2     #0a0e1a    slightly raised panels
+--bg-elevated    #0d1220    raised elements, hover states
+--line           rgba(255,255,255,.06)   subtle borders
+--line-bright    rgba(255,255,255,.12)   visible borders
+--cyan           #2fe6e0    primary accent — AirSENS brand
+--cyan-dim       #1fb8b3    secondary cyan
+--cyan-glow      rgba(47,230,224,.25)   glow effect
+--amber          #ffb02e    warnings, due-soon
+--red            #ff4d5e    alerts, AOG
+--green          #3ad27a    airworthy, success
+--blue           #4d8fff    info, secondary
+--violet         #8b5cf6    user avatars, accents
+--text-hi        rgba(255,255,255,.95)  primary text
+--text           rgba(255,255,255,.75)  body text
+--text-dim       rgba(255,255,255,.45)  secondary text
+--font-sans      'Sora', sans-serif
+--font-mono      'JetBrains Mono', monospace
+--sidebar-w      248px
+--topbar-h       60px
+--radius         12px
 ```
+
+### Shared Components (`src/components/ui.tsx`)
+
+**`PageHeader`** — eyebrow (e.g. "CAMO · Fleet"), title, subtitle, optional actions slot.
+
+**`KpiCard`** — label, large value, sub-label, accent colour, icon, staggered fade-up
+animation via `delay` prop (0/60/120/180ms for 4-card grids).
+
+**`StatusBadge`** — coloured badge for airworthiness status. Airworthy = green dot.
+Due Soon = amber. Overdue = red. AOG = pulsing red dot.
+
+**`Bar`** — horizontal progress bar. `value`, `max`, `color` props.
+
+**`PanelHead`** — panel title row with icon, title, optional right-side content.
 
 ### Responsive Grid Utilities
 
-Defined in `global.css`, stacking to single column at ≤700px:
-- `.grid-2col` — two equal columns
-- `.grid-3col` — three equal columns
-- `.grid-chart` — 2fr + 1fr (chart + sidebar)
-- `.grid-chart-alt` — 1.4fr + 1fr
+```css
+.grid-2col    { display: grid; grid-template-columns: 1fr 1fr; }
+.grid-3col    { display: grid; grid-template-columns: 1fr 1fr 1fr; }
+.grid-chart   { display: grid; grid-template-columns: 2fr 1fr; }
+.grid-chart-alt { display: grid; grid-template-columns: 1.4fr 1fr; }
+
+@media (max-width: 700px) {
+  .grid-2col, .grid-3col, .grid-chart, .grid-chart-alt {
+    grid-template-columns: 1fr !important;
+  }
+}
+```
+
+### Global Search (`src/components/Layout.tsx`)
+
+- Minimum 2 characters to activate (avoids noise from single letters)
+- **Searches:** aircraft (reg/model/MSN/owner), work orders (WO number/title/assignee),
+  components (P/N/S/N/name), defects (description/ATA/MEL ref/reporter), inventory (P/N/description)
+- **Colour-coded by type:** Aircraft=cyan, Defect=red, WO=amber, Component=blue, Part=green
+- **Status badges inline:** 🔴 AOG, 🟠 High/Overdue, Low Stock
+- **Keyboard navigation:** ↑↓ arrows move selection, Enter jumps, Esc clears and closes
+- **Aircraft result** → auto-opens profile drawer via `useLocation()` + `highlightId` state
+- **Defect result** → highlights MEL row in cyan with "← from search" badge
+- Portal-based (document.body) — `z-index: 9999`, escapes all stacking contexts
+
+### Notification Bell (`src/components/Layout.tsx`)
+
+- Portal-based (document.body) with `bellPanelRef` attached to panel div
+- Outside-click handler excludes BOTH `bellBtnRef` AND `bellPanelRef` — this was the
+  critical bug: mousedown was firing before onClick, closing panel before navigation ran
+- `window.location.assign(n.to)` for reliable navigation from portal context
+- Children have `pointerEvents: 'none'` so clicks bubble to parent div onClick
+- Shows: AOG aircraft, overdue MEL items, due-soon checks, low-stock parts
+- Count badge on bell with red glow
 
 ### Toast System (`src/components/Toast.tsx`)
 
-Global notification system. `ToastProvider` wraps the app. `useToast()` hook available anywhere. Call `toast.push('message', 'success')` or `toast.push('message')` (defaults to info). Toasts auto-dismiss after 3.6 seconds.
+```typescript
+const { push } = useToast();
+push('message', 'success');  // green checkmark
+push('message');             // cyan info icon (default)
+```
+`ToastProvider` wraps app in `main.tsx`. Auto-dismisses after 3.6 seconds.
+Stacks multiple toasts. Manual dismiss via ✕ button.
 
 ---
 
-## 13. Deployment & Infrastructure
+## 14. Deployment & Infrastructure
 
-**Repository:** `https://github.com/airsens/airsens-karib` (public)  
-**Hosting:** Vercel (Hobby plan, auto-deploy)  
-**Live URL:** `https://airsens-karib-l8n2.vercel.app`  
-**SPA Routing:** `vercel.json` rewrites all paths to `index.html`
+**Repository:** https://github.com/airsens/airsens-karib (public)
+**Hosting:** Vercel Hobby — auto-deploy on every git push to main
+**Live URL:** https://airsens-karib-l8n2.vercel.app
+**SPA routing:** `vercel.json` rewrites all paths to `index.html` (prevents 404 on direct URL)
+**Build command:** `vite build` (tsc removed — TypeScript checked by IDE, not build pipeline)
 
-### Deploy Workflow
-
+### Deploy Workflow (every time)
 ```powershell
+cd C:\Users\...\airsens_karib_pkg
 git add .
-git commit -m "description of change"
+git commit -m "description of what changed"
 git push
+# Vercel auto-deploys in ~45 seconds. Live URL updates instantly.
 ```
 
-Vercel detects the push, runs `vite build`, deploys in ~45 seconds. No manual steps.
-
-### Local Development
-
+### New Machine Setup
 ```powershell
-cd C:\Users\rilon\Documents\airsens_karib\airsens_karib_pkg
-npm install     # first time only
-npm run dev     # starts at http://localhost:5173
+# Install: Node.js LTS (nodejs.org) + Git (git-scm.com)
+# Then:
+cd Documents
+git clone https://airsens:YOUR_TOKEN@github.com/airsens/airsens-karib.git airsens_karib_pkg
+cd airsens_karib_pkg
+npm install
+npm run dev    # optional — only needed for local testing
 ```
 
-### Sharing via Cloudflare Tunnel (for demos)
-
+### Git Identity (new machine, one-time)
 ```powershell
-# Terminal 1 — app running
+git config --global user.email "rilwan.olowu@karib-aerospace.com"
+git config --global user.name "Rilwan Olowu"
+```
+
+### Cloudflare Tunnel (for sharing demos)
+```powershell
+# Terminal 1 — app running locally
 npm run dev
 
-# Terminal 2 — tunnel
+# Terminal 2 — public tunnel
 cloudflared tunnel --url http://localhost:5173
+# Gives: https://random-words.trycloudflare.com — share this URL
 ```
 
-Gives a public `https://xxxx.trycloudflare.com` URL that anyone can access while the tunnel is running.
-
-### Vite Config (`vite.config.ts`)
-
+### vite.config.ts
 ```typescript
 server: {
   port: 5173,
-  host: '0.0.0.0',           // accept connections from all interfaces
-  allowedHosts: ['all', '.trycloudflare.com'],  // allow Cloudflare tunnel URLs
+  host: '0.0.0.0',
+  allowedHosts: ['all', '.trycloudflare.com'],
   cors: true,
 }
 ```
 
 ---
 
-## 14. Demo Accounts
+## 15. Demo Accounts
 
-All accounts use `karib-aerospace.com` domain.
+All accounts use `@karib-aerospace.com` domain.
 
 | Name | Email | Password | Role | Access |
 |---|---|---|---|---|
 | Rilwan Olowu | rilwan.olowu@karib-aerospace.com | admin | Super Admin | Everything including Control Tower |
 | Promise Benebo | promise.benebo@karib-aerospace.com | admin | Org Admin | Everything including Control Tower |
-| M. Okafor | m.okafor@karib-aerospace.com | engineer | Engineer | Aircraft, Logbook (write), Work Orders (write), MEL (write), Components, all read |
-| S. Rampersad | s.rampersad@karib-aerospace.com | engineer | Engineer | Logbook (write), Work Orders (write), MEL (write), all read |
-| L. Persaud | l.persaud@karib-aerospace.com | viewer | Viewer | All modules read-only |
+| M. Okafor | m.okafor@karib-aerospace.com | engineer | Engineer (B1) | Aircraft, Logbook write, WOs write, MEL write, Components, all read |
+| S. Rampersad | s.rampersad@karib-aerospace.com | engineer | Engineer (B2) | Logbook write, WOs write, MEL write, all read |
+| L. Persaud | l.persaud@karib-aerospace.com | viewer | Quality Auditor | All modules read-only |
 
-**Note:** These passwords are plaintext in the frontend for demo purposes only. In production, authentication will be server-side with hashed passwords (bcrypt/argon2) and JWT tokens. The swap point is the `login()` action in `src/context/store.tsx`.
-
----
-
-## 15. Competitive Positioning
-
-| Feature | AirSENS | SAM (ASA) | Blue Eye (MRX) | OASES | Traxxall |
-|---|---|---|---|---|---|
-| Modern web UI | ✅ | ❌ (legacy) | ❌ (Windows app) | ❌ (legacy) | Partial |
-| Mobile responsive | ✅ | ❌ | ❌ | ❌ | Partial |
-| AI assistant | ✅ SENS | ❌ | ❌ | Basic (2024) | ❌ |
-| Amplification Factor engine | ✅ Unique | ❌ | ❌ | ❌ | ❌ |
-| Structural Fatigue Index | ✅ SFI engine | ❌ | ❌ | ❌ | ❌ |
-| Real-time flight rollup | ✅ | ✅ | ✅ | ✅ | ✅ |
-| MEL dispatch | ✅ Live | ✅ | ✅ | ✅ | ✅ |
-| Multi-org platform | ✅ Control Tower | ❌ (single org) | ❌ | Partial | ❌ |
-| Transparent pricing | ✅ (planned) | ❌ | ❌ | ❌ | ❌ |
-| Caribbean/African market focus | ✅ | ❌ | ❌ | ❌ | ❌ |
-| Self-onboarding | ✅ (planned) | ❌ | ❌ | ❌ | ❌ |
+**Organisations in demo:**
+- Karib Aerospace (ORG1) — Enterprise plan, Active, max 20 users / 3 admins / 30 aircraft
+- Caribbean Wings Ltd (ORG2) — Professional plan, Pending, max 10 users / 2 admins / 10 aircraft
 
 ---
 
-## 16. Roadmap — Backend & Production
+## 16. Competitive Analysis
 
-### Phase 1 — Current (Complete)
-- ✅ Full frontend application with all 18 modules
-- ✅ LocalStorage persistence
-- ✅ Authentication and role-based access control
-- ✅ Two-tier admin (Control Tower + Admin Panel)
-- ✅ Amplification Factor engine
-- ✅ Structural Fatigue Index engine (Promise's model)
-- ✅ Mobile responsive
-- ✅ Live on Vercel with auto-deploy
-- ✅ CSV and PDF exports
+| Feature | AirSENS | SAM | Blue Eye | OASES | Traxxall | Aerotrac |
+|---|---|---|---|---|---|---|
+| Modern web UI | ✅ | ❌ legacy | ❌ Windows | ❌ legacy | Partial | ❌ |
+| Mobile responsive | ✅ | ❌ | ❌ | ❌ | Partial | ❌ |
+| SENS AI (live fleet data) | ✅ | ❌ | ❌ | Basic doc search | ❌ | ❌ |
+| Amplification Factor engine | ✅ Unique | ❌ | ❌ | ❌ | ❌ | ❌ |
+| Structural Fatigue Index | ✅ SFI engine | ❌ | ❌ | ❌ | ❌ | ❌ |
+| SSID/ASIP/CPCP/FAR26 | ✅ Full | Partial | Partial | ✅ | ❌ | Partial |
+| Control Tower (multi-org) | ✅ | ❌ | ❌ | Partial | ❌ | ❌ |
+| Flight hours rollup | ✅ Auto | ✅ | ✅ | ✅ | ✅ | ✅ |
+| MEL dispatch | ✅ Live | ✅ | ✅ | ✅ | ✅ | ✅ |
+| Auto-WO from threshold | Phase 1 | Partial | ❌ | ✅ | Partial | ❌ |
+| Electronic Tech Log | Phase 1 | Partial | ❌ | ✅ | ✅ | ❌ |
+| Electronic signatures | Phase 2 | ❌ | ❌ | ✅ | ✅ | ❌ |
+| Document management | Phase 2 | ✅ | Partial | ✅ | ✅ | Partial |
+| Email/SMS alerts | Phase 2 | Partial | ❌ | ✅ | ✅ | ❌ |
+| Licence tracking | Phase 1 | ✅ | Partial | ✅ | ✅ | ✅ |
+| Predictive maintenance AI | Phase 3 | ❌ | ❌ | ❌ | ❌ | ❌ |
+| Dispatch Risk Score | Phase 4 | ❌ | ❌ | ❌ | ❌ | ❌ |
+| AD/SB auto-feed | Phase 4 | Partial | ❌ | Partial | ✅ | ❌ |
+| ACARS auto-flight-logging | Phase 4 | Partial | ❌ | ✅ | Partial | ❌ |
+| Self-onboarding (<1 hour) | Phase 2 | ❌ weeks | ❌ weeks | ❌ weeks | ❌ | ❌ |
+| Caribbean/African focus | ✅ | ❌ | ❌ | ❌ | ❌ | ❌ |
+| Transparent pricing | Phase 2 | ❌ | ❌ | ❌ | ❌ | ❌ |
+| iOS/Android native app | Phase 5 | ❌ | ❌ | Partial | ✅ | ❌ |
+| Regulator portal | Phase 5 | ❌ | ❌ | ❌ | ❌ | ❌ |
 
-### Phase 2 — Backend (Next)
-**What to build:**
-- Node.js / Express API (or Supabase for faster start)
-- PostgreSQL database (Turso for edge deployment)
-- Real authentication: bcrypt password hashing, JWT tokens
-- Resend for transactional email (user invites, password reset, MEL alerts)
+---
 
-**Swap point — `src/context/store.tsx`:**
-```typescript
-// Replace this:
-function load(): State { return JSON.parse(localStorage.getItem(KEY)) }
-useEffect(() => { localStorage.setItem(KEY, JSON.stringify(state)) }, [state])
+## 17. Master Roadmap — All 5 Phases
 
-// With this:
-async function load(): State { return await api.get('/state') }
-// and dispatch API calls in each action
+### PHASE 1 — Frontend Upgrades (This Week)
+*Pure React/TypeScript. No backend needed. Deploy to Vercel in minutes.*
+
+**1.1 Auto-WO Generation from Maintenance Thresholds**
+When a task drops below 15% remaining AND no open WO exists for it → auto-create WO in Backlog.
+Engineer opens app and the job is already there. Nobody manually creates it.
+**How:** Add trigger inside `logFlight()` in store — after rolling hours, scan every aircraft's
+`maintProgram` tasks. Compare remaining vs interval. If below threshold and no matching open WO,
+call `createWorkOrder()` automatically with task details pre-filled.
+
+**1.2 Engineer Licence & Rating Tracking**
+User profiles gain: licenceType (B1/B2/C/D), typeRatings (A320/B737/ATR72 etc.),
+medicalExpiry, licenceExpiry, lastTaskDate (recency).
+Expiry alerts in notification bell (30 days warning, 7 days critical).
+Expired licence blocks WO assignment — system prevents assigning tasks to expired engineers.
+**How:** Extend `User` type. Add expiry date checking to notification engine `useMemo`.
+Add validation to `createWorkOrder` / `moveWorkOrder` actions.
+
+**1.3 Electronic Tech Log (ETL) — Basic Version**
+Log Flight drawer becomes proper ETL entry.
+Step 1: flight data as now. Step 2: captain signs (PIN entry or drawn signature on screen).
+Step 3: engineer countersigns.
+Both signatures stored as base64 strings in FlightLog record.
+Signed entries show lock icon — `isLocked: true` flag, cannot be edited.
+**How:** Add signature step to `LogFlight.tsx`. Extend FlightLog type with
+`captainSignature`, `engineerSignature`, `isLocked` fields.
+
+**1.4 Auto-MEL Due Date Escalation**
+MEL items within 24 hours of deadline → red in notification bell, escalated priority.
+Cat-A items open more than 2 hours → persistent red banner at top of page.
+**How:** Add time-based checks to notification `useMemo` in Layout.tsx.
+
+**1.5 Pilot App View**
+Simplified mobile-first view for pilots — role: `pilot` (new role level).
+Shows only: aircraft they fly, current MEL items, raise defect, sector sign-off.
+No engineering modules, no admin, no work orders.
+**How:** Add `pilot` role. Create `PilotView.tsx`. Route guard shows pilot view vs full app.
+
+**1.6 Bulk Flight Import**
+CSV/Excel upload to log multiple flights at once — for when operations are logged on paper
+then transferred into AirSENS at end of day.
+Column mapping wizard. Preview before committing. Batch rollup.
+**How:** Add import drawer to Logbook. Parse CSV with PapaParse (already in React ecosystem).
+Map columns to FlightLog fields. Preview. Commit batch to store.
+
+---
+
+### PHASE 2 — Backend Foundation (Weeks 2–4)
+*Supabase (PostgreSQL + Auth + Storage). Replaces localStorage entirely.*
+
+**2.1 Real Authentication**
+- Bcrypt-hashed passwords (argon2 preferred), JWT access tokens, refresh tokens
+- Password reset via email (Resend)
+- Session timeout after inactivity (configurable per org)
+- 2FA for admins (TOTP authenticator app)
+- SSO via Google/Microsoft for enterprise clients
+
+**2.2 Real Database (Supabase PostgreSQL)**
+- All data migrates from localStorage to PostgreSQL
+- Row-level security (RLS) policies — org isolation at database level, not JavaScript
+- Real-time subscriptions — multiple users see updates live simultaneously
+- Full server-side audit trail, immutable, tamper-proof
+- Daily automated backups with point-in-time recovery
+- 99.9% uptime SLA
+
+**2.3 Email Alerts (Resend)**
+Triggered emails:
+- AOG event → immediate email to org admin + CAMO manager
+- MEL due in 24hrs → email to assigned engineer
+- Check due in 7 days → weekly maintenance digest
+- New defect raised → email to maintenance controller
+- WO assigned → email to engineer with task details
+- Licence expiring 30 days → email to engineer + admin
+- New user invited → onboarding email with temporary password + login link
+- Organisation activated → welcome email to org admin
+
+**2.4 SMS Alerts (Twilio)**
+Critical events only (keeps cost low):
+- AOG event → SMS to CAMO manager + accountable manager
+- Cat-A MEL overdue → SMS to maintenance director
+- Aircraft grounded unexpectedly → cascading SMS chain
+
+**2.5 Electronic Signatures — Full Legal Compliance**
+- PKI-based digital signatures (legally binding in EU and UK under eIDAS)
+- Sign on screen (touch/stylus/mouse) or PIN-based confirmation
+- Signature record: user identity + timestamp + IP address + device fingerprint
+- Immutable after signing — cryptographic hash of record + signature stored together
+- Full chain of custody: raised by → inspected by → signed off by → countersigned by
+- Export signature packages for authority audits (PDF with signature certificates)
+
+**2.6 Document & Technical Publication Management**
+- Upload AMMs, CMMs, IPC, STCs, repair schemes, job cards, airworthiness approvals
+- Linked to aircraft type and component P/N
+- Opening a WO → related documents shown automatically in sidebar
+- Version control — previous versions archived, never deleted, full revision history
+- Full-text search within uploaded PDFs (Supabase vector search or Meilisearch)
+- Storage: Supabase Storage (S3-compatible, CDN-backed)
+- File size limits, virus scanning on upload
+
+**2.7 Transparent Pricing & Self-Onboarding**
+- Stripe integration — operator signs up, picks plan, enters card, gets access immediately
+- No sales call. No "contact us for pricing". Done in under one hour.
+- Plan limits enforced at database level (not just JavaScript)
+- Upgrade/downgrade self-service from org admin settings
+- Invoices auto-generated and emailed monthly
+
+---
+
+### PHASE 3 — Automation Engine (Month 2)
+*The system starts doing work by itself.*
+
+**3.1 Intelligent Maintenance Scheduler**
+- Auto-generates WOs at configurable lead times per task (not just fixed 15%)
+  — each task can have its own lead time: "create WO when 200FH from 1000HR check"
+- Chains dependent tasks — cannot sign off C-Check until all sub-tasks complete
+- Fleet optimisation across multiple aircraft — if 3 aircraft need checks same week,
+  suggests staggering to avoid hangar congestion
+- Accounts for: available engineers, tool calibration expiry, hangar capacity, spare parts stock
+
+**3.2 Predictive Maintenance AI**
+**Nobody in the market has this for small operators.**
+Using: flight log history, component life data, environment severity, AF value, historical removals.
+- Predicts when each component is likely to reach its limit — before it gets there
+- Flags components degrading faster than expected (anomaly detection)
+- "Predicted Removal Date" per rotable component
+- "Component Health Score" (0–100) visual indicator
+- Learns from historical removal data to improve predictions over time
+**Technology:** Linear regression model (Phase 3 MVP) → gradient boosting (Phase 4 full).
+Inference runs server-side. Results presented as visual health indicators in Components module.
+
+**3.3 Regulatory Compliance Engine**
+- Auto-checks every open WO against regulatory requirements for the task type
+- Flags if assigned engineer lacks required type rating or licence currency
+- Generates EASA Part-145 / Part-CAMO compliance reports on demand
+- Tracks authority audit findings: raised → actioned → closed → verified
+- Part-CAMO airworthiness review certificate tracking
+
+**3.4 Inventory Automation**
+- Auto-raise purchase request when stock hits reorder point (currently shows alert only)
+- Auto-create replenishment WO when rotable component is removed and installed
+- Shelf life monitoring — flag components expiring within 30 days before they become unserviceable
+- ILS / Aviall API integration — check part availability and price without leaving AirSENS
+- Quarantine tracking for parts with airworthiness concerns
+
+**3.5 CSV/Excel Flight Data Import (Bulk)**
+Import multiple flights from daily operations CSV.
+Column mapping wizard. Batch preview. One-click commit.
+Handles operator's existing spreadsheet format without forcing a template.
+
+---
+
+### PHASE 4 — Market Leadership (Months 3–4)
+*Features nobody in the market has. AirSENS becomes untouchable.*
+
+**4.1 SENS AI — Full Claude Integration**
+Server-side Node.js API route proxies Anthropic API — key never in frontend.
+SENS reads entire organisation's live data and answers complex analytical questions:
+- "Which aircraft has the highest maintenance cost per flight hour this quarter?"
+- "What's my fleet's projected maintenance spend for the next 6 months?"
+- "Which components are most likely to fail before the next A-Check?"
+Proactive insights pushed to notification bell:
+- "J7-EMG MTBUR trending down 18% over 60 days — recommend early hydraulic inspection"
+- "Runway 27 approach profile suggests harder-than-average landings on J7-JBL — check MLG"
+Generates drafts: MEL submissions, defect narratives, maintenance reports, authority letters.
+Multi-language support (Spanish, French, Arabic — critical for target markets).
+Voice input on mobile.
+
+**4.2 Dispatch Risk Score**
+Single 0–100 number per aircraft per day. The ultimate pre-flight check.
+Combines:
+- Maintenance threshold proximity (weighted by check severity)
+- Open defects (severity + MEL category weighted)
+- Structural Fatigue Index current value
+- Amplification Factor (based on planned route load)
+- Engineer licence currency for today's tasks
+- Weather/environment severity at route airports
+**Green (0–30):** Dispatch with confidence.
+**Amber (31–65):** Dispatch with caution — review flagged items.
+**Red (66–100):** Ground the aircraft — engineering assessment required.
+**Nobody in the world has this for small/medium operators.**
+
+**4.3 AD/SB Regulatory Feed Integration**
+Direct API connections:
+- EASA AD database (public API) — auto-imports applicable ADs for fleet aircraft types
+- FAA AD database (public API)
+- Boeing SABLE — service bulletin notifications
+- Airbus AirbusWorld — SB and OIT notifications
+- ATR Customer Services — fleet campaign tracking
+New ADs applicable to your aircraft types appear automatically within 24 hours of publication.
+Compliance status auto-populated based on aircraft hours/cycles/date at AD issue.
+Zero manual entry for regulatory requirements.
+
+**4.4 ACARS / QAR Auto-Flight-Logging**
+Aircraft datalink system integration. Full automation of flight logging.
+- Each flight auto-logged when aircraft lands (ACARS OUT → AirSENS)
+- Block hours, cycles, fuel burn, route — all from aircraft avionics
+- Defects entered by crew via EFB during flight appear in AirSENS before aircraft parks
+- Post-flight data available for MEL review before crew deboards
+- Zero manual data entry for routine operations
+
+**4.5 Full MRO Marketplace**
+- Operators request quotes from MRO providers directly in AirSENS
+- MRO providers list capabilities, certifications, availability and pricing
+- Parts marketplace — find and order from multiple suppliers with price comparison
+- Labour marketplace — licensed engineers available for AOG support (24/7 response network)
+- Integrated with Stripe for payments between operators and providers
+
+**4.6 Damage Tolerance Calculations (Promise's Model)**
+Promise to provide the calculation framework.
+Inputs: damage geometry (crack length/area), material properties, load spectrum (from AF engine).
+Outputs:
+- Crack growth rate prediction (da/dN)
+- Remaining fatigue life estimate
+- Critical crack size for catastrophic failure
+- Inspection interval recommendation
+- Repair classification (acceptable vs requires immediate repair)
+Integrated with SFI engine — damage tolerance results refine the fatigue index.
+
+**4.7 White Label & Public API**
+- White label: any aviation company can deploy AirSENS under their own brand
+  (custom logo, colours, domain) — premium tier
+- Public REST API — operators integrate their own tools and internal systems
+- Webhooks — real-time push notifications for AOG events, threshold breaches etc.
+- GraphQL endpoint for advanced integrations
+
+---
+
+### PHASE 5 — Enterprise & Scale (Month 5+)
+
+**5.1 iOS & Android Native Apps (Capacitor)**
+Wrap existing React app — zero code rewrite needed.
+Additional mobile capabilities:
+- Push notifications (not just email/SMS) — instant AOG alert on phone
+- Offline mode — engineers log defects and work offline, syncs on reconnect
+- Barcode/QR scanning — scan part labels to add to inventory or WO
+- Camera integration — attach photos to defects and WOs directly from phone
+- Biometric login (Face ID / fingerprint)
+
+**5.2 Airline-Grade Features**
+For operators growing into scheduled operations:
+- Flight schedule integration (SSIM format import)
+- Crew rostering module (licence/rating/recency/FTL tracking)
+- Weight and balance integration
+- Fuel planning integration
+- Airport slot coordination
+- NOTAM integration
+
+**5.3 Regulator Portal**
+**First in the world to offer this for small operators.**
+- Civil aviation authorities (TTCAA, GCAA, SACAA, CAA UK etc.) get read-only portal access
+  to the operators they oversee
+- Automated audit report generation — no manual preparation needed
+- Digital oversight programme — authority can track finding closure in real time
+- Reduces surveillance audit burden for both operator and authority
+- AirSENS becomes the link between operator and regulator
+
+**5.4 Advanced Analytics & Reporting**
+- Custom report builder — drag-and-drop report designer
+- Executive dashboard — C-suite view with cost, reliability, compliance KPIs
+- Fleet comparison — benchmark against anonymised industry averages
+- Carbon/emissions tracking (growing regulatory requirement)
+- Maintenance cost per flight hour trending
+
+**5.5 Training & Qualification Management**
+- Engineer training records — courses, qualifications, simulator hours
+- Recurrent training tracking with expiry alerts
+- Integration with training organisations for certificate upload
+- Authorisation matrix — who is qualified to sign off what
+
+---
+
+## 18. Scale Architecture — 1,000–3,000 Customers
+
+### Database Design at Scale
+```
+1,000 operators × 20 users × 14 aircraft × 500 flights/year
+= 140,000,000 flight records (manageable with proper indexing)
+
+PostgreSQL with indexes on: (orgId, aircraftId, date)
+Query time for 90-day fleet view: < 50ms
+
+Supabase RLS policy:
+CREATE POLICY "org_isolation" ON flight_logs
+  USING (org_id = auth.jwt() ->> 'org_id');
 ```
 
-Everything else in the application stays unchanged.
+### Multi-tenancy Model
+All data shares a single database with Row Level Security.
+Every table has `org_id` column. Every query automatically filtered at database level.
+Even if a bug existed in JavaScript, the database rejects cross-org queries.
+Cost-effective vs dedicated databases per org (saves ~£20/org/month at scale).
 
-### Phase 3 — Production Features
-- Real Claude API for SENS (server-side proxy — API key never in frontend)
-- Domain connection (airsens.io or airsens.app via Namecheap → Vercel)
-- Real user invitations via Resend email
-- Damage tolerance calculation input (Promise's model — to be defined)
-- Real aircraft data for Karib Aerospace fleet
-- iOS/Android app via Capacitor (wraps existing React app — no rewrite)
-- Stripe billing integration for plan management
-- Real-time collaboration (multiple users see updates live)
+### Performance at Scale
+- Vercel Edge Network: static assets cached globally (~15ms load time worldwide)
+- Database queries via Supabase connection pooling (PgBouncer) — handles thousands of connections
+- React code-splitting (Phase 3): split 793KB bundle into ~20 per-module chunks
+  → first load < 100KB, subsequent navigation instant
+- Recharts rendered server-side for PDF exports (no client computation)
 
-### Phase 4 — Scale
-- Multi-region deployment
-- Offline mode (service worker + sync on reconnect)
-- API for third-party integrations (CAMP, AMOS data feeds)
-- White-label capability for larger operators
+### Reliability & Uptime
+- Vercel SLA: 99.99% uptime for production tier
+- Supabase SLA: 99.9% uptime
+- Automatic point-in-time database recovery
+- Instant Vercel rollback if deployment breaks
+- Sentry error monitoring — team alerted before users notice issues
+
+### Security at Scale
+- All data encrypted in transit: HTTPS/TLS 1.3
+- All data encrypted at rest: AES-256 (Supabase default)
+- No credentials in frontend code (Phase 2 moves all auth server-side)
+- API rate limiting per org (prevent abuse, fair usage)
+- GDPR compliance: data deletion on request, data portability export
+- SOC2 Type II target (Phase 5 — required for airline-grade customers)
+
+### Cost Model at Scale
+
+| Customers | Infrastructure/mo | Revenue (avg £350/operator) | Gross Margin |
+|---|---|---|---|
+| 10 | £70 | £3,500 | 98.0% |
+| 50 | £150 | £17,500 | 99.1% |
+| 100 | £250 | £35,000 | 99.3% |
+| 500 | £800 | £175,000 | 99.5% |
+| 1,000 | £1,500 | £350,000 | 99.6% |
+| 3,000 | £4,000 | £1,050,000 | 99.6% |
+
+Infrastructure stays near-flat while revenue scales linearly. SaaS economics are exceptional.
 
 ---
 
-*This document was generated on June 3, 2026 and reflects AirSENS v1.0 as deployed at `https://airsens-karib-l8n2.vercel.app`.*
+## 19. Business Model & Pricing
 
-*Karib Aerospace Ltd — Confidential and Proprietary*
+### Subscription Plans (Phase 2 launch)
+
+**Starter — £199/month**
+- Up to 5 aircraft
+- Up to 10 users (max 2 admins)
+- All CAMO modules
+- Basic MRO execution
+- Email alerts
+- CSV/PDF exports
+- 30-day free trial, no credit card required
+
+**Professional — £499/month**
+- Up to 20 aircraft
+- Up to 30 users (max 5 admins)
+- Everything in Starter
+- Full MRO execution suite
+- Electronic Tech Log (ETL)
+- Document management (up to 50GB)
+- SMS alerts for critical events
+- Priority support (4hr response)
+- API access (read-only)
+
+**Enterprise — Custom pricing**
+- Unlimited aircraft
+- Unlimited users
+- Everything in Professional
+- White label option (custom domain + branding)
+- Dedicated implementation support
+- Full API access + webhooks
+- SLA guarantee (99.9% uptime)
+- Custom integrations (ACARS, EFB, flight ops systems)
+- Quarterly engineering review with Promise Benebo
+
+### Revenue Projections (Conservative)
+
+| Milestone | Timeline | Operators | Monthly Revenue | Annual |
+|---|---|---|---|---|
+| Beta launch | Now | 10 | £3,000 | £36,000 |
+| Early traction | 6 months | 50 | £15,000 | £180,000 |
+| Growth | 12 months | 200 | £70,000 | £840,000 |
+| Scale | 24 months | 500 | £200,000 | £2,400,000 |
+| Market leader | 36 months | 1,000 | £400,000 | £4,800,000 |
+| Full scale | 48 months | 3,000 | £1,200,000 | £14,400,000 |
+
+### Target Markets (Priority Order)
+
+1. **Caribbean island operators** — Home market, Rilwan and Promise's direct network.
+   15-20 operators immediately reachable. TTCAA relationship advantage.
+
+2. **West African regional operators** — Nigeria, Ghana, Kenya, South Africa.
+   Massively underserved by current vendors. English-speaking. Fast growth.
+
+3. **Middle East charter operators** — UAE, Qatar, Bahrain. High spend, English operations.
+
+4. **UK/European small charter and ACMI operators** — EASA-regulated, familiar regulatory
+   framework. 500+ operators currently on legacy systems.
+
+5. **Latin American regional carriers** — Colombia, Peru, Brazil (Spanish language critical —
+   Phase 4 multi-language). Huge underserved market.
+
+### Go-to-Market Strategy
+
+**Phase 1 (Now):** Use existing Karib Aerospace operator relationships.
+Give beta access free to 5-10 operators in Caribbean. Get testimonials and case studies.
+
+**Phase 2 (With backend):** Launch public website with pricing. Self-service onboarding.
+Content marketing: publish articles about AF engine, SFI model, Caribbean aviation compliance.
+
+**Phase 3 (Scale):** Partner with CAA/TTCAA authorities.
+Attend regional aviation conferences: CASSOS, IATA Ground Handling, MRO Africa.
+
+**Phase 4 (Market leadership):** White label partnerships with aircraft manufacturers.
+ATR, DeHavilland Canada, Embraer regional sales teams recommending AirSENS to new operators.
+
+---
+
+*Document Version 3.0 — June 5, 2026*
+*AirSENS current build status: Phase 0 complete (all 19 modules live), Phase 1 in progress*
+*5,200+ lines of production TypeScript/React deployed at https://airsens-karib-l8n2.vercel.app*
+*Built by Karib Aerospace Ltd — Confidential and Proprietary*
