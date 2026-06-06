@@ -426,6 +426,7 @@ export const seedUsers: User[] = [
     email: 'l.persaud@karib-aerospace.com', password: 'viewer', role: 'viewer',
     orgId: 'ORG1', active: true, createdAt: daysFrom(-120),
     permissions: { aircraft: ['view','read'], logbook: ['view','read'], 'work-orders': ['view','read'], mel: ['view','read'], components: ['view','read'], reliability: ['view','read'], 'fleet-planning': ['view','read'], adsb: ['view','read'], amp: ['view','read'], inventory: ['view','read'], 'tools-manuals': ['view','read'], configuration: ['view','read'], structural: ['view','read'], ageing: ['view','read'], amplification: ['view','read'], sales: ['view','read'], dashboard: ['view','read'], admin: [] },
+  },
 ];
 
 export { allModules };
