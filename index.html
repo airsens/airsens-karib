@@ -1,16 +1,485 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>AirSENS — Karib Aerospace</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet" />
-  </head>
-  <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.tsx"></script>
-  </body>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Karib Aerospace — Aircraft Portfolio Summary</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Barlow:wght@300;400;500;600;700&family=Barlow+Condensed:wght@400;600;700;800&display=swap');
+
+  * { margin:0; padding:0; box-sizing:border-box; }
+  :root {
+    --navy: #0B1F3A;
+    --navy2: #0d2a4a;
+    --gold: #C9A84C;
+    --silver: #8E9BAB;
+    --light: #F2F5F8;
+    --white: #FFFFFF;
+    --text: #1A2A3A;
+    --muted: #5A6A7A;
+  }
+
+  body {
+    font-family: 'Barlow', sans-serif;
+    background: var(--white);
+    color: var(--text);
+    min-height: 100vh;
+  }
+
+  /* ── TOP BAR ── */
+  .topbar {
+    background: var(--navy);
+    padding: 16px 64px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .topbar img { height: 40px; }
+  .topbar-right {
+    text-align: right;
+  }
+  .topbar-right .t1 {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--white);
+    letter-spacing: 0.06em;
+  }
+  .topbar-right .t2 {
+    font-size: 9.5px;
+    letter-spacing: 0.2em;
+    color: var(--gold);
+    text-transform: uppercase;
+    margin-top: 2px;
+  }
+
+  /* ── HERO ── */
+  .hero {
+    background: linear-gradient(150deg, #091828 0%, #0d2a4a 55%, #0B1F3A 100%);
+    padding: 56px 64px 52px;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero-grid {
+    position: absolute; inset: 0;
+    background-image:
+      linear-gradient(rgba(201,168,76,0.05) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(201,168,76,0.05) 1px, transparent 1px);
+    background-size: 52px 52px;
+  }
+  .hero-accent {
+    position: absolute; bottom:0; right:0;
+    width: 50%; height: 100%;
+    background: linear-gradient(135deg, transparent 45%, rgba(201,168,76,0.07));
+    clip-path: polygon(25% 0, 100% 0, 100% 100%, 0% 100%);
+  }
+  .hero-inner { position: relative; z-index: 10; }
+  .hero-eyebrow {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.28em;
+    color: var(--gold);
+    text-transform: uppercase;
+    margin-bottom: 14px;
+  }
+  .hero-title {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 52px;
+    font-weight: 800;
+    color: var(--white);
+    line-height: 0.95;
+    letter-spacing: -0.015em;
+    margin-bottom: 20px;
+  }
+  .hero-title em { font-style: normal; color: var(--gold); }
+  .hero-rule { width: 64px; height: 3px; background: var(--gold); margin-bottom: 18px; }
+  .hero-desc {
+    font-size: 14px;
+    color: rgba(255,255,255,0.55);
+    font-weight: 300;
+    line-height: 1.7;
+    max-width: 560px;
+  }
+
+  /* ── BODY ── */
+  .body { padding: 52px 64px 64px; }
+
+  /* ── SECTION LABEL ── */
+  .slabel {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 24px;
+  }
+  .slabel span {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.26em;
+    color: var(--silver);
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+  .slabel::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: #D0D8E0;
+  }
+
+  /* ── AIRCRAFT CARDS ── */
+  .cards {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    margin-bottom: 44px;
+  }
+
+  /* wide card spans both cols */
+  .card-wide { grid-column: 1 / -1; }
+
+  .card {
+    background: var(--light);
+    border-left: 3px solid var(--gold);
+    padding: 0;
+    overflow: hidden;
+  }
+
+  .card-head {
+    background: linear-gradient(135deg, var(--navy), var(--navy2));
+    padding: 18px 22px 16px;
+    position: relative;
+    overflow: hidden;
+  }
+  .card-head::after {
+    content: '';
+    position: absolute; top:0; right:0;
+    width: 40%; height: 100%;
+    background: linear-gradient(135deg, transparent 40%, rgba(201,168,76,0.1));
+    clip-path: polygon(20% 0, 100% 0, 100% 100%, 0% 100%);
+  }
+  .card-reg {
+    font-size: 9.5px;
+    font-weight: 700;
+    letter-spacing: 0.22em;
+    color: var(--gold);
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+  .card-name {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 26px;
+    font-weight: 800;
+    color: var(--white);
+    line-height: 1;
+    letter-spacing: -0.01em;
+    margin-bottom: 3px;
+  }
+  .card-sub {
+    font-size: 11px;
+    color: rgba(255,255,255,0.4);
+    letter-spacing: 0.03em;
+  }
+
+  .card-body { padding: 16px 22px 18px; }
+
+  .stat-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    padding: 6px 0;
+    border-bottom: 1px solid #E0E8F0;
+  }
+  .stat-row:last-child { border: none; }
+  .stat-key {
+    font-size: 11px;
+    color: var(--muted);
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+  .stat-val {
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--navy);
+    text-align: right;
+  }
+  .stat-val.highlight { color: var(--gold); }
+
+  .card-tags {
+    padding: 10px 22px 14px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+  .tag {
+    padding: 3px 10px;
+    border: 1px solid rgba(201,168,76,0.45);
+    color: var(--gold);
+    font-size: 9px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  /* ── CTA ── */
+  .cta {
+    background: linear-gradient(135deg, var(--navy), var(--navy2));
+    padding: 36px 48px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .cta::before {
+    content: '';
+    position: absolute; top:0; right:0;
+    width: 35%; height: 100%;
+    background: linear-gradient(135deg, transparent 30%, rgba(201,168,76,0.1));
+    clip-path: polygon(25% 0, 100% 0, 100% 100%, 0% 100%);
+  }
+  .cta-left { position: relative; z-index: 10; }
+  .cta-eyebrow {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.22em;
+    color: var(--gold);
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+  .cta-title {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 28px;
+    font-weight: 800;
+    color: var(--white);
+    margin-bottom: 4px;
+  }
+  .cta-sub {
+    font-size: 13px;
+    color: rgba(255,255,255,0.45);
+    font-weight: 300;
+  }
+  .cta-right {
+    position: relative; z-index: 10;
+    text-align: right;
+  }
+  .cta-right p {
+    font-size: 12.5px;
+    color: rgba(255,255,255,0.7);
+    line-height: 2;
+    letter-spacing: 0.02em;
+  }
+  .cta-right a {
+    color: var(--gold);
+    text-decoration: none;
+    font-weight: 600;
+  }
+
+  /* ── FOOTER ── */
+  .footer {
+    padding: 18px 64px;
+    border-top: 1px solid #D8E0E8;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .footer p {
+    font-size: 10px;
+    color: var(--silver);
+    letter-spacing: 0.05em;
+    line-height: 1.7;
+  }
+  .footer-disc {
+    font-size: 9.5px;
+    color: #B8C2CC;
+    max-width: 420px;
+    text-align: right;
+    line-height: 1.6;
+  }
+</style>
+</head>
+<body>
+
+<!-- TOP BAR -->
+<div class="topbar">
+  <img src="data:image/png;base64,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" alt="Karib Aerospace">
+  <div class="topbar-right">
+    <div class="t1">Aircraft Disposition Portfolio</div>
+    <div class="t2">Portfolio Summary — 2025</div>
+  </div>
+</div>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-grid"></div>
+  <div class="hero-accent"></div>
+  <div class="hero-inner">
+    <div class="hero-eyebrow">Karib Aerospace Ltd &nbsp;·&nbsp; Asset Trading &amp; Acquisition</div>
+    <div class="hero-title">5 Aircraft<br><em>Available Now</em></div>
+    <div class="hero-rule"></div>
+    <div class="hero-desc">
+      Karib Aerospace is pleased to present the following aircraft for immediate acquisition consideration.
+      All aircraft carry full maintenance records and are available for inspection by qualified buyers.
+      Complete technical specifications available upon request.
+    </div>
+  </div>
+</div>
+
+<!-- BODY -->
+<div class="body">
+
+  <div class="slabel"><span>Business &amp; VIP Jets</span></div>
+
+  <div class="cards">
+
+    <!-- FALCON 900B -->
+    <div class="card">
+      <div class="card-head">
+        <div class="card-reg">Registration: NAF-961 &nbsp;·&nbsp; S/N: 096</div>
+        <div class="card-name">Dassault Falcon 900B</div>
+        <div class="card-sub">3-Engine Long-Range Business Jet &nbsp;·&nbsp; Dassault Aviation</div>
+      </div>
+      <div class="card-body">
+        <div class="stat-row"><span class="stat-key">Airframe Hours</span><span class="stat-val">12,093:10</span></div>
+        <div class="stat-row"><span class="stat-key">Total Landings</span><span class="stat-val">44,788</span></div>
+        <div class="stat-row"><span class="stat-key">Engines</span><span class="stat-val">3 × TFE731-5BR-1C</span></div>
+        <div class="stat-row"><span class="stat-key">APU Hours</span><span class="stat-val">4,827</span></div>
+        <div class="stat-row"><span class="stat-key">Last Major Check</span><span class="stat-val">C-Check — Aug 2022</span></div>
+        <div class="stat-row"><span class="stat-key">Next Inspections</span><span class="stat-val">A1/A2 &amp; B1/B2 Due</span></div>
+        <div class="stat-row"><span class="stat-key">MLG Overhaul</span><span class="stat-val">2016 &nbsp;·&nbsp; 4,132 ldgs remaining</span></div>
+      </div>
+      <div class="card-tags">
+        <span class="tag">Full Records</span>
+        <span class="tag">EASA Maintained</span>
+        <span class="tag">Available for Inspection</span>
+      </div>
+    </div>
+
+    <!-- A340-800 -->
+    <div class="card">
+      <div class="card-head">
+        <div class="card-reg">Registration: TBC</div>
+        <div class="card-name">Airbus A340-800</div>
+        <div class="card-sub">4-Engine Long-Range Wide-Body &nbsp;·&nbsp; Airbus SAS</div>
+      </div>
+      <div class="card-body">
+        <div class="stat-row"><span class="stat-key">Configuration</span><span class="stat-val">Long-Range Wide-Body</span></div>
+        <div class="stat-row"><span class="stat-key">Engines</span><span class="stat-val">4 × CFM56 / Trent 500</span></div>
+        <div class="stat-row"><span class="stat-key">Eng 1 TSO</span><span class="stat-val">784:10 hrs (OH: Sep 2021)</span></div>
+        <div class="stat-row"><span class="stat-key">Eng 2 TSO</span><span class="stat-val">1,491:50 hrs (OH: Jan 2016)</span></div>
+        <div class="stat-row"><span class="stat-key">Eng 3 TSO</span><span class="stat-val">784:10 hrs (OH: Sep 2021)</span></div>
+        <div class="stat-row"><span class="stat-key">Last C-Check</span><span class="stat-val">26 July 2022</span></div>
+        <div class="stat-row"><span class="stat-key">Next Inspections</span><span class="stat-val">A1/A2 &amp; B1/B2 Due</span></div>
+      </div>
+      <div class="card-tags">
+        <span class="tag">Full Records on Request</span>
+        <span class="tag">Site Visit Available</span>
+        <span class="tag">Immediate Enquiry</span>
+      </div>
+    </div>
+
+  </div><!-- /cards -->
+
+  <div class="slabel"><span>Commercial Narrowbody Fleet — Boeing MD-83 (Dana Air)</span></div>
+
+  <div class="cards">
+
+    <!-- 5N-SAI -->
+    <div class="card">
+      <div class="card-head">
+        <div class="card-reg">Registration: 5N-SAI &nbsp;·&nbsp; MSN: 53018</div>
+        <div class="card-name">Boeing MD-83</div>
+        <div class="card-sub">Narrow-Body Twinjet &nbsp;·&nbsp; Mfd: October 1990</div>
+      </div>
+      <div class="card-body">
+        <div class="stat-row"><span class="stat-key">Total Hours</span><span class="stat-val">68,360:20</span></div>
+        <div class="stat-row"><span class="stat-key">Total Cycles</span><span class="stat-val">44,788</span></div>
+        <div class="stat-row"><span class="stat-key">Seating</span><span class="stat-val">12 BC / 128 YC</span></div>
+        <div class="stat-row"><span class="stat-key">Engines</span><span class="stat-val">2 × JT8D (Pos.2: ESN 728250)</span></div>
+        <div class="stat-row"><span class="stat-key">Last C-Check</span><span class="stat-val">1C/2C/3C — Nov 2022</span></div>
+        <div class="stat-row"><span class="stat-key">LH/RH MLG Next OH</span><span class="stat-val">Nov 2029</span></div>
+        <div class="stat-row"><span class="stat-key">NLG Next OH</span><span class="stat-val">Jan 2031</span></div>
+      </div>
+      <div class="card-tags">
+        <span class="tag">MTOW 149,500 lbs</span>
+        <span class="tag">Avionics List Available</span>
+      </div>
+    </div>
+
+    <!-- 5N-JOY -->
+    <div class="card">
+      <div class="card-head">
+        <div class="card-reg">Registration: 5N-JOY &nbsp;·&nbsp; MSN: 49944</div>
+        <div class="card-name">Boeing MD-83</div>
+        <div class="card-sub">Narrow-Body Twinjet &nbsp;·&nbsp; Mfd: June 1991</div>
+      </div>
+      <div class="card-body">
+        <div class="stat-row"><span class="stat-key">Total Hours</span><span class="stat-val">49,963:53</span></div>
+        <div class="stat-row"><span class="stat-key">Total Cycles</span><span class="stat-val">58,552</span></div>
+        <div class="stat-row"><span class="stat-key">Seating</span><span class="stat-val">12 BC / 135 YC</span></div>
+        <div class="stat-row"><span class="stat-key">Engines</span><span class="stat-val">2 × JT8D (TBA)</span></div>
+        <div class="stat-row"><span class="stat-key">Last C-Check</span><span class="stat-val">1C — Jun 2021</span></div>
+        <div class="stat-row"><span class="stat-key">LH/RH MLG Next OH</span><span class="stat-val">Apr 2025</span></div>
+        <div class="stat-row"><span class="stat-key">NLG Next OH</span><span class="stat-val">Mar 2025</span></div>
+      </div>
+      <div class="card-tags">
+        <span class="tag">MTOW 160,000 lbs</span>
+        <span class="tag">Avionics List Available</span>
+      </div>
+    </div>
+
+    <!-- 5N-DEV -->
+    <div class="card card-wide">
+      <div class="card-head">
+        <div class="card-reg">Registration: 5N-DEV &nbsp;·&nbsp; MSN: 49947</div>
+        <div class="card-name">Boeing MD-83</div>
+        <div class="card-sub">Narrow-Body Twinjet &nbsp;·&nbsp; Mfd: July 1991</div>
+      </div>
+      <div class="card-body" style="display:grid;grid-template-columns:1fr 1fr;gap:0 40px;">
+        <div>
+          <div class="stat-row"><span class="stat-key">Total Hours</span><span class="stat-val">49,911:45</span></div>
+          <div class="stat-row"><span class="stat-key">Total Cycles</span><span class="stat-val">57,868</span></div>
+          <div class="stat-row"><span class="stat-key">Seating</span><span class="stat-val">12 BC / 135 YC</span></div>
+          <div class="stat-row"><span class="stat-key">Engines</span><span class="stat-val">2 × JT8D (TBA)</span></div>
+        </div>
+        <div>
+          <div class="stat-row"><span class="stat-key">Last C-Check</span><span class="stat-val">1C/2C/3C — Apr 2021</span></div>
+          <div class="stat-row"><span class="stat-key">MTOW</span><span class="stat-val">160,000 lbs</span></div>
+          <div class="stat-row"><span class="stat-key">LH/RH MLG Next OH</span><span class="stat-val">July 2027</span></div>
+          <div class="stat-row"><span class="stat-key">NLG Next OH</span><span class="stat-val">June 2023</span></div>
+        </div>
+      </div>
+      <div class="card-tags">
+        <span class="tag">MTOW 160,000 lbs</span>
+        <span class="tag">Avionics List Available</span>
+        <span class="tag">Full Records on Request</span>
+      </div>
+    </div>
+
+  </div><!-- /cards -->
+
+  <!-- CTA -->
+  <div class="cta">
+    <div class="cta-left">
+      <div class="cta-eyebrow">Request Full Specification</div>
+      <div class="cta-title">Ready to take the next step?</div>
+      <div class="cta-sub">Full technical spec sheets, maintenance records and site visits available on request.</div>
+    </div>
+    <div class="cta-right">
+      <p><strong style="color:var(--gold);">Promise Benebo</strong> &nbsp;·&nbsp; Technical Lead</p>
+      <p><a href="mailto:promise.benebo@karib-aerospace.com">promise.benebo@karib-aerospace.com</a></p>
+      <p style="color:rgba(255,255,255,0.6);">+44 7512 549 068 &nbsp;·&nbsp; +1 217 848 2193</p>
+      <p style="color:rgba(255,255,255,0.6);">Karib Aerospace Ltd &nbsp;·&nbsp; Brighton, UK</p>
+    </div>
+  </div>
+
+</div><!-- /body -->
+
+<!-- FOOTER -->
+<div class="footer">
+  <p>Karib Aerospace Ltd &nbsp;·&nbsp; Companies House No. 14231476<br>4 Preston Road, Brighton, England BN1 4QF</p>
+  <p class="footer-disc">No warranty is made as to the completeness or accuracy of the data presented. Specifications subject to change. Buyer to verify independently via inspection.</p>
+</div>
+
+</body>
 </html>
